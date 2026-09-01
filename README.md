@@ -1,9 +1,9 @@
-# Eco (nome provisório)
+# [Nome do jogo a definir]
 
 Jogo de terror psicológico em primeira pessoa, desenvolvido em Godot 4.7, para a
 disciplina de Jogos Digitais. Inspirado em *Iron Lung*: o jogador está preso
 dentro de uma cápsula sem visibilidade do ambiente externo, navegando um
-labirinto (matriz com caminho único) apenas com sons e um sonar de uso limitado.
+labirinto (matriz com no mínimo um caminho válido) apenas com sons e um sonar de uso limitado.
 
 ## Como abrir o projeto
 
@@ -36,7 +36,9 @@ labirinto (matriz com caminho único) apenas com sons e um sonar de uso limitado
 ├── resources/
 │   ├── maze_configs/     # Resources (.tres) com definição de cada labirinto/dificuldade
 │   └── enemy_configs/    # Resources (.tres) com parâmetros do inimigo
-├── docs/                 # GDD, one-sheet, diagramas de classes/arquitetura
+├── docs/                 # GDD, diagramas de classes/arquitetura
+│   ├── one-sheet.pdf
+│   └── one-sheet.docx    # Versão editável
 ├── project.godot
 └── .gitignore
 ```
