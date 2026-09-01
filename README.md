@@ -10,8 +10,7 @@ labirinto (matriz com caminho único) apenas com sons e um sonar de uso limitado
 1. Instale o Godot 4.7 (https://godotengine.org/download/linux/).
 2. Abra o Godot, clique em "Importar" e selecione a pasta deste repositório
    (arquivo `project.godot`).
-3. `run/main_scene` já aponta para `scenes/main/main.tscn` — essa cena ainda
-   precisa ser criada no editor (é a primeira coisa a fazer).
+3. `run/main_scene` já aponta para `scenes/main/main.tscn`.
 
 ## Estrutura de pastas
 
