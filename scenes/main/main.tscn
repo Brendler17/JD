@@ -1,3 +1,6 @@
-[gd_scene format=3 uid="uid://bqqfv4d7oitwm"]
+[gd_scene load_steps=2 format=3 uid="uid://bqqfv4d7oitwm"]
 
-[node name="Main" type="Node" unique_id=704815389]
+[ext_resource type="Script" path="res://scripts/ui/tarefa_gitsinctest.gd" id="1_fspc8"]
+
+[node name="Main" type="Node"]
+script = ExtResource("1_fspc8")
