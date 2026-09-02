@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://bqqfv4d7oitwm"]
+[gd_scene format=3 uid="uid://bqqfv4d7oitwm"]
 
-[ext_resource type="Script" path="res://scripts/ui/tarefa_gitsinctest.gd" id="1_fspc8"]
+[ext_resource type="Script" uid="uid://cl2pehjnc843f" path="res://scripts/ui/tarefa_gitsinctest.gd" id="1_fspc8"]
 
-[node name="Main" type="Node"]
+[node name="Main" type="Node" unique_id=1514978619]
+
+[node name="Node2D" type="Node2D" parent="." unique_id=2014553275]
 script = ExtResource("1_fspc8")
