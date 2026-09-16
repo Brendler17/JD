@@ -97,6 +97,6 @@ Notas técnicas:
 
 ## 12. Registro de Implementações
 
-> Cada implementação feita a partir de pedidos ao assistente deve ser registrada aqui, com data e um resumo curto do que foi construído/alterado.
+> Cada implementação deve ser registrada aqui, com data e um resumo curto do que foi construído/alterado.
 
-- *(vazio até o momento — preencher conforme o código for implementado)*
+- **2026-09-15 — `EventBus` (autoload):** criado `scripts/autoload/event_bus.gd` e registrado como singleton `EventBus` em `project.godot` (`[autoload]`). Define o contrato de sinais para a primeira fatia vertical (painel de movimentação): `request_move_forward`, `request_rotate_left`, `request_rotate_right` (intenções da UI) e `capsule_moved`, `capsule_rotated`, `oxygen_changed` (fatos emitidos pela Capsule/GameState). Nenhum outro sistema ainda escuta ou emite esses sinais — próximos passos: `Capsule` e o painel de UI.
