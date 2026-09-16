@@ -1,4 +1,4 @@
-# [Nome do jogo a definir]
+# Profundidade Zero
 
 Jogo de terror psicológico em primeira pessoa, desenvolvido em Godot 4.7, para a
 disciplina de Jogos Digitais. Inspirado em *Iron Lung*: o jogador está preso
