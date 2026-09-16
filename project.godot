@@ -14,7 +14,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 [application]
 
-config/name="project.godot"
+config/name="Profundidade Zero"
 config/description="Horror psicologico em primeira pessoa dentro de uma capsula submersa, navegando as cegas por sonar."
 run/main_scene="res://scenes/main/main.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
