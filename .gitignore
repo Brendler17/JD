@@ -27,37 +27,6 @@ builds/
 Thumbs.db
 .vscode/
 .idea/
-EOF
 
-cat .gitignore
-Saída
-
-# Godot 4+ specific ignores
-.godot/
-.nomedia
-~*.dll
-
-# Godot-specific ignores
-.import/
-export.cfg
-export_presets.cfg
-export_credentials.cfg
-*.tmp
-
-# Imported translations (geradas automaticamente a partir de CSVs)
-*.translation
-
-# Mono-specific ignores (caso venham a usar C#)
-.mono/
-data_*/
-mono_crash.*.json
-
-# Pastas de build/export
-exports/
-builds/
-
-# Sistema operacional / IDE
-.DS_Store
-Thumbs.db
-.vscode/
-.idea/
+# Configuração local do Claude Code (não deve ir para o repositório)
+CLAUDE.md
