@@ -21,7 +21,8 @@ Autoloads (Singletons) — persistem entre cenas
 Cena: Cápsula — instanciada a cada partida
 ├── Capsule        → recebe input do painel, emite sinais via EventBus
 ├── SonarSystem    → calcula distância/risco do sonar
-├── MazeGrid (Resource) → grade do labirinto (dados)
+├── MazeGrid (Resource) → grade do labirinto (dados, fonte de verdade das regras)
+├── MazeBuilder    → constrói o labirinto em 3D a partir da MazeGrid (só visual)
 └── Enemy          → reage ao uso do sonar
 ```
 
@@ -34,7 +35,7 @@ O jogo é **3D desde a base**: a cápsula e o labirinto existem no mundo 3D, sem
 - **Fonte de verdade da posição:** a célula lógica da grade (`Vector2i`), guardada na Capsule (`grid_position`). Regras de jogo (movimento, colisão com paredes via `MazeGrid`, sonar) operam sobre a grade — consultas em matriz, O(1) e determinísticas.
 - **Representação:** a posição 3D é derivada da célula via `Grid.grid_to_world()` (`scripts/systems/grid.gd`) a cada mudança; não há física 3D (raycast/`CharacterBody3D`) na movimentação.
 - **Mapeamento de eixos:** coluna `x` → eixo X do mundo; linha `y` → eixo Z do mundo; o centro da célula fica em `(x, 0, y) * CELL_SIZE`. "Cima" na matriz (`y - 1`) coincide com o "frente" padrão do Godot (`-Z`).
-- **Tamanho da célula:** `Grid.CELL_SIZE = 4.0` metros — constante única, compartilhada por Capsule, chão de debug e (futuramente) `MazeGrid`/construtor de paredes.
+- **Tamanho da célula:** `Grid.CELL_SIZE = 4.0` metros — constante única, compartilhada por Capsule, chão de debug e `MazeBuilder`.
 
 ## 3. Padrões de Projeto (Design Patterns)
 
@@ -101,9 +102,34 @@ Enquanto não há câmera de cockpit, a `main.tscn` é uma cena 3D de debug:
 
 ## 8. Labirinto (MazeGrid)
 
-- O labirinto será construído **diretamente em 3D** a partir da matriz (paredes instanciadas por célula), servindo também de debug visual para validar se a matriz está correta. Tamanho de célula vem de `Grid.CELL_SIZE`.
+Dividido em **dados** (`MazeGrid`) e **representação** (`MazeBuilder`), seguindo a regra de §2.1.
 
-*(A detalhar: formato dos dados — matriz 2D, tipos de célula (livre/parede/saída), como é carregado/gerado para o MVP (fixo) vs. pós-MVP (procedural).)*
+### 8.1 `MazeGrid` — `scripts/systems/maze_grid.gd` (Resource, `@tool`)
+
+- O mapa é escrito como texto em `rows: PackedStringArray` — uma string por linha (`y`), um caractere por coluna (`x`):
+
+| Caractere | `CellType` | Andável? |
+|---|---|---|
+| `#` | `WALL` | Não |
+| `.` | `FLOOR` | Sim |
+| `S` | `START` (exatamente 1) | Sim |
+| `E` | `EXIT` (exatamente 1) | Sim |
+
+- O setter de `rows` faz o parse para um array linear (`_cells[y * width + x]`), preenche `width`, `height`, `start_cell`, `exit_cell` e emite `changed`. Linhas de tamanhos diferentes, caracteres desconhecidos (tratados como parede) e quantidade errada de `S`/`E` geram erro/aviso no console.
+- API: `get_cell()`, `is_inside()`, `is_walkable()`, `is_exit()`, `get_cells_of_type()`. **Fora dos limites conta como parede** — o labirinto nunca "vaza", mesmo sem borda de `#`.
+- Formato textual escolhido por ser legível e editável direto no Inspector/`.tres`, e fácil de gerar por código no pós-MVP (o gerador procedural só precisa produzir as strings).
+- MVP: `resources/maze_configs/campaign_01.tres` — 15 × 15, `S` em `(1, 13)`, `E` em `(13, 1)`, menor caminho de 88 passos, todas as 97 células livres alcançáveis (validado por BFS). Balanceamento de tamanho/caminho fica para quando o oxigênio existir.
+
+### 8.2 `MazeBuilder` — `scripts/systems/maze_builder.gd` (`Node3D`, `@tool`)
+
+- Recebe a mesma `MazeGrid` (`@export var maze`) e gera, como filhos: `Walls` — um único `MultiMeshInstance3D` com um bloco `CELL_SIZE × 3 m × CELL_SIZE` por célula `#` (1 draw call independente do tamanho do labirinto) — e `ExitMarker`, uma placa verde na célula de saída.
+- Roda **no editor** (`@tool`): o labirinto aparece na viewport 3D e é reconstruído ao editar o Resource (sinal `changed`). Os nós gerados não têm `owner`, então nunca são salvos na cena.
+- Não tem regras de jogo: é descartável/substituível quando entrar arte final.
+
+### 8.3 Colisão
+
+- A `Capsule` recebe a mesma `MazeGrid` (`@export var maze`), posiciona-se em `maze.start_cell` no `_ready()` e, a cada "Andar", consulta `maze.is_walkable(alvo)`. Se bloqueado: **não se move** e emite `EventBus.capsule_collided(blocked_cell, direction)`; caso contrário, move e emite `capsule_moved`. Sem `maze` definido, a cápsula anda livremente (útil para testes isolados).
+- O custo de oxigênio da colisão será aplicado pelo `GameState` ouvindo `capsule_collided` (ainda não implementado).
 
 ## 9. Inimigo (Enemy)
 
@@ -126,3 +152,4 @@ Enquanto não há câmera de cockpit, a `main.tscn` é uma cena 3D de debug:
 - **2026-09-15 — `Capsule` (entidade):** criado `scripts/entities/capsule.gd` + `scenes/entities/capsule.tscn`. A Capsule guarda posição em grade (`grid_position: Vector2i`) e direção atual (`enum Facing`, 4 direções), e reage a `EventBus.request_move_forward/request_rotate_left/request_rotate_right`, emitindo de volta `capsule_moved`/`capsule_rotated`. Movimento é sempre "para frente" na direção atual; rotação em incrementos de 90º, sem deslocamento. Consumo de oxigênio **não** é tratado aqui — fica para o `GameState`, que vai escutar `capsule_moved`. Ainda não há checagem de colisão com paredes (depende da `MazeGrid`, que ainda não existe) nem instância na `main.tscn` (isso fica para quando o painel de UI estiver pronto). Visual é um `Polygon2D` triangular só para tornar a rotação visível em teste.
 - **2026-10-06 — `MovementPanel` (UI) + integração na `main.tscn`:** criados `scripts/ui/movement_panel.gd` + `scenes/ui/movement_panel.tscn`, com os 3 botões (Girar Esq. / Andar / Girar Dir.) emitindo `request_rotate_left` / `request_move_forward` / `request_rotate_right` no `EventBus`. O painel não referencia a Capsule. `main.tscn` agora instancia a `Capsule` (em `grid_position = (4, 4)`, só para ficar visível na tela) e o painel dentro de um `CanvasLayer`. Primeira fatia vertical jogável: clicar nos botões move/gira a cápsula. Pendências: bloqueio de cliques durante animação (ainda não há animação — movimento é instantâneo), colisão com paredes (depende da `MazeGrid`) e consumo de oxigênio (depende do `GameState`).
 - **2026-10-06 — Capsule migrada para 3D + cena de debug:** decisão de abandonar a ideia de mover a cápsula numa matriz 2D e espelhar a posição no 3D a cada passo (custo de sincronização e perda do debug visual do labirinto em 3D). Agora a grade é apenas lógica e a representação é direto em 3D (ver §2.1). Criado `scripts/systems/grid.gd` (`class_name Grid`, `CELL_SIZE = 4.0` m, `grid_to_world()`); `Capsule` passou de `Node2D` para `Node3D` (rotação no eixo Y, meshes provisórios `Body` + `Nose`), removendo seu `cell_size` local. `main.tscn` virou cena 3D de debug com câmera top-down ortográfica fixa, chão com grade (`assets/shaders/debug_grid.gdshader`), luz e ambiente (ver §5.1). Contrato do `EventBus` inalterado (`capsule_moved` continua emitindo posições de grade). Movimento segue instantâneo.
+- **2026-10-06 — `MazeGrid` + `MazeBuilder` + colisão:** criado o Resource `MazeGrid` (mapa textual `#`/`.`/`S`/`E`, fora dos limites = parede) e o primeiro labirinto do MVP (`resources/maze_configs/campaign_01.tres`, 15 × 15). Criado o `MazeBuilder` (`@tool`), que gera as paredes em 3D via `MultiMeshInstance3D` + marcador da saída, visível também no editor. `Capsule` agora recebe a `MazeGrid`, nasce em `start_cell` e consulta a matriz antes de andar; novo sinal `EventBus.capsule_collided(blocked_cell, direction)`. `Grid` passou a ser `@tool` (usado pelo builder no editor). `main.tscn`: adicionado `MazeBuilder`, Capsule ligada ao labirinto, chão de debug/câmera reajustados para 15 × 15 (chão 60 × 60 m centrado em `(28, 0, 28)`). Detecção de chegada na saída existe na API (`is_exit`), mas a reação (vitória) fica para o `GameState`. Ver §8.

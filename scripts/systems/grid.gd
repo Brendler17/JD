@@ -1,3 +1,4 @@
+@tool
 class_name Grid
 ## Conversões entre o espaço lógico da grade (matriz do labirinto, Vector2i)
 ## e o espaço 3D do mundo (Vector3, em metros).

@@ -1,8 +1,10 @@
-[gd_scene load_steps=8 format=3 uid="uid://bqqfv4d7oitwm"]
+[gd_scene load_steps=10 format=3 uid="uid://bqqfv4d7oitwm"]
 
 [ext_resource type="PackedScene" path="res://scenes/entities/capsule.tscn" id="1_capsule"]
 [ext_resource type="PackedScene" path="res://scenes/ui/movement_panel.tscn" id="2_panel"]
 [ext_resource type="Shader" path="res://assets/shaders/debug_grid.gdshader" id="3_grid"]
+[ext_resource type="Resource" path="res://resources/maze_configs/campaign_01.tres" id="4_maze"]
+[ext_resource type="Script" path="res://scripts/systems/maze_builder.gd" id="5_builder"]
 
 [sub_resource type="Environment" id="Env_debug"]
 background_mode = 1
@@ -17,7 +19,7 @@ shader_parameter/cell_size = 4.0
 
 [sub_resource type="PlaneMesh" id="Mesh_floor"]
 material = SubResource("Mat_grid")
-size = Vector2(64, 64)
+size = Vector2(60, 60)
 
 [node name="Main" type="Node3D" unique_id=1514978619]
 
@@ -28,18 +30,22 @@ environment = SubResource("Env_debug")
 rotation_degrees = Vector3(-60, 30, 0)
 
 [node name="DebugFloor" type="MeshInstance3D" parent="."]
-position = Vector3(30, 0, 30)
+position = Vector3(28, 0, 28)
 mesh = SubResource("Mesh_floor")
 
 [node name="DebugCamera" type="Camera3D" parent="."]
-position = Vector3(30, 50, 34)
+position = Vector3(28, 50, 32)
 rotation_degrees = Vector3(-90, 0, 0)
 projection = 1
 size = 76.0
 current = true
 
+[node name="MazeBuilder" type="Node3D" parent="."]
+script = ExtResource("5_builder")
+maze = ExtResource("4_maze")
+
 [node name="Capsule" parent="." instance=ExtResource("1_capsule")]
-grid_position = Vector2i(4, 4)
+maze = ExtResource("4_maze")
 
 [node name="UI" type="CanvasLayer" parent="."]
 

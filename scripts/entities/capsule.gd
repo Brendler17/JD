@@ -24,6 +24,11 @@ const FACING_ROTATION_DEGREES := {
 	Facing.LEFT: 90.0,
 }
 
+## Labirinto em que a cápsula está. Se definido, a posição inicial vem de
+## maze.start_cell e cada "Andar" consulta a matriz antes de mover.
+## Sem labirinto, a cápsula anda livremente (útil para testes isolados).
+@export var maze: MazeGrid
+
 ## Célula onde a cápsula está - não é a posição no mundo;
 ## a conversão para metros acontece em Grid.grid_to_world().
 @export var grid_position: Vector2i = Vector2i.ZERO
@@ -33,6 +38,8 @@ var facing: Facing = Facing.UP
 
 
 func _ready() -> void:
+	if maze:
+		grid_position = maze.start_cell
 	position = Grid.grid_to_world(grid_position)
 	rotation_degrees.y = FACING_ROTATION_DEGREES[facing]
 
@@ -40,11 +47,16 @@ func _ready() -> void:
 	EventBus.request_rotate_left.connect(_on_request_rotate_left)
 	EventBus.request_rotate_right.connect(_on_request_rotate_right)
 
-## Pega o deslocamento correspondente à direção atual (dicionário GRID_OFFSET), soma à grid_position
-## e atualiza a posição 3D, e emite capsule_moved avisando "eu me movi, fui pra cá, nessa direção".
+## Pega o deslocamento correspondente à direção atual (dicionário GRID_OFFSET) e calcula a célula alvo.
+## Se a matriz disser que ela é bloqueada, a cápsula fica parada e emite capsule_collided;
+## senão, atualiza grid_position e a posição 3D, e emite capsule_moved ("fui pra cá, nessa direção").
 func _on_request_move_forward() -> void:
 	var direction: Vector2i = GRID_OFFSET[facing]
-	grid_position += direction
+	var target := grid_position + direction
+	if maze and not maze.is_walkable(target):
+		EventBus.capsule_collided.emit(target, direction)
+		return
+	grid_position = target
 	position = Grid.grid_to_world(grid_position)
 	EventBus.capsule_moved.emit(grid_position, direction)
 

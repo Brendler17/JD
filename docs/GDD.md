@@ -63,6 +63,9 @@ Regras:
 - Representado como uma matriz (grade) com no mínimo um caminho válido entre entrada e saída.
 - Modo Campanha (MVP): labirinto único, ponto A → ponto B.
 - Modo Roguelike (pós-MVP): múltiplos mapas gerados, dificuldade crescente.
+- Células: parede, livre, início (1) e saída (1). Tudo além dos limites do mapa é parede.
+- **Colisão:** tentar andar para uma parede **não move** a cápsula — o comando é "desperdiçado" e conta como colisão (que custará oxigênio, conforme §4.3). O jogador sente a parede, mas não atravessa nem é empurrado.
+- Primeiro labirinto do MVP: 15 × 15 células (4 m cada), início no canto inferior esquerdo, saída no canto superior direito, menor caminho de 88 passos. Tamanho e comprimento serão rebalanceados quando o consumo de oxigênio estiver definido.
 
 ### 4.5 Inimigo
 
@@ -110,3 +113,4 @@ A atmosfera é construída quase inteiramente por áudio, já que o jogador não
 
 - **2026-10-06 — Layout do painel de movimentação:** botões na ordem Girar Esq. / Andar / Girar Dir., centralizados na base da tela, com input exclusivamente por mouse (sem atalhos de teclado), reforçando a fantasia de "operar um painel físico" dentro da cápsula.
 - **2026-10-06 — Movimentação direto no espaço 3D:** em vez de movimentar a cápsula numa matriz 2D e espelhar o resultado no 3D, a cápsula se move direto no mundo 3D, com a matriz servindo apenas como lógica (posição e colisão). Motivos: evitar o custo de manter duas representações sincronizadas e permitir visualizar o labirinto em 3D para depurar sua geração. Parâmetros definidos: **célula de 4 m**, **câmera de debug top-down fixa** (provisória, até existir a câmera em primeira pessoa do cockpit) e **movimento instantâneo** por enquanto (animação fica para a etapa de game feel).
+- **2026-10-06 — Labirinto e colisão:** mapas definidos como texto (`#` parede, `.` livre, `S` início, `E` saída), editáveis direto no editor — o mesmo formato poderá ser gerado proceduralmente no modo Roguelike. Colidir com uma parede mantém a cápsula na mesma célula (sem deslocamento nem empurrão) e é registrado como colisão para fins de custo de oxigênio.

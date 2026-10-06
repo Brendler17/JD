@@ -11,6 +11,8 @@ signal request_rotate_right
 # --- Fatos emitidos pela Capsule após executar uma ação ---
 signal capsule_moved(new_position: Vector2i, direction: Vector2i)
 signal capsule_rotated(new_direction: Vector2i)
+## Tentou andar para uma célula bloqueada (parede ou fora do labirinto); a cápsula não se moveu.
+signal capsule_collided(blocked_cell: Vector2i, direction: Vector2i)
 
 # --- Fatos emitidos por sistemas de estado/recursos ---
 signal oxygen_changed(new_value: float)
