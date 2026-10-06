@@ -1,0 +1,37 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/movement_panel.gd" id="1_panel"]
+
+[node name="MovementPanel" type="HBoxContainer"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -186.0
+offset_top = -80.0
+offset_right = 186.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 12
+alignment = 1
+script = ExtResource("1_panel")
+
+[node name="RotateLeftButton" type="Button" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(116, 56)
+focus_mode = 0
+text = "◀ Girar Esq."
+
+[node name="MoveForwardButton" type="Button" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(116, 56)
+focus_mode = 0
+text = "▲ Andar"
+
+[node name="RotateRightButton" type="Button" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(116, 56)
+focus_mode = 0
+text = "Girar Dir. ▶"

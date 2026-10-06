@@ -86,7 +86,7 @@ A atmosfera é construída quase inteiramente por áudio, já que o jogador não
 
 ## 7. UI/UX
 
-- Painel de botões de movimentação (Andar / Girar Esquerda / Girar Direita).
+- Painel de botões de movimentação, centralizado na parte inferior da tela, na ordem **[◀ Girar Esq.] [▲ Andar] [Girar Dir. ▶]** — a ordem espacial espelha a ação (esquerda à esquerda, frente no centro), reduzindo erro de clique sob tensão. Acionado apenas por mouse (teclado não ativa os botões).
 - Indicador de oxigênio.
 - Indicador/feedback do sonar (quando ativado).
 
@@ -108,4 +108,4 @@ A atmosfera é construída quase inteiramente por áudio, já que o jogador não
 
 > Cada nova decisão de design tomada em conversas com a IA ou discussões de equipe deve ser registrada aqui, com data.
 
-- *(vazio até o momento — preencher conforme decisões forem tomadas)*
+- **2026-10-06 — Layout do painel de movimentação:** botões na ordem Girar Esq. / Andar / Girar Dir., centralizados na base da tela, com input exclusivamente por mouse (sem atalhos de teclado), reforçando a fantasia de "operar um painel físico" dentro da cápsula.
