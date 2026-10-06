@@ -50,6 +50,7 @@ func _ready() -> void:
 ## Pega o deslocamento correspondente à direção atual (dicionário GRID_OFFSET) e calcula a célula alvo.
 ## Se a matriz disser que ela é bloqueada, a cápsula fica parada e emite capsule_collided;
 ## senão, atualiza grid_position e a posição 3D, e emite capsule_moved ("fui pra cá, nessa direção").
+## Se a célula for a saída, emite capsule_reached_exit antes de capsule_moved (vitória tem prioridade sobre o custo do passo).
 func _on_request_move_forward() -> void:
 	var direction: Vector2i = GRID_OFFSET[facing]
 	var target := grid_position + direction
@@ -58,6 +59,8 @@ func _on_request_move_forward() -> void:
 		return
 	grid_position = target
 	position = Grid.grid_to_world(grid_position)
+	if maze and maze.is_exit(grid_position):
+		EventBus.capsule_reached_exit.emit(grid_position)
 	EventBus.capsule_moved.emit(grid_position, direction)
 
 ## Rotates chamam _rotate_facing(-1) ou _rotate_facing(1), que usa wrapi()

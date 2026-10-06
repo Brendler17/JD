@@ -1,10 +1,12 @@
-[gd_scene load_steps=10 format=3 uid="uid://bqqfv4d7oitwm"]
+[gd_scene load_steps=12 format=3 uid="uid://bqqfv4d7oitwm"]
 
 [ext_resource type="PackedScene" path="res://scenes/entities/capsule.tscn" id="1_capsule"]
 [ext_resource type="PackedScene" path="res://scenes/ui/movement_panel.tscn" id="2_panel"]
 [ext_resource type="Shader" path="res://assets/shaders/debug_grid.gdshader" id="3_grid"]
 [ext_resource type="Resource" path="res://resources/maze_configs/campaign_01.tres" id="4_maze"]
 [ext_resource type="Script" path="res://scripts/systems/maze_builder.gd" id="5_builder"]
+[ext_resource type="PackedScene" path="res://scenes/ui/oxygen_gauge.tscn" id="6_gauge"]
+[ext_resource type="PackedScene" path="res://scenes/ui/game_over_screen.tscn" id="7_gameover"]
 
 [sub_resource type="Environment" id="Env_debug"]
 background_mode = 1
@@ -50,3 +52,7 @@ maze = ExtResource("4_maze")
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="MovementPanel" parent="UI" instance=ExtResource("2_panel")]
+
+[node name="OxygenGauge" parent="UI" instance=ExtResource("6_gauge")]
+
+[node name="GameOverScreen" parent="UI" instance=ExtResource("7_gameover")]

@@ -98,7 +98,41 @@ Enquanto não há câmera de cockpit, a `main.tscn` é uma cena 3D de debug:
 
 ## 7. Sistema de Oxigênio
 
-*(A detalhar: valor inicial, taxa de consumo por "Andar", taxa por colisão, onde o valor é armazenado — provavelmente `GameState`.)*
+Implementado no autoload **`GameState`** (`scripts/autoload/game_state.gd`), que também controla o estado da partida.
+
+### 7.1 Valores
+
+| Constante | Valor |
+|---|---|
+| `MAX_OXYGEN` | 150 |
+| `OXYGEN_COST_MOVE` | 1 por "Andar" bem-sucedido |
+| `OXYGEN_COST_COLLISION` | 5 por "Andar" contra parede |
+
+Girar não consome. Oxigênio é `float` (permite drenos fracionários futuros, ex.: por tempo) e é exibido arredondado para cima. Valores são constantes no script por enquanto; se o balanceamento exigir iteração frequente, migrar para um Resource de configuração.
+
+### 7.2 Estados da partida (State Pattern via enum)
+
+`enum State { PLAYING, WON, LOST }`. Só em `PLAYING` o oxigênio é consumido; qualquer evento após o fim é ignorado.
+
+```
+PLAYING ──capsule_reached_exit──▶ WON
+PLAYING ──oxygen chega a 0──────▶ LOST
+WON/LOST ──request_restart──────▶ PLAYING (recarrega a cena)
+```
+
+### 7.3 Fluxo de sinais
+
+- **Escuta:** `capsule_moved` (−1), `capsule_collided` (−5), `capsule_reached_exit` (→ `WON`), `request_restart`.
+- **Emite:** `oxygen_changed(current, maximum)` a cada alteração e `game_over(won)` ao encerrar.
+- **Prioridade da saída:** a `Capsule` emite `capsule_reached_exit` **antes** de `capsule_moved` no passo que entra na saída. Assim o `GameState` já está em `WON` quando o custo do passo chega, e chegar à saída com o último ponto de oxigênio conta como vitória.
+- **Reinício:** `request_restart` → `_start_run()` (zera estado e oxigênio, emite `oxygen_changed`) + `get_tree().reload_current_scene()`. Os nós da cena antiga são liberados e suas conexões com o `EventBus` são desfeitas automaticamente pelo Godot.
+- O `GameState` não conhece Capsule, UI nem labirinto. As UIs podem **ler** `GameState.oxygen`/`MAX_OXYGEN` para inicializar (o primeiro `oxygen_changed` pode ocorrer antes de a UI existir), mas nunca escrevem nele.
+
+### 7.4 UI de estado
+
+- `scenes/ui/oxygen_gauge.tscn` (`OxygenGauge`, canto superior esquerdo): `Label` "O₂ atual / máximo" + `ProgressBar`; muda para a cor de alerta (vermelho) em ≤ 25% do máximo. Não captura mouse.
+- `scenes/ui/game_over_screen.tscn` (`GameOverScreen`, tela cheia, oculta por padrão): escurece a tela e mostra título/subtítulo de vitória ou derrota e o botão "Tentar novamente", que emite `request_restart`.
+- `MovementPanel` desabilita seus botões ao receber `game_over`.
 
 ## 8. Labirinto (MazeGrid)
 
@@ -153,3 +187,4 @@ Dividido em **dados** (`MazeGrid`) e **representação** (`MazeBuilder`), seguin
 - **2026-10-06 — `MovementPanel` (UI) + integração na `main.tscn`:** criados `scripts/ui/movement_panel.gd` + `scenes/ui/movement_panel.tscn`, com os 3 botões (Girar Esq. / Andar / Girar Dir.) emitindo `request_rotate_left` / `request_move_forward` / `request_rotate_right` no `EventBus`. O painel não referencia a Capsule. `main.tscn` agora instancia a `Capsule` (em `grid_position = (4, 4)`, só para ficar visível na tela) e o painel dentro de um `CanvasLayer`. Primeira fatia vertical jogável: clicar nos botões move/gira a cápsula. Pendências: bloqueio de cliques durante animação (ainda não há animação — movimento é instantâneo), colisão com paredes (depende da `MazeGrid`) e consumo de oxigênio (depende do `GameState`).
 - **2026-10-06 — Capsule migrada para 3D + cena de debug:** decisão de abandonar a ideia de mover a cápsula numa matriz 2D e espelhar a posição no 3D a cada passo (custo de sincronização e perda do debug visual do labirinto em 3D). Agora a grade é apenas lógica e a representação é direto em 3D (ver §2.1). Criado `scripts/systems/grid.gd` (`class_name Grid`, `CELL_SIZE = 4.0` m, `grid_to_world()`); `Capsule` passou de `Node2D` para `Node3D` (rotação no eixo Y, meshes provisórios `Body` + `Nose`), removendo seu `cell_size` local. `main.tscn` virou cena 3D de debug com câmera top-down ortográfica fixa, chão com grade (`assets/shaders/debug_grid.gdshader`), luz e ambiente (ver §5.1). Contrato do `EventBus` inalterado (`capsule_moved` continua emitindo posições de grade). Movimento segue instantâneo.
 - **2026-10-06 — `MazeGrid` + `MazeBuilder` + colisão:** criado o Resource `MazeGrid` (mapa textual `#`/`.`/`S`/`E`, fora dos limites = parede) e o primeiro labirinto do MVP (`resources/maze_configs/campaign_01.tres`, 15 × 15). Criado o `MazeBuilder` (`@tool`), que gera as paredes em 3D via `MultiMeshInstance3D` + marcador da saída, visível também no editor. `Capsule` agora recebe a `MazeGrid`, nasce em `start_cell` e consulta a matriz antes de andar; novo sinal `EventBus.capsule_collided(blocked_cell, direction)`. `Grid` passou a ser `@tool` (usado pelo builder no editor). `main.tscn`: adicionado `MazeBuilder`, Capsule ligada ao labirinto, chão de debug/câmera reajustados para 15 × 15 (chão 60 × 60 m centrado em `(28, 0, 28)`). Detecção de chegada na saída existe na API (`is_exit`), mas a reação (vitória) fica para o `GameState`. Ver §8.
+- **2026-10-06 — `GameState` (autoload) + oxigênio + fim de partida:** criado `scripts/autoload/game_state.gd`, registrado em `project.godot` após o `EventBus`. Estados `PLAYING/WON/LOST`; oxigênio 150, −1 por passo, −5 por colisão. Novos sinais no `EventBus`: `capsule_reached_exit`, `game_over(won)`, `request_restart`; `oxygen_changed` passou a enviar `(current, maximum)`. `Capsule` emite `capsule_reached_exit` antes de `capsule_moved` (vitória tem prioridade sobre o custo do passo). `MovementPanel` desabilita os botões no fim. Nova HUD: `OxygenGauge` e `GameOverScreen` (com reinício via recarga de cena), instanciadas em `main.tscn` › `UI`. Ver §7.

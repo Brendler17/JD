@@ -56,7 +56,18 @@ Regras:
 - Consumido ao usar o botão Andar e por colisões.
 - Esgotar oxigênio ou colidir repetidamente leva à morte.
 
-*(A detalhar: valor inicial, taxa de consumo por movimento, taxa por colisão, se há regeneração.)*
+| Parâmetro | Valor (MVP, ponto de partida) |
+|---|---|
+| Oxigênio inicial | 150 |
+| Custo por "Andar" | 1 |
+| Custo por colisão | 5 |
+| Custo por girar | 0 |
+| Regeneração | Nenhuma |
+
+- Com o primeiro labirinto (menor caminho de 88 passos), sobram ~62 de margem: o equivalente a ~12 colisões ou a uma boa quantidade de becos sem saída. É um valor inicial para playtest, não final.
+- Uma colisão custa o mesmo que 5 passos: bater na parede deve doer o suficiente para fazer o jogador hesitar antes de andar às cegas.
+- **Chegar à saída com o último ponto de oxigênio conta como vitória.**
+- Fim da partida: tela de vitória ("Saída alcançada") ou derrota ("Oxigênio esgotado"), com opção de tentar novamente (reinicia o mesmo labirinto).
 
 ### 4.4 Labirinto
 
@@ -90,7 +101,8 @@ A atmosfera é construída quase inteiramente por áudio, já que o jogador não
 ## 7. UI/UX
 
 - Painel de botões de movimentação, centralizado na parte inferior da tela, na ordem **[◀ Girar Esq.] [▲ Andar] [Girar Dir. ▶]** — a ordem espacial espelha a ação (esquerda à esquerda, frente no centro), reduzindo erro de clique sob tensão. Acionado apenas por mouse (teclado não ativa os botões).
-- Indicador de oxigênio.
+- Indicador de oxigênio no canto superior esquerdo (texto "O₂ atual / máximo" + barra), que fica vermelho com 25% ou menos.
+- Tela de fim de partida (vitória/derrota) com botão "Tentar novamente"; o painel de movimentação é desabilitado ao fim.
 - Indicador/feedback do sonar (quando ativado).
 
 *(A detalhar: layout do painel, indicadores visuais mínimos já que o jogo é majoritariamente às escuras.)*
@@ -114,3 +126,4 @@ A atmosfera é construída quase inteiramente por áudio, já que o jogador não
 - **2026-10-06 — Layout do painel de movimentação:** botões na ordem Girar Esq. / Andar / Girar Dir., centralizados na base da tela, com input exclusivamente por mouse (sem atalhos de teclado), reforçando a fantasia de "operar um painel físico" dentro da cápsula.
 - **2026-10-06 — Movimentação direto no espaço 3D:** em vez de movimentar a cápsula numa matriz 2D e espelhar o resultado no 3D, a cápsula se move direto no mundo 3D, com a matriz servindo apenas como lógica (posição e colisão). Motivos: evitar o custo de manter duas representações sincronizadas e permitir visualizar o labirinto em 3D para depurar sua geração. Parâmetros definidos: **célula de 4 m**, **câmera de debug top-down fixa** (provisória, até existir a câmera em primeira pessoa do cockpit) e **movimento instantâneo** por enquanto (animação fica para a etapa de game feel).
 - **2026-10-06 — Labirinto e colisão:** mapas definidos como texto (`#` parede, `.` livre, `S` início, `E` saída), editáveis direto no editor — o mesmo formato poderá ser gerado proceduralmente no modo Roguelike. Colidir com uma parede mantém a cápsula na mesma célula (sem deslocamento nem empurrão) e é registrado como colisão para fins de custo de oxigênio.
+- **2026-10-06 — Valores iniciais de oxigênio e fim de partida:** oxigênio 150, −1 por passo, −5 por colisão, girar grátis, sem regeneração (valores de partida para playtest). Chegar à saída com o último ponto de oxigênio é vitória. Ao fim, tela de vitória/derrota com "Tentar novamente". O labirinto segue fixo por enquanto (facilita o balanceamento); geração procedural com seed foi discutida como próximo passo provável, para evitar que o jogador decore o mapa — decisão sobre a Campanha também ser procedural ainda em aberto.

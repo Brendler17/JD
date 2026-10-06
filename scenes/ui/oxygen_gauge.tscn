@@ -1,0 +1,24 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/oxygen_gauge.gd" id="1_gauge"]
+
+[node name="OxygenGauge" type="VBoxContainer"]
+offset_left = 24.0
+offset_top = 24.0
+offset_right = 264.0
+offset_bottom = 80.0
+mouse_filter = 2
+script = ExtResource("1_gauge")
+
+[node name="OxygenLabel" type="Label" parent="."]
+unique_name_in_owner = true
+theme_override_font_sizes/font_size = 20
+text = "O₂  150 / 150"
+
+[node name="OxygenBar" type="ProgressBar" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(240, 16)
+mouse_filter = 2
+max_value = 150.0
+value = 150.0
+show_percentage = false
