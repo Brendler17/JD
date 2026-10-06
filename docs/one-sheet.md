@@ -32,6 +32,7 @@ Não existe movimento livre nem strafe: a cápsula sempre anda "para frente" na 
 ## Diferenciais de venda
 
 - **Navegação 100% às cegas** — o horror nasce da privação sensorial e do áudio, não de sustos visuais roteirizados.
+- **Narrativa e tutorial pelo rádio** — o jogador é situado e instruído apenas pela voz de um comandante do lado de fora, numa transmissão cheia de estática e interferências; sirene e luz vermelha piscando anunciam o perigo.
 - **Sonar como faca de dois gumes** — obter informação tem preço: cada uso pode atrair um inimigo invisível e intransponível.
 - **Escopo gráfico enxuto, execução afiada** — toda a produção acontece dentro da cápsula, liberando o tempo do time para polir áudio e sistemas em vez de arte 3D cara.
 - **Progressão por risco calculado** — oxigênio, sonar e dano acumulado criam decisões constantes de risco x recompensa.
