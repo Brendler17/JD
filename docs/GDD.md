@@ -16,6 +16,14 @@
 - Decisões de risco x recompensa a cada ativação do sonar e a cada movimento.
 - Sensação de isolamento e vulnerabilidade dentro da cápsula.
 
+### 2.1 Perspectiva & Interação (visão final)
+
+- **Primeira pessoa, sempre dentro da cápsula 3D.** O jogador nunca vê o exterior: não há janelas, câmera externa nem mapa. Tudo o que se sabe do lado de fora chega por **som** (ambiente, colisões, sonar, inimigo).
+- **Mira:** no centro da tela há apenas um pequeno ponto (a "mira"); não há HUD flutuante tradicional. O mouse movimenta o olhar dentro da cabine e o ponto indica o que está sendo apontado.
+- **Painel físico (diegético):** os botões de movimentação (Andar / Girar Esq. / Girar Dir.) e demais controles (sonar, etc.) são objetos 3D num painel **dentro da cápsula**. O jogador aponta a mira para um botão e clica para acioná-lo.
+- **Indicadores diegéticos:** informações como oxigênio devem, idealmente, viver em instrumentos da própria cabine (mostradores, luzes, sons de alarme), e não em elementos 2D sobre a tela.
+- **Estado atual (protótipo):** ainda não há assets nem texturas. Enquanto isso, o painel de botões, o medidor de oxigênio e a tela de fim são **UI 2D provisória** e a câmera é top-down de debug — todos substituíveis sem mudar as regras do jogo, pois se comunicam apenas por sinais.
+
 *(A detalhar: referências de tom, moodboard, exemplos de "momentos" que o jogo deve gerar.)*
 
 ## 3. Core Loop
@@ -104,6 +112,7 @@ A atmosfera é construída quase inteiramente por áudio, já que o jogador não
 - Indicador de oxigênio no canto superior esquerdo (texto "O₂ atual / máximo" + barra), que fica vermelho com 25% ou menos.
 - Tela de fim de partida (vitória/derrota) com botão "Tentar novamente"; o painel de movimentação é desabilitado ao fim.
 - Indicador/feedback do sonar (quando ativado).
+- **Na versão final, todos esses elementos ficam no painel 3D dentro da cápsula e são acionados pela mira central** (ver §2.1); o layout 2D atual é provisório e serve de referência para a disposição dos botões no painel físico.
 
 *(A detalhar: layout do painel, indicadores visuais mínimos já que o jogo é majoritariamente às escuras.)*
 
@@ -127,3 +136,4 @@ A atmosfera é construída quase inteiramente por áudio, já que o jogador não
 - **2026-10-06 — Movimentação direto no espaço 3D:** em vez de movimentar a cápsula numa matriz 2D e espelhar o resultado no 3D, a cápsula se move direto no mundo 3D, com a matriz servindo apenas como lógica (posição e colisão). Motivos: evitar o custo de manter duas representações sincronizadas e permitir visualizar o labirinto em 3D para depurar sua geração. Parâmetros definidos: **célula de 4 m**, **câmera de debug top-down fixa** (provisória, até existir a câmera em primeira pessoa do cockpit) e **movimento instantâneo** por enquanto (animação fica para a etapa de game feel).
 - **2026-10-06 — Labirinto e colisão:** mapas definidos como texto (`#` parede, `.` livre, `S` início, `E` saída), editáveis direto no editor — o mesmo formato poderá ser gerado proceduralmente no modo Roguelike. Colidir com uma parede mantém a cápsula na mesma célula (sem deslocamento nem empurrão) e é registrado como colisão para fins de custo de oxigênio.
 - **2026-10-06 — Valores iniciais de oxigênio e fim de partida:** oxigênio 150, −1 por passo, −5 por colisão, girar grátis, sem regeneração (valores de partida para playtest). Chegar à saída com o último ponto de oxigênio é vitória. Ao fim, tela de vitória/derrota com "Tentar novamente". O labirinto segue fixo por enquanto (facilita o balanceamento); geração procedural com seed foi discutida como próximo passo provável, para evitar que o jogador decore o mapa — decisão sobre a Campanha também ser procedural ainda em aberto.
+- **2026-10-06 — Perspectiva final e interação por mira:** o jogo é em 1ª pessoa, dentro de uma cápsula 3D sem qualquer visão externa (informação só por som). Na tela há apenas um ponto central (mira); o mouse movimenta o olhar e o clique aciona o botão apontado, em um painel físico dentro da cabine. Assets/texturas ainda não existem; a UI 2D e a câmera top-down atuais são provisórias. Ver §2.1.

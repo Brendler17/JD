@@ -14,7 +14,7 @@ O jogador está preso dentro de uma cápsula submersa, sem qualquer visão do am
 
 ## Controles / Painel de movimentação
 
-A movimentação **não** ocorre por teclado (setas/WASD), e sim por um **painel visual de botões** clicado com o mouse:
+O jogo é em **primeira pessoa, dentro da cápsula**. Na tela há apenas um pequeno ponto central (a mira): o mouse movimenta o olhar pela cabine e o clique aciona o botão apontado. A movimentação **não** ocorre por teclado (setas/WASD), e sim por um **painel físico de botões dentro da cápsula**:
 
 | Botão | Ação | Consome oxigênio? |
 |---|---|---|
