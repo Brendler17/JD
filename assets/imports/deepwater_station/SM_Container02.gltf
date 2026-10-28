@@ -1,0 +1,337 @@
+{
+	"asset":
+	{
+		"version": "2.0",
+		"generator": "Unreal Engine 5.8.2"
+	},
+	"scene": 0,
+	"accessors": [
+		{
+			"bufferView": 0,
+			"count": 50844,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"bufferView": 1,
+			"count": 12764,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [
+				-0.204737186,
+				-0.00100383756,
+				-0.364939421
+			],
+			"max": [
+				0.204737157,
+				1.07502961,
+				0.369137943
+			]
+		},
+		{
+			"bufferView": 2,
+			"count": 12764,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 3,
+			"count": 12764,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 4,
+			"count": 12764,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 5,
+			"count": 12764,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 6,
+			"count": 1056,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"bufferView": 7,
+			"count": 356,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [
+				-0.176970214,
+				0.101004519,
+				-0.18491739
+			],
+			"max": [
+				0.185146019,
+				0.889259934,
+				0.364939183
+			]
+		},
+		{
+			"bufferView": 8,
+			"count": 356,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 9,
+			"count": 356,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 10,
+			"count": 356,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 11,
+			"count": 356,
+			"type": "VEC2",
+			"componentType": 5126
+		}
+	],
+	"buffers": [
+		{
+			"uri": "SM_Container02.bin",
+			"byteLength": 838520
+		}
+	],
+	"bufferViews": [
+		{
+			"buffer": 0,
+			"byteLength": 101688,
+			"target": 34963
+		},
+		{
+			"buffer": 0,
+			"byteLength": 153168,
+			"byteOffset": 101688,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 153168,
+			"byteOffset": 254856,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 204224,
+			"byteOffset": 408024,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 102112,
+			"byteOffset": 612248,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 102112,
+			"byteOffset": 714360,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 2112,
+			"byteOffset": 816472,
+			"target": 34963
+		},
+		{
+			"buffer": 0,
+			"byteLength": 4272,
+			"byteOffset": 818584,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 4272,
+			"byteOffset": 822856,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 5696,
+			"byteOffset": 827128,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 2848,
+			"byteOffset": 832824,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 2848,
+			"byteOffset": 835672,
+			"target": 34962
+		}
+	],
+	"images": [
+		{
+			"uri": "MI_Container01_Emissive.png"
+		},
+		{
+			"uri": "T_Container_BC.png"
+		},
+		{
+			"uri": "T_Container_ORM.png"
+		},
+		{
+			"uri": "T_Container_N.png"
+		}
+	],
+	"materials": [
+		{
+			"name": "MI_Container01",
+			"pbrMetallicRoughness":
+			{
+				"baseColorTexture":
+				{
+					"index": 0
+				},
+				"metallicRoughnessTexture":
+				{
+					"index": 1
+				}
+			},
+			"normalTexture":
+			{
+				"index": 3
+			},
+			"occlusionTexture":
+			{
+				"index": 1
+			},
+			"emissiveTexture":
+			{
+				"index": 2
+			},
+			"emissiveFactor": [
+				0.0864868164,
+				0.0864868164,
+				0.0864868164
+			]
+		},
+		{
+			"name": "MI_ContainerGlass",
+			"pbrMetallicRoughness":
+			{
+				"baseColorTexture":
+				{
+					"index": 0
+				},
+				"metallicRoughnessTexture":
+				{
+					"index": 1
+				}
+			},
+			"normalTexture":
+			{
+				"index": 3
+			},
+			"occlusionTexture":
+			{
+				"index": 1
+			},
+			"alphaMode": "BLEND",
+			"extensions":
+			{
+				"KHR_materials_specular":
+				{
+					"specularFactor": 10
+				},
+				"KHR_materials_ior":
+				{
+					"ior": 1
+				}
+			}
+		}
+	],
+	"meshes": [
+		{
+			"name": "SM_Container02",
+			"primitives": [
+				{
+					"attributes":
+					{
+						"POSITION": 1,
+						"NORMAL": 2,
+						"TANGENT": 3,
+						"TEXCOORD_0": 4,
+						"TEXCOORD_1": 5
+					},
+					"indices": 0,
+					"material": 0
+				},
+				{
+					"attributes":
+					{
+						"POSITION": 7,
+						"NORMAL": 8,
+						"TANGENT": 9,
+						"TEXCOORD_0": 10,
+						"TEXCOORD_1": 11
+					},
+					"indices": 6,
+					"material": 1
+				}
+			]
+		}
+	],
+	"nodes": [
+		{
+			"mesh": 0
+		}
+	],
+	"samplers": [
+		{
+			"minFilter": 9987,
+			"magFilter": 9729
+		}
+	],
+	"scenes": [
+		{
+			"nodes": [
+				0
+			]
+		}
+	],
+	"textures": [
+		{
+			"name": "T_Container_BC",
+			"sampler": 0,
+			"source": 1
+		},
+		{
+			"name": "T_Container_ORM",
+			"sampler": 0,
+			"source": 2
+		},
+		{
+			"name": "MI_Container01_Emissive",
+			"sampler": 0,
+			"source": 0
+		},
+		{
+			"name": "T_Container_N",
+			"sampler": 0,
+			"source": 3
+		}
+	],
+	"extensionsUsed": [
+		"KHR_materials_specular",
+		"KHR_materials_ior"
+	]
+}

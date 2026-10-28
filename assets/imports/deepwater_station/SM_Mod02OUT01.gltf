@@ -1,0 +1,188 @@
+{
+	"asset":
+	{
+		"version": "2.0",
+		"generator": "Unreal Engine 5.8.2"
+	},
+	"scene": 0,
+	"accessors": [
+		{
+			"bufferView": 0,
+			"count": 6495,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"bufferView": 1,
+			"count": 2533,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [
+				-0.0215221345,
+				-11.3849726,
+				-4.99707365
+			],
+			"max": [
+				8.02106094,
+				0.217511833,
+				0.0347249061
+			]
+		},
+		{
+			"bufferView": 2,
+			"count": 2533,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 3,
+			"count": 2533,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 4,
+			"count": 2533,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 5,
+			"count": 2533,
+			"type": "VEC2",
+			"componentType": 5126
+		}
+	],
+	"buffers": [
+		{
+			"uri": "SM_Mod02OUT01.bin",
+			"byteLength": 154840
+		}
+	],
+	"bufferViews": [
+		{
+			"buffer": 0,
+			"byteLength": 12990,
+			"target": 34963
+		},
+		{
+			"buffer": 0,
+			"byteLength": 30396,
+			"byteOffset": 12992,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 30396,
+			"byteOffset": 43388,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 40528,
+			"byteOffset": 73784,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 20264,
+			"byteOffset": 114312,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 20264,
+			"byteOffset": 134576,
+			"target": 34962
+		}
+	],
+	"images": [
+		{
+			"uri": "T_Mod02OUT_BC.png"
+		},
+		{
+			"uri": "T_Mod02OUT_ORM.png"
+		},
+		{
+			"uri": "T_Mod02OUT_N.png"
+		}
+	],
+	"materials": [
+		{
+			"name": "MI_Mod02OUT",
+			"pbrMetallicRoughness":
+			{
+				"baseColorTexture":
+				{
+					"index": 0
+				},
+				"metallicRoughnessTexture":
+				{
+					"index": 1
+				}
+			},
+			"normalTexture":
+			{
+				"index": 2
+			},
+			"occlusionTexture":
+			{
+				"index": 1
+			}
+		}
+	],
+	"meshes": [
+		{
+			"name": "SM_Mod02OUT01",
+			"primitives": [
+				{
+					"attributes":
+					{
+						"POSITION": 1,
+						"NORMAL": 2,
+						"TANGENT": 3,
+						"TEXCOORD_0": 4,
+						"TEXCOORD_1": 5
+					},
+					"indices": 0,
+					"material": 0
+				}
+			]
+		}
+	],
+	"nodes": [
+		{
+			"mesh": 0
+		}
+	],
+	"samplers": [
+		{
+			"minFilter": 9987,
+			"magFilter": 9729
+		}
+	],
+	"scenes": [
+		{
+			"nodes": [
+				0
+			]
+		}
+	],
+	"textures": [
+		{
+			"name": "T_Mod02OUT_BC",
+			"sampler": 0,
+			"source": 0
+		},
+		{
+			"name": "T_Mod02OUT_ORM",
+			"sampler": 0,
+			"source": 1
+		},
+		{
+			"name": "T_Mod02OUT_N",
+			"sampler": 0,
+			"source": 2
+		}
+	]
+}

@@ -1,0 +1,230 @@
+{
+	"asset":
+	{
+		"version": "2.0",
+		"generator": "Unreal Engine 5.8.2"
+	},
+	"scene": 0,
+	"accessors": [
+		{
+			"bufferView": 0,
+			"count": 3570,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"bufferView": 1,
+			"count": 1487,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [
+				-0.190631106,
+				0.000194507709,
+				-0.0582692884
+			],
+			"max": [
+				0.19653289,
+				0.456718892,
+				0.070278801
+			]
+		},
+		{
+			"bufferView": 2,
+			"count": 1487,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 3,
+			"count": 1487,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 4,
+			"count": 1487,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 5,
+			"count": 1487,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 6,
+			"count": 1487,
+			"type": "VEC2",
+			"componentType": 5126
+		}
+	],
+	"buffers": [
+		{
+			"uri": "SM_Retro_Tech_Set_01d.bin",
+			"byteLength": 102308
+		}
+	],
+	"bufferViews": [
+		{
+			"buffer": 0,
+			"byteLength": 7140,
+			"target": 34963
+		},
+		{
+			"buffer": 0,
+			"byteLength": 17844,
+			"byteOffset": 7140,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 17844,
+			"byteOffset": 24984,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 23792,
+			"byteOffset": 42828,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 11896,
+			"byteOffset": 66620,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 11896,
+			"byteOffset": 78516,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 11896,
+			"byteOffset": 90412,
+			"target": 34962
+		}
+	],
+	"images": [
+		{
+			"uri": "MI_Retro_Tech_Set_01a_BaseColor.png"
+		},
+		{
+			"uri": "MI_Retro_Tech_Set_01a_MetallicRoughness.png"
+		},
+		{
+			"uri": "MI_Retro_Tech_Set_01a_Normal.png"
+		},
+		{
+			"uri": "MI_Retro_Tech_Set_01a_Occlusion.png"
+		},
+		{
+			"uri": "MI_Retro_Tech_Set_01a_Specular.png"
+		}
+	],
+	"materials": [
+		{
+			"name": "MI_Retro_Tech_Set_01a",
+			"pbrMetallicRoughness":
+			{
+				"baseColorTexture":
+				{
+					"index": 0
+				},
+				"metallicRoughnessTexture":
+				{
+					"index": 1
+				}
+			},
+			"normalTexture":
+			{
+				"index": 2
+			},
+			"occlusionTexture":
+			{
+				"index": 3
+			},
+			"extensions":
+			{
+				"KHR_materials_specular":
+				{
+					"specularTexture":
+					{
+						"index": 4
+					}
+				}
+			}
+		}
+	],
+	"meshes": [
+		{
+			"name": "SM_Retro_Tech_Set_01d",
+			"primitives": [
+				{
+					"attributes":
+					{
+						"POSITION": 1,
+						"NORMAL": 2,
+						"TANGENT": 3,
+						"TEXCOORD_0": 4,
+						"TEXCOORD_1": 5,
+						"TEXCOORD_2": 6
+					},
+					"indices": 0,
+					"material": 0
+				}
+			]
+		}
+	],
+	"nodes": [
+		{
+			"mesh": 0
+		}
+	],
+	"samplers": [
+		{
+			"minFilter": 9987,
+			"magFilter": 9729
+		}
+	],
+	"scenes": [
+		{
+			"nodes": [
+				0
+			]
+		}
+	],
+	"textures": [
+		{
+			"name": "MI_Retro_Tech_Set_01a_BaseColor",
+			"sampler": 0,
+			"source": 0
+		},
+		{
+			"name": "MI_Retro_Tech_Set_01a_MetallicRoughness",
+			"sampler": 0,
+			"source": 1
+		},
+		{
+			"name": "MI_Retro_Tech_Set_01a_Normal",
+			"sampler": 0,
+			"source": 2
+		},
+		{
+			"name": "MI_Retro_Tech_Set_01a_Occlusion",
+			"sampler": 0,
+			"source": 3
+		},
+		{
+			"name": "MI_Retro_Tech_Set_01a_Specular",
+			"sampler": 0,
+			"source": 4
+		}
+	],
+	"extensionsUsed": [
+		"KHR_materials_specular"
+	]
+}

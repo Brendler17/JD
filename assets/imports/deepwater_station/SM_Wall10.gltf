@@ -1,0 +1,188 @@
+{
+	"asset":
+	{
+		"version": "2.0",
+		"generator": "Unreal Engine 5.8.2"
+	},
+	"scene": 0,
+	"accessors": [
+		{
+			"bufferView": 0,
+			"count": 1860,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"bufferView": 1,
+			"count": 750,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [
+				-6.56928492,
+				-1.30599847e-05,
+				-2.05193043
+			],
+			"max": [
+				6.57976055,
+				6.52830553,
+				0.0053747925
+			]
+		},
+		{
+			"bufferView": 2,
+			"count": 750,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 3,
+			"count": 750,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 4,
+			"count": 750,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 5,
+			"count": 750,
+			"type": "VEC2",
+			"componentType": 5126
+		}
+	],
+	"buffers": [
+		{
+			"uri": "SM_Wall10.bin",
+			"byteLength": 45720
+		}
+	],
+	"bufferViews": [
+		{
+			"buffer": 0,
+			"byteLength": 3720,
+			"target": 34963
+		},
+		{
+			"buffer": 0,
+			"byteLength": 9000,
+			"byteOffset": 3720,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 9000,
+			"byteOffset": 12720,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 12000,
+			"byteOffset": 21720,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 6000,
+			"byteOffset": 33720,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 6000,
+			"byteOffset": 39720,
+			"target": 34962
+		}
+	],
+	"images": [
+		{
+			"uri": "T_Wall09_BC.png"
+		},
+		{
+			"uri": "T_Wall09_ORM.png"
+		},
+		{
+			"uri": "T_Wall09_N.png"
+		}
+	],
+	"materials": [
+		{
+			"name": "MI_Wall09",
+			"pbrMetallicRoughness":
+			{
+				"baseColorTexture":
+				{
+					"index": 0
+				},
+				"metallicRoughnessTexture":
+				{
+					"index": 1
+				}
+			},
+			"normalTexture":
+			{
+				"index": 2
+			},
+			"occlusionTexture":
+			{
+				"index": 1
+			}
+		}
+	],
+	"meshes": [
+		{
+			"name": "SM_Wall10",
+			"primitives": [
+				{
+					"attributes":
+					{
+						"POSITION": 1,
+						"NORMAL": 2,
+						"TANGENT": 3,
+						"TEXCOORD_0": 4,
+						"TEXCOORD_1": 5
+					},
+					"indices": 0,
+					"material": 0
+				}
+			]
+		}
+	],
+	"nodes": [
+		{
+			"mesh": 0
+		}
+	],
+	"samplers": [
+		{
+			"minFilter": 9987,
+			"magFilter": 9729
+		}
+	],
+	"scenes": [
+		{
+			"nodes": [
+				0
+			]
+		}
+	],
+	"textures": [
+		{
+			"name": "T_Wall09_BC",
+			"sampler": 0,
+			"source": 0
+		},
+		{
+			"name": "T_Wall09_ORM",
+			"sampler": 0,
+			"source": 1
+		},
+		{
+			"name": "T_Wall09_N",
+			"sampler": 0,
+			"source": 2
+		}
+	]
+}

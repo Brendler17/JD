@@ -1,0 +1,329 @@
+{
+	"asset":
+	{
+		"version": "2.0",
+		"generator": "Unreal Engine 5.8.2"
+	},
+	"scene": 0,
+	"accessors": [
+		{
+			"bufferView": 0,
+			"count": 5988,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"bufferView": 1,
+			"count": 1954,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [
+				-0.0650139973,
+				-1.40516686,
+				-0.052252572
+			],
+			"max": [
+				1.43051147e-05,
+				1.40516686,
+				0.0522524007
+			]
+		},
+		{
+			"bufferView": 2,
+			"count": 1954,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 3,
+			"count": 1954,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 4,
+			"count": 1954,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 5,
+			"count": 1954,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 6,
+			"count": 1458,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"bufferView": 7,
+			"count": 296,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [
+				-0.103372969,
+				-1.40017295,
+				-0.0469269603
+			],
+			"max": [
+				-0.012245426,
+				1.39951015,
+				0.0469273888
+			]
+		},
+		{
+			"bufferView": 8,
+			"count": 296,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 9,
+			"count": 296,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 10,
+			"count": 296,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 11,
+			"count": 296,
+			"type": "VEC2",
+			"componentType": 5126
+		}
+	],
+	"buffers": [
+		{
+			"uri": "SM_Lamp05.bin",
+			"byteLength": 140892
+		}
+	],
+	"bufferViews": [
+		{
+			"buffer": 0,
+			"byteLength": 11976,
+			"target": 34963
+		},
+		{
+			"buffer": 0,
+			"byteLength": 23448,
+			"byteOffset": 11976,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 23448,
+			"byteOffset": 35424,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 31264,
+			"byteOffset": 58872,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 15632,
+			"byteOffset": 90136,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 15632,
+			"byteOffset": 105768,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 2916,
+			"byteOffset": 121400,
+			"target": 34963
+		},
+		{
+			"buffer": 0,
+			"byteLength": 3552,
+			"byteOffset": 124316,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 3552,
+			"byteOffset": 127868,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 4736,
+			"byteOffset": 131420,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 2368,
+			"byteOffset": 136156,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 2368,
+			"byteOffset": 138524,
+			"target": 34962
+		}
+	],
+	"images": [
+		{
+			"uri": "MI_Lamp06_Emissive.png"
+		},
+		{
+			"uri": "T_Lamp_BC.png"
+		},
+		{
+			"uri": "T_Lamp_ORM.png"
+		},
+		{
+			"uri": "T_Lamp_N.png"
+		}
+	],
+	"materials": [
+		{
+			"name": "MI_Lamp06",
+			"pbrMetallicRoughness":
+			{
+				"baseColorTexture":
+				{
+					"index": 0
+				},
+				"metallicRoughnessTexture":
+				{
+					"index": 1
+				}
+			},
+			"normalTexture":
+			{
+				"index": 3
+			},
+			"occlusionTexture":
+			{
+				"index": 1
+			},
+			"emissiveTexture":
+			{
+				"index": 2
+			},
+			"emissiveFactor": [
+				0.846679688,
+				0.846679688,
+				0.846679688
+			]
+		},
+		{
+			"name": "M_Glass2",
+			"pbrMetallicRoughness":
+			{
+				"baseColorFactor": [
+					0,
+					0.00120199996,
+					0.003303,
+					0.349999994
+				],
+				"metallicFactor": 0,
+				"roughnessFactor": 0
+			},
+			"alphaMode": "BLEND",
+			"extensions":
+			{
+				"KHR_materials_specular":
+				{
+					"specularFactor": 10
+				},
+				"KHR_materials_ior":
+				{
+					"ior": 1
+				}
+			}
+		}
+	],
+	"meshes": [
+		{
+			"name": "SM_Lamp05",
+			"primitives": [
+				{
+					"attributes":
+					{
+						"POSITION": 1,
+						"NORMAL": 2,
+						"TANGENT": 3,
+						"TEXCOORD_0": 4,
+						"TEXCOORD_1": 5
+					},
+					"indices": 0,
+					"material": 0
+				},
+				{
+					"attributes":
+					{
+						"POSITION": 7,
+						"NORMAL": 8,
+						"TANGENT": 9,
+						"TEXCOORD_0": 10,
+						"TEXCOORD_1": 11
+					},
+					"indices": 6,
+					"material": 1
+				}
+			]
+		}
+	],
+	"nodes": [
+		{
+			"mesh": 0
+		}
+	],
+	"samplers": [
+		{
+			"minFilter": 9987,
+			"magFilter": 9729
+		}
+	],
+	"scenes": [
+		{
+			"nodes": [
+				0
+			]
+		}
+	],
+	"textures": [
+		{
+			"name": "T_Lamp_BC",
+			"sampler": 0,
+			"source": 1
+		},
+		{
+			"name": "T_Lamp_ORM",
+			"sampler": 0,
+			"source": 2
+		},
+		{
+			"name": "MI_Lamp06_Emissive",
+			"sampler": 0,
+			"source": 0
+		},
+		{
+			"name": "T_Lamp_N",
+			"sampler": 0,
+			"source": 3
+		}
+	],
+	"extensionsUsed": [
+		"KHR_materials_specular",
+		"KHR_materials_ior"
+	]
+}

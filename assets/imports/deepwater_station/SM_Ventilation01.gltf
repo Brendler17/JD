@@ -1,0 +1,188 @@
+{
+	"asset":
+	{
+		"version": "2.0",
+		"generator": "Unreal Engine 5.8.2"
+	},
+	"scene": 0,
+	"accessors": [
+		{
+			"bufferView": 0,
+			"count": 7284,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"bufferView": 1,
+			"count": 2203,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [
+				-0.0991112515,
+				-0.355082691,
+				-0.00371713657
+			],
+			"max": [
+				0.753687203,
+				0.0972459614,
+				5.12926912
+			]
+		},
+		{
+			"bufferView": 2,
+			"count": 2203,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 3,
+			"count": 2203,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 4,
+			"count": 2203,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 5,
+			"count": 2203,
+			"type": "VEC2",
+			"componentType": 5126
+		}
+	],
+	"buffers": [
+		{
+			"uri": "SM_Ventilation01.bin",
+			"byteLength": 137936
+		}
+	],
+	"bufferViews": [
+		{
+			"buffer": 0,
+			"byteLength": 14568,
+			"target": 34963
+		},
+		{
+			"buffer": 0,
+			"byteLength": 26436,
+			"byteOffset": 14568,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 26436,
+			"byteOffset": 41004,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 35248,
+			"byteOffset": 67440,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 17624,
+			"byteOffset": 102688,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 17624,
+			"byteOffset": 120312,
+			"target": 34962
+		}
+	],
+	"images": [
+		{
+			"uri": "T_Ventilation01_BC.png"
+		},
+		{
+			"uri": "T_Ventilation01_ORM.png"
+		},
+		{
+			"uri": "T_Ventilation01_N.png"
+		}
+	],
+	"materials": [
+		{
+			"name": "MI_Ventilation01",
+			"pbrMetallicRoughness":
+			{
+				"baseColorTexture":
+				{
+					"index": 0
+				},
+				"metallicRoughnessTexture":
+				{
+					"index": 1
+				}
+			},
+			"normalTexture":
+			{
+				"index": 2
+			},
+			"occlusionTexture":
+			{
+				"index": 1
+			}
+		}
+	],
+	"meshes": [
+		{
+			"name": "SM_Ventilation01",
+			"primitives": [
+				{
+					"attributes":
+					{
+						"POSITION": 1,
+						"NORMAL": 2,
+						"TANGENT": 3,
+						"TEXCOORD_0": 4,
+						"TEXCOORD_1": 5
+					},
+					"indices": 0,
+					"material": 0
+				}
+			]
+		}
+	],
+	"nodes": [
+		{
+			"mesh": 0
+		}
+	],
+	"samplers": [
+		{
+			"minFilter": 9987,
+			"magFilter": 9729
+		}
+	],
+	"scenes": [
+		{
+			"nodes": [
+				0
+			]
+		}
+	],
+	"textures": [
+		{
+			"name": "T_Ventilation01_BC",
+			"sampler": 0,
+			"source": 0
+		},
+		{
+			"name": "T_Ventilation01_ORM",
+			"sampler": 0,
+			"source": 1
+		},
+		{
+			"name": "T_Ventilation01_N",
+			"sampler": 0,
+			"source": 2
+		}
+	]
+}

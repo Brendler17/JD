@@ -1,0 +1,188 @@
+{
+	"asset":
+	{
+		"version": "2.0",
+		"generator": "Unreal Engine 5.8.2"
+	},
+	"scene": 0,
+	"accessors": [
+		{
+			"bufferView": 0,
+			"count": 80904,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"bufferView": 1,
+			"count": 32763,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [
+				-0.388890684,
+				-0.170314327,
+				-3.10065699
+			],
+			"max": [
+				3.05953574,
+				2.03524423,
+				0.760021985
+			]
+		},
+		{
+			"bufferView": 2,
+			"count": 32763,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 3,
+			"count": 32763,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 4,
+			"count": 32763,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 5,
+			"count": 32763,
+			"type": "VEC2",
+			"componentType": 5126
+		}
+	],
+	"buffers": [
+		{
+			"uri": "SM_GasCylinderA03.bin",
+			"byteLength": 1996536
+		}
+	],
+	"bufferViews": [
+		{
+			"buffer": 0,
+			"byteLength": 161808,
+			"target": 34963
+		},
+		{
+			"buffer": 0,
+			"byteLength": 393156,
+			"byteOffset": 161808,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 393156,
+			"byteOffset": 554964,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 524208,
+			"byteOffset": 948120,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 262104,
+			"byteOffset": 1472328,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 262104,
+			"byteOffset": 1734432,
+			"target": 34962
+		}
+	],
+	"images": [
+		{
+			"uri": "T_Props01_BC.png"
+		},
+		{
+			"uri": "T_Props01_ORM.png"
+		},
+		{
+			"uri": "T_Props01_N.png"
+		}
+	],
+	"materials": [
+		{
+			"name": "MI_Props01",
+			"pbrMetallicRoughness":
+			{
+				"baseColorTexture":
+				{
+					"index": 0
+				},
+				"metallicRoughnessTexture":
+				{
+					"index": 1
+				}
+			},
+			"normalTexture":
+			{
+				"index": 2
+			},
+			"occlusionTexture":
+			{
+				"index": 1
+			}
+		}
+	],
+	"meshes": [
+		{
+			"name": "SM_GasCylinderA03",
+			"primitives": [
+				{
+					"attributes":
+					{
+						"POSITION": 1,
+						"NORMAL": 2,
+						"TANGENT": 3,
+						"TEXCOORD_0": 4,
+						"TEXCOORD_1": 5
+					},
+					"indices": 0,
+					"material": 0
+				}
+			]
+		}
+	],
+	"nodes": [
+		{
+			"mesh": 0
+		}
+	],
+	"samplers": [
+		{
+			"minFilter": 9987,
+			"magFilter": 9729
+		}
+	],
+	"scenes": [
+		{
+			"nodes": [
+				0
+			]
+		}
+	],
+	"textures": [
+		{
+			"name": "T_Props01_BC",
+			"sampler": 0,
+			"source": 0
+		},
+		{
+			"name": "T_Props01_ORM",
+			"sampler": 0,
+			"source": 1
+		},
+		{
+			"name": "T_Props01_N",
+			"sampler": 0,
+			"source": 2
+		}
+	]
+}

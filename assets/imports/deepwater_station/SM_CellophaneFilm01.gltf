@@ -1,0 +1,204 @@
+{
+	"asset":
+	{
+		"version": "2.0",
+		"generator": "Unreal Engine 5.8.2"
+	},
+	"scene": 0,
+	"accessors": [
+		{
+			"bufferView": 0,
+			"count": 79392,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"bufferView": 1,
+			"count": 14307,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [
+				-0.770529628,
+				-3.11218143,
+				-1.83616102
+			],
+			"max": [
+				0.111927487,
+				0.0310327448,
+				1.83616066
+			]
+		},
+		{
+			"bufferView": 2,
+			"count": 14307,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 3,
+			"count": 14307,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 4,
+			"count": 14307,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 5,
+			"count": 14307,
+			"type": "VEC2",
+			"componentType": 5126
+		}
+	],
+	"buffers": [
+		{
+			"uri": "SM_CellophaneFilm01.bin",
+			"byteLength": 959976
+		}
+	],
+	"bufferViews": [
+		{
+			"buffer": 0,
+			"byteLength": 158784,
+			"target": 34963
+		},
+		{
+			"buffer": 0,
+			"byteLength": 171684,
+			"byteOffset": 158784,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 171684,
+			"byteOffset": 330468,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 228912,
+			"byteOffset": 502152,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 114456,
+			"byteOffset": 731064,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 114456,
+			"byteOffset": 845520,
+			"target": 34962
+		}
+	],
+	"images": [
+		{
+			"uri": "T_CellophaneFilm01_BC.png"
+		},
+		{
+			"uri": "T_CellophaneFilm01_ORM.png"
+		},
+		{
+			"uri": "T_CellophaneFilm01_N.png"
+		}
+	],
+	"materials": [
+		{
+			"name": "MI_CellophaneFilm01",
+			"pbrMetallicRoughness":
+			{
+				"baseColorTexture":
+				{
+					"index": 0
+				},
+				"metallicRoughnessTexture":
+				{
+					"index": 1
+				}
+			},
+			"normalTexture":
+			{
+				"index": 2
+			},
+			"occlusionTexture":
+			{
+				"index": 1
+			},
+			"alphaMode": "BLEND",
+			"extensions":
+			{
+				"KHR_materials_specular":
+				{
+					"specularFactor": 6.30462122
+				},
+				"KHR_materials_ior":
+				{
+					"ior": 1
+				}
+			}
+		}
+	],
+	"meshes": [
+		{
+			"name": "SM_CellophaneFilm01",
+			"primitives": [
+				{
+					"attributes":
+					{
+						"POSITION": 1,
+						"NORMAL": 2,
+						"TANGENT": 3,
+						"TEXCOORD_0": 4,
+						"TEXCOORD_1": 5
+					},
+					"indices": 0,
+					"material": 0
+				}
+			]
+		}
+	],
+	"nodes": [
+		{
+			"mesh": 0
+		}
+	],
+	"samplers": [
+		{
+			"minFilter": 9987,
+			"magFilter": 9729
+		}
+	],
+	"scenes": [
+		{
+			"nodes": [
+				0
+			]
+		}
+	],
+	"textures": [
+		{
+			"name": "T_CellophaneFilm01_BC",
+			"sampler": 0,
+			"source": 0
+		},
+		{
+			"name": "T_CellophaneFilm01_ORM",
+			"sampler": 0,
+			"source": 1
+		},
+		{
+			"name": "T_CellophaneFilm01_N",
+			"sampler": 0,
+			"source": 2
+		}
+	],
+	"extensionsUsed": [
+		"KHR_materials_specular",
+		"KHR_materials_ior"
+	]
+}

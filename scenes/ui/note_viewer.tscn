@@ -1,0 +1,82 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/note_viewer.gd" id="1_note"]
+
+[sub_resource type="StyleBoxFlat" id="Style_paper"]
+content_margin_left = 28.0
+content_margin_top = 22.0
+content_margin_right = 28.0
+content_margin_bottom = 22.0
+bg_color = Color(0.92, 0.89, 0.8, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45, 0.4, 0.3, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+shadow_color = Color(0, 0, 0, 0.6)
+shadow_size = 10
+
+[node name="NoteViewer" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_note")
+
+[node name="Dim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0.55)
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Paper" type="PanelContainer" parent="Center"]
+custom_minimum_size = Vector2(520, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("Style_paper")
+
+[node name="Content" type="VBoxContainer" parent="Center/Paper"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="NoteTitleLabel" type="Label" parent="Center/Paper/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.15, 0.12, 0.08, 1)
+theme_override_font_sizes/font_size = 24
+text = "Título"
+
+[node name="NoteBodyLabel" type="Label" parent="Center/Paper/Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(464, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.17, 0.12, 1)
+theme_override_font_sizes/font_size = 17
+text = "Texto"
+autowrap_mode = 3
+
+[node name="HintLabel" type="Label" parent="Center/Paper/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.4, 0.35, 0.28, 1)
+theme_override_font_sizes/font_size = 13
+text = "Clique para fechar"
+horizontal_alignment = 2

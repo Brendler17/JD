@@ -1,0 +1,188 @@
+{
+	"asset":
+	{
+		"version": "2.0",
+		"generator": "Unreal Engine 5.8.2"
+	},
+	"scene": 0,
+	"accessors": [
+		{
+			"bufferView": 0,
+			"count": 1539,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"bufferView": 1,
+			"count": 851,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [
+				-0.000468368642,
+				-0.00175242836,
+				-2.88358188
+			],
+			"max": [
+				5.39753819,
+				1.76545095,
+				0.00311197829
+			]
+		},
+		{
+			"bufferView": 2,
+			"count": 851,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 3,
+			"count": 851,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 4,
+			"count": 851,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 5,
+			"count": 851,
+			"type": "VEC2",
+			"componentType": 5126
+		}
+	],
+	"buffers": [
+		{
+			"uri": "SM_FloorPart07.bin",
+			"byteLength": 50736
+		}
+	],
+	"bufferViews": [
+		{
+			"buffer": 0,
+			"byteLength": 3078,
+			"target": 34963
+		},
+		{
+			"buffer": 0,
+			"byteLength": 10212,
+			"byteOffset": 3080,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 10212,
+			"byteOffset": 13292,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 13616,
+			"byteOffset": 23504,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 6808,
+			"byteOffset": 37120,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 6808,
+			"byteOffset": 43928,
+			"target": 34962
+		}
+	],
+	"images": [
+		{
+			"uri": "T_FloorPart07_BC.png"
+		},
+		{
+			"uri": "T_FloorPart07_ORM.png"
+		},
+		{
+			"uri": "T_FloorPart07_N.png"
+		}
+	],
+	"materials": [
+		{
+			"name": "MI_FloorPart07",
+			"pbrMetallicRoughness":
+			{
+				"baseColorTexture":
+				{
+					"index": 0
+				},
+				"metallicRoughnessTexture":
+				{
+					"index": 1
+				}
+			},
+			"normalTexture":
+			{
+				"index": 2
+			},
+			"occlusionTexture":
+			{
+				"index": 1
+			}
+		}
+	],
+	"meshes": [
+		{
+			"name": "SM_FloorPart07",
+			"primitives": [
+				{
+					"attributes":
+					{
+						"POSITION": 1,
+						"NORMAL": 2,
+						"TANGENT": 3,
+						"TEXCOORD_0": 4,
+						"TEXCOORD_1": 5
+					},
+					"indices": 0,
+					"material": 0
+				}
+			]
+		}
+	],
+	"nodes": [
+		{
+			"mesh": 0
+		}
+	],
+	"samplers": [
+		{
+			"minFilter": 9987,
+			"magFilter": 9729
+		}
+	],
+	"scenes": [
+		{
+			"nodes": [
+				0
+			]
+		}
+	],
+	"textures": [
+		{
+			"name": "T_FloorPart07_BC",
+			"sampler": 0,
+			"source": 0
+		},
+		{
+			"name": "T_FloorPart07_ORM",
+			"sampler": 0,
+			"source": 1
+		},
+		{
+			"name": "T_FloorPart07_N",
+			"sampler": 0,
+			"source": 2
+		}
+	]
+}

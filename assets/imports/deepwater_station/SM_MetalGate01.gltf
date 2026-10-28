@@ -1,0 +1,188 @@
+{
+	"asset":
+	{
+		"version": "2.0",
+		"generator": "Unreal Engine 5.8.2"
+	},
+	"scene": 0,
+	"accessors": [
+		{
+			"bufferView": 0,
+			"count": 1746,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"bufferView": 1,
+			"count": 994,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [
+				-2.48391128,
+				0.000162360011,
+				-0.112425119
+			],
+			"max": [
+				2.47893691,
+				3.53230333,
+				0.109409213
+			]
+		},
+		{
+			"bufferView": 2,
+			"count": 994,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 3,
+			"count": 994,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 4,
+			"count": 994,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 5,
+			"count": 994,
+			"type": "VEC2",
+			"componentType": 5126
+		}
+	],
+	"buffers": [
+		{
+			"uri": "SM_MetalGate01.bin",
+			"byteLength": 59156
+		}
+	],
+	"bufferViews": [
+		{
+			"buffer": 0,
+			"byteLength": 3492,
+			"target": 34963
+		},
+		{
+			"buffer": 0,
+			"byteLength": 11928,
+			"byteOffset": 3492,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 11928,
+			"byteOffset": 15420,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 15904,
+			"byteOffset": 27348,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 7952,
+			"byteOffset": 43252,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 7952,
+			"byteOffset": 51204,
+			"target": 34962
+		}
+	],
+	"images": [
+		{
+			"uri": "T_MetalGate01_BC.png"
+		},
+		{
+			"uri": "T_MetalGate01_ORM.png"
+		},
+		{
+			"uri": "T_MetalGate01_N.png"
+		}
+	],
+	"materials": [
+		{
+			"name": "MI_MetalGate01",
+			"pbrMetallicRoughness":
+			{
+				"baseColorTexture":
+				{
+					"index": 0
+				},
+				"metallicRoughnessTexture":
+				{
+					"index": 1
+				}
+			},
+			"normalTexture":
+			{
+				"index": 2
+			},
+			"occlusionTexture":
+			{
+				"index": 1
+			}
+		}
+	],
+	"meshes": [
+		{
+			"name": "SM_MetalGate01",
+			"primitives": [
+				{
+					"attributes":
+					{
+						"POSITION": 1,
+						"NORMAL": 2,
+						"TANGENT": 3,
+						"TEXCOORD_0": 4,
+						"TEXCOORD_1": 5
+					},
+					"indices": 0,
+					"material": 0
+				}
+			]
+		}
+	],
+	"nodes": [
+		{
+			"mesh": 0
+		}
+	],
+	"samplers": [
+		{
+			"minFilter": 9987,
+			"magFilter": 9729
+		}
+	],
+	"scenes": [
+		{
+			"nodes": [
+				0
+			]
+		}
+	],
+	"textures": [
+		{
+			"name": "T_MetalGate01_BC",
+			"sampler": 0,
+			"source": 0
+		},
+		{
+			"name": "T_MetalGate01_ORM",
+			"sampler": 0,
+			"source": 1
+		},
+		{
+			"name": "T_MetalGate01_N",
+			"sampler": 0,
+			"source": 2
+		}
+	]
+}

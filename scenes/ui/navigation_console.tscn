@@ -1,0 +1,291 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/navigation_console.gd" id="1_console"]
+[ext_resource type="Script" path="res://scripts/ui/navigation_map.gd" id="2_map"]
+[ext_resource type="PackedScene" path="res://scenes/ui/oxygen_gauge.tscn" id="3_gauge"]
+[ext_resource type="PackedScene" path="res://scenes/ui/movement_panel.tscn" id="4_panel"]
+
+[sub_resource type="StyleBoxFlat" id="Style_key_normal"]
+content_margin_left = 6.0
+content_margin_top = 4.0
+content_margin_right = 6.0
+content_margin_bottom = 4.0
+bg_color = Color(0.22, 0.23, 0.25, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 4
+border_color = Color(0.1, 0.1, 0.11, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="Style_key_hover"]
+content_margin_left = 6.0
+content_margin_top = 4.0
+content_margin_right = 6.0
+content_margin_bottom = 4.0
+bg_color = Color(0.3, 0.32, 0.34, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 4
+border_color = Color(0.45, 0.95, 0.85, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="Style_key_pressed"]
+content_margin_left = 6.0
+content_margin_top = 6.0
+content_margin_right = 6.0
+content_margin_bottom = 2.0
+bg_color = Color(0.12, 0.4, 0.37, 1)
+border_width_left = 2
+border_width_top = 4
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.1, 0.1, 0.11, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="Style_key_disabled"]
+content_margin_left = 6.0
+content_margin_top = 4.0
+content_margin_right = 6.0
+content_margin_bottom = 4.0
+bg_color = Color(0.16, 0.16, 0.17, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.1, 0.1, 0.11, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="Theme" id="Theme_panel"]
+Button/colors/font_color = Color(0.85, 0.88, 0.86, 1)
+Button/colors/font_hover_color = Color(0.6, 1, 0.92, 1)
+Button/colors/font_pressed_color = Color(1, 1, 1, 1)
+Button/colors/font_disabled_color = Color(0.4, 0.4, 0.4, 1)
+Button/font_sizes/font_size = 14
+Button/styles/normal = SubResource("Style_key_normal")
+Button/styles/hover = SubResource("Style_key_hover")
+Button/styles/pressed = SubResource("Style_key_pressed")
+Button/styles/disabled = SubResource("Style_key_disabled")
+Label/colors/font_color = Color(0.8, 0.95, 0.9, 1)
+
+[sub_resource type="StyleBoxFlat" id="Style_casing"]
+bg_color = Color(0.86, 0.6, 0.13, 0.97)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 10
+border_color = Color(0.55, 0.36, 0.07, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+shadow_color = Color(0, 0, 0, 0.5)
+shadow_size = 12
+
+[sub_resource type="StyleBoxFlat" id="Style_instrument"]
+content_margin_left = 14.0
+content_margin_top = 12.0
+content_margin_right = 14.0
+content_margin_bottom = 12.0
+bg_color = Color(0.13, 0.15, 0.17, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.32, 0.22, 0.05, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="Style_screen_bezel"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0.36, 0.25, 0.08, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.2, 0.13, 0.03, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="Style_interference_fill"]
+bg_color = Color(0.85, 0.15, 0.1, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+
+[node name="NavigationConsole" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_panel")
+script = ExtResource("1_console")
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Casing" type="PanelContainer" parent="Center"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("Style_casing")
+
+[node name="Margin" type="MarginContainer" parent="Center/Casing"]
+layout_mode = 2
+theme_override_constants/margin_left = 22
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 22
+theme_override_constants/margin_bottom = 18
+
+[node name="Rows" type="VBoxContainer" parent="Center/Casing/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Header" type="HBoxContainer" parent="Center/Casing/Margin/Rows"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="Center/Casing/Margin/Rows/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.2, 0.13, 0.03, 1)
+theme_override_font_sizes/font_size = 20
+text = "NAVEGAÇÃO  ·  CÁPSULA 10"
+
+[node name="AlertLabel" type="Label" parent="Center/Casing/Margin/Rows/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.05, 0.02, 1)
+theme_override_font_sizes/font_size = 20
+text = "ALERTA"
+
+[node name="HeaderSpacer" type="Control" parent="Center/Casing/Margin/Rows/Header"]
+custom_minimum_size = Vector2(24, 0)
+layout_mode = 2
+
+[node name="HeadingLabel" type="Label" parent="Center/Casing/Margin/Rows/Header"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.13, 0.03, 1)
+theme_override_font_sizes/font_size = 20
+text = "RUMO  N"
+
+[node name="Body" type="HBoxContainer" parent="Center/Casing/Margin/Rows"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="LeftColumn" type="VBoxContainer" parent="Center/Casing/Margin/Rows/Body"]
+custom_minimum_size = Vector2(230, 0)
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="OxygenInstrument" type="PanelContainer" parent="Center/Casing/Margin/Rows/Body/LeftColumn"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("Style_instrument")
+
+[node name="OxygenGauge" parent="Center/Casing/Margin/Rows/Body/LeftColumn/OxygenInstrument" instance=ExtResource("3_gauge")]
+layout_mode = 2
+
+[node name="CostsInstrument" type="PanelContainer" parent="Center/Casing/Margin/Rows/Body/LeftColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("Style_instrument")
+
+[node name="CostsLabel" type="Label" parent="Center/Casing/Margin/Rows/Body/LeftColumn/CostsInstrument"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 15
+text = "CUSTO DE O₂"
+
+[node name="InterferenceInstrument" type="PanelContainer" parent="Center/Casing/Margin/Rows/Body/LeftColumn"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("Style_instrument")
+
+[node name="InterferenceBox" type="VBoxContainer" parent="Center/Casing/Margin/Rows/Body/LeftColumn/InterferenceInstrument"]
+layout_mode = 2
+
+[node name="InterferenceLabel" type="Label" parent="Center/Casing/Margin/Rows/Body/LeftColumn/InterferenceInstrument/InterferenceBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+text = "INTERFERÊNCIA"
+
+[node name="InterferenceBar" type="ProgressBar" parent="Center/Casing/Margin/Rows/Body/LeftColumn/InterferenceInstrument/InterferenceBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 14)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/fill = SubResource("Style_interference_fill")
+show_percentage = false
+
+[node name="ScreenBezel" type="PanelContainer" parent="Center/Casing/Margin/Rows/Body"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("Style_screen_bezel")
+
+[node name="NavigationMap" type="Control" parent="Center/Casing/Margin/Rows/Body/ScreenBezel"]
+unique_name_in_owner = true
+clip_contents = true
+custom_minimum_size = Vector2(440, 440)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("2_map")
+
+[node name="RightColumn" type="VBoxContainer" parent="Center/Casing/Margin/Rows/Body"]
+custom_minimum_size = Vector2(270, 0)
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="KeypadInstrument" type="PanelContainer" parent="Center/Casing/Margin/Rows/Body/RightColumn"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("Style_instrument")
+
+[node name="MovementPanel" parent="Center/Casing/Margin/Rows/Body/RightColumn/KeypadInstrument" instance=ExtResource("4_panel")]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="StatusInstrument" type="PanelContainer" parent="Center/Casing/Margin/Rows/Body/RightColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("Style_instrument")
+
+[node name="StatusLabel" type="Label" parent="Center/Casing/Margin/Rows/Body/RightColumn/StatusInstrument"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(230, 0)
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 15
+text = "Sistemas prontos."
+autowrap_mode = 3
+
+[node name="FooterLabel" type="Label" parent="Center/Casing/Margin/Rows"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.13, 0.03, 1)
+theme_override_font_sizes/font_size = 14
+text = "Clique nos botões para comandar a cápsula  ·  Botão direito: levantar do posto"
+horizontal_alignment = 1

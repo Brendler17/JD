@@ -1,0 +1,201 @@
+{
+	"asset":
+	{
+		"version": "2.0",
+		"generator": "Unreal Engine 5.8.2"
+	},
+	"scene": 0,
+	"accessors": [
+		{
+			"bufferView": 0,
+			"count": 38901,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"bufferView": 1,
+			"count": 6948,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [
+				-0.495770216,
+				-0.117465682,
+				-1.10582173
+			],
+			"max": [
+				0.428572059,
+				0.212697044,
+				1.07122087
+			]
+		},
+		{
+			"bufferView": 2,
+			"count": 6948,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 3,
+			"count": 6948,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 4,
+			"count": 6948,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 5,
+			"count": 6948,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 6,
+			"count": 6948,
+			"type": "VEC2",
+			"componentType": 5126
+		}
+	],
+	"buffers": [
+		{
+			"uri": "SM_BedSheets01.bin",
+			"byteLength": 522476
+		}
+	],
+	"bufferViews": [
+		{
+			"buffer": 0,
+			"byteLength": 77802,
+			"target": 34963
+		},
+		{
+			"buffer": 0,
+			"byteLength": 83376,
+			"byteOffset": 77804,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 83376,
+			"byteOffset": 161180,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 111168,
+			"byteOffset": 244556,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 55584,
+			"byteOffset": 355724,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 55584,
+			"byteOffset": 411308,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 55584,
+			"byteOffset": 466892,
+			"target": 34962
+		}
+	],
+	"images": [
+		{
+			"uri": "T_BedSheets01_BC.png"
+		},
+		{
+			"uri": "T_BedSheets01_ORM.png"
+		},
+		{
+			"uri": "T_BedSheets01_N.png"
+		}
+	],
+	"materials": [
+		{
+			"name": "MI_BedSheets01",
+			"pbrMetallicRoughness":
+			{
+				"baseColorTexture":
+				{
+					"index": 0
+				},
+				"metallicRoughnessTexture":
+				{
+					"index": 1
+				}
+			},
+			"normalTexture":
+			{
+				"index": 2
+			},
+			"occlusionTexture":
+			{
+				"index": 1
+			}
+		}
+	],
+	"meshes": [
+		{
+			"name": "SM_BedSheets01",
+			"primitives": [
+				{
+					"attributes":
+					{
+						"POSITION": 1,
+						"NORMAL": 2,
+						"TANGENT": 3,
+						"TEXCOORD_0": 4,
+						"TEXCOORD_1": 5,
+						"TEXCOORD_2": 6
+					},
+					"indices": 0,
+					"material": 0
+				}
+			]
+		}
+	],
+	"nodes": [
+		{
+			"mesh": 0
+		}
+	],
+	"samplers": [
+		{
+			"minFilter": 9987,
+			"magFilter": 9729
+		}
+	],
+	"scenes": [
+		{
+			"nodes": [
+				0
+			]
+		}
+	],
+	"textures": [
+		{
+			"name": "T_BedSheets01_BC",
+			"sampler": 0,
+			"source": 0
+		},
+		{
+			"name": "T_BedSheets01_ORM",
+			"sampler": 0,
+			"source": 1
+		},
+		{
+			"name": "T_BedSheets01_N",
+			"sampler": 0,
+			"source": 2
+		}
+	]
+}

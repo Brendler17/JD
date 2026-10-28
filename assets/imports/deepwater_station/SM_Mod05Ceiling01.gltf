@@ -1,0 +1,205 @@
+{
+	"asset":
+	{
+		"version": "2.0",
+		"generator": "Unreal Engine 5.8.2"
+	},
+	"scene": 0,
+	"accessors": [
+		{
+			"bufferView": 0,
+			"count": 1707,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"bufferView": 1,
+			"count": 726,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [
+				-2.69591737,
+				6.54792881,
+				-2.55918527
+			],
+			"max": [
+				2.69591737,
+				6.63534975,
+				2.5591855
+			]
+		},
+		{
+			"bufferView": 2,
+			"count": 726,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 3,
+			"count": 726,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 4,
+			"count": 726,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 5,
+			"count": 726,
+			"type": "VEC2",
+			"componentType": 5126
+		}
+	],
+	"buffers": [
+		{
+			"uri": "SM_Mod05Ceiling01.bin",
+			"byteLength": 44072
+		}
+	],
+	"bufferViews": [
+		{
+			"buffer": 0,
+			"byteLength": 3414,
+			"target": 34963
+		},
+		{
+			"buffer": 0,
+			"byteLength": 8712,
+			"byteOffset": 3416,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 8712,
+			"byteOffset": 12128,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 11616,
+			"byteOffset": 20840,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 5808,
+			"byteOffset": 32456,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 5808,
+			"byteOffset": 38264,
+			"target": 34962
+		}
+	],
+	"images": [
+		{
+			"uri": "MI_Mod05Ceiling01_Emissive.png"
+		},
+		{
+			"uri": "T_Mod05Ceiling01_BC.png"
+		},
+		{
+			"uri": "T_Mod05Ceiling01_ORM.png"
+		},
+		{
+			"uri": "T_Mod05Ceiling01_N.png"
+		}
+	],
+	"materials": [
+		{
+			"name": "MI_Mod05Ceiling01",
+			"pbrMetallicRoughness":
+			{
+				"baseColorTexture":
+				{
+					"index": 0
+				},
+				"metallicRoughnessTexture":
+				{
+					"index": 1
+				}
+			},
+			"normalTexture":
+			{
+				"index": 3
+			},
+			"occlusionTexture":
+			{
+				"index": 1
+			},
+			"emissiveTexture":
+			{
+				"index": 2
+			},
+			"emissiveFactor": [
+				0.11328125,
+				0.11328125,
+				0.11328125
+			]
+		}
+	],
+	"meshes": [
+		{
+			"name": "SM_Mod05Ceiling01",
+			"primitives": [
+				{
+					"attributes":
+					{
+						"POSITION": 1,
+						"NORMAL": 2,
+						"TANGENT": 3,
+						"TEXCOORD_0": 4,
+						"TEXCOORD_1": 5
+					},
+					"indices": 0,
+					"material": 0
+				}
+			]
+		}
+	],
+	"nodes": [
+		{
+			"mesh": 0
+		}
+	],
+	"samplers": [
+		{
+			"minFilter": 9987,
+			"magFilter": 9729
+		}
+	],
+	"scenes": [
+		{
+			"nodes": [
+				0
+			]
+		}
+	],
+	"textures": [
+		{
+			"name": "T_Mod05Ceiling01_BC",
+			"sampler": 0,
+			"source": 1
+		},
+		{
+			"name": "T_Mod05Ceiling01_ORM",
+			"sampler": 0,
+			"source": 2
+		},
+		{
+			"name": "MI_Mod05Ceiling01_Emissive",
+			"sampler": 0,
+			"source": 0
+		},
+		{
+			"name": "T_Mod05Ceiling01_N",
+			"sampler": 0,
+			"source": 3
+		}
+	]
+}

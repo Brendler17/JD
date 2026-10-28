@@ -1,0 +1,234 @@
+{
+	"asset":
+	{
+		"version": "2.0",
+		"generator": "Unreal Engine 5.8.2"
+	},
+	"scene": 0,
+	"accessors": [
+		{
+			"bufferView": 0,
+			"count": 7935,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"bufferView": 1,
+			"count": 2983,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [
+				-0.250777423,
+				0.000868735311,
+				0.000979595119
+			],
+			"max": [
+				0.246935263,
+				0.519242465,
+				0.623042643
+			]
+		},
+		{
+			"bufferView": 2,
+			"count": 2983,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 3,
+			"count": 2983,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 4,
+			"count": 2983,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 5,
+			"count": 2983,
+			"type": "VEC2",
+			"componentType": 5126
+		}
+	],
+	"buffers": [
+		{
+			"uri": "SM_Computer_02b.bin",
+			"byteLength": 182920
+		}
+	],
+	"bufferViews": [
+		{
+			"buffer": 0,
+			"byteLength": 15870,
+			"target": 34963
+		},
+		{
+			"buffer": 0,
+			"byteLength": 35796,
+			"byteOffset": 15872,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 35796,
+			"byteOffset": 51668,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 47728,
+			"byteOffset": 87464,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 23864,
+			"byteOffset": 135192,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 23864,
+			"byteOffset": 159056,
+			"target": 34962
+		}
+	],
+	"images": [
+		{
+			"uri": "MI_Computer_02a_BaseColor.png"
+		},
+		{
+			"uri": "MI_Computer_02a_MetallicRoughness.png"
+		},
+		{
+			"uri": "MI_Computer_02a_Emissive.png"
+		},
+		{
+			"uri": "MI_Computer_02a_Normal.png"
+		},
+		{
+			"uri": "MI_Computer_02a_Occlusion.png"
+		},
+		{
+			"uri": "MI_Computer_02a_Specular.png"
+		}
+	],
+	"materials": [
+		{
+			"name": "MI_Computer_02a",
+			"pbrMetallicRoughness":
+			{
+				"baseColorTexture":
+				{
+					"index": 0
+				},
+				"metallicRoughnessTexture":
+				{
+					"index": 1
+				}
+			},
+			"normalTexture":
+			{
+				"index": 3
+			},
+			"occlusionTexture":
+			{
+				"index": 4
+			},
+			"emissiveTexture":
+			{
+				"index": 2
+			},
+			"emissiveFactor": [
+				0.423828125,
+				0.423828125,
+				0.423828125
+			],
+			"extensions":
+			{
+				"KHR_materials_specular":
+				{
+					"specularTexture":
+					{
+						"index": 5
+					}
+				}
+			}
+		}
+	],
+	"meshes": [
+		{
+			"name": "SM_Computer_02b",
+			"primitives": [
+				{
+					"attributes":
+					{
+						"POSITION": 1,
+						"NORMAL": 2,
+						"TANGENT": 3,
+						"TEXCOORD_0": 4,
+						"TEXCOORD_1": 5
+					},
+					"indices": 0,
+					"material": 0
+				}
+			]
+		}
+	],
+	"nodes": [
+		{
+			"mesh": 0
+		}
+	],
+	"samplers": [
+		{
+			"minFilter": 9987,
+			"magFilter": 9729
+		}
+	],
+	"scenes": [
+		{
+			"nodes": [
+				0
+			]
+		}
+	],
+	"textures": [
+		{
+			"name": "MI_Computer_02a_BaseColor",
+			"sampler": 0,
+			"source": 0
+		},
+		{
+			"name": "MI_Computer_02a_MetallicRoughness",
+			"sampler": 0,
+			"source": 1
+		},
+		{
+			"name": "MI_Computer_02a_Emissive",
+			"sampler": 0,
+			"source": 2
+		},
+		{
+			"name": "MI_Computer_02a_Normal",
+			"sampler": 0,
+			"source": 3
+		},
+		{
+			"name": "MI_Computer_02a_Occlusion",
+			"sampler": 0,
+			"source": 4
+		},
+		{
+			"name": "MI_Computer_02a_Specular",
+			"sampler": 0,
+			"source": 5
+		}
+	],
+	"extensionsUsed": [
+		"KHR_materials_specular"
+	]
+}

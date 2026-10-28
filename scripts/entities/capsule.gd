@@ -44,15 +44,25 @@ func _ready() -> void:
 	rotation_degrees.y = FACING_ROTATION_DEGREES[facing]
 
 	EventBus.request_move_forward.connect(_on_request_move_forward)
+	EventBus.request_move_backward.connect(_on_request_move_backward)
 	EventBus.request_rotate_left.connect(_on_request_rotate_left)
 	EventBus.request_rotate_right.connect(_on_request_rotate_right)
+	EventBus.request_sonar_ping.connect(_on_request_sonar_ping)
 
-## Pega o deslocamento correspondente à direção atual (dicionário GRID_OFFSET) e calcula a célula alvo.
+
+func _on_request_move_forward() -> void:
+	_try_move(GRID_OFFSET[facing])
+
+
+## Ré: anda uma célula no sentido oposto ao que a cápsula aponta, sem girar.
+func _on_request_move_backward() -> void:
+	_try_move(-GRID_OFFSET[facing])
+
+## Calcula a célula alvo a partir do deslocamento `direction`.
 ## Se a matriz disser que ela é bloqueada, a cápsula fica parada e emite capsule_collided;
 ## senão, atualiza grid_position e a posição 3D, e emite capsule_moved ("fui pra cá, nessa direção").
 ## Se a célula for a saída, emite capsule_reached_exit antes de capsule_moved (vitória tem prioridade sobre o custo do passo).
-func _on_request_move_forward() -> void:
-	var direction: Vector2i = GRID_OFFSET[facing]
+func _try_move(direction: Vector2i) -> void:
 	var target := grid_position + direction
 	if maze and not maze.is_walkable(target):
 		EventBus.capsule_collided.emit(target, direction)
@@ -78,3 +88,16 @@ func _rotate_facing(steps: int) -> void:
 	facing = wrapi(facing + steps, 0, Facing.size())
 	rotation_degrees.y = FACING_ROTATION_DEGREES[facing]
 	EventBus.capsule_rotated.emit(GRID_OFFSET[facing])
+
+
+## Sonar: um sinal em cada uma das 4 direções da grade, que segue reto até
+## a primeira célula bloqueada. Só o primeiro obstáculo de cada sinal é revelado.
+func _on_request_sonar_ping() -> void:
+	var hits: Array[Vector2i] = []
+	if maze:
+		for direction: Vector2i in GRID_OFFSET.values():
+			var cell := grid_position + direction
+			while maze.is_walkable(cell):
+				cell += direction
+			hits.append(cell)
+	EventBus.sonar_pinged.emit(grid_position, hits)

@@ -1,0 +1,340 @@
+{
+	"asset":
+	{
+		"version": "2.0",
+		"generator": "Unreal Engine 5.8.2"
+	},
+	"scene": 0,
+	"accessors": [
+		{
+			"bufferView": 0,
+			"count": 108228,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"bufferView": 1,
+			"count": 34950,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [
+				-0.426509351,
+				0.0087423129,
+				-0.453442782
+			],
+			"max": [
+				0.433170587,
+				1.19549286,
+				0.379329681
+			]
+		},
+		{
+			"bufferView": 2,
+			"count": 34950,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 3,
+			"count": 34950,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 4,
+			"count": 34950,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 5,
+			"count": 34950,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 6,
+			"count": 804,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"bufferView": 7,
+			"count": 282,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [
+				-0.3067725,
+				0.476391971,
+				-0.364161253
+			],
+			"max": [
+				0.306772709,
+				1.17688167,
+				0.312391222
+			]
+		},
+		{
+			"bufferView": 8,
+			"count": 282,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 9,
+			"count": 282,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 10,
+			"count": 282,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 11,
+			"count": 282,
+			"type": "VEC2",
+			"componentType": 5126
+		}
+	],
+	"buffers": [
+		{
+			"uri": "SM_ChairA04.bin",
+			"byteLength": 2191056
+		}
+	],
+	"bufferViews": [
+		{
+			"buffer": 0,
+			"byteLength": 216456,
+			"target": 34963
+		},
+		{
+			"buffer": 0,
+			"byteLength": 419400,
+			"byteOffset": 216456,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 419400,
+			"byteOffset": 635856,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 559200,
+			"byteOffset": 1055256,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 279600,
+			"byteOffset": 1614456,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 279600,
+			"byteOffset": 1894056,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 1608,
+			"byteOffset": 2173656,
+			"target": 34963
+		},
+		{
+			"buffer": 0,
+			"byteLength": 3384,
+			"byteOffset": 2175264,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 3384,
+			"byteOffset": 2178648,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 4512,
+			"byteOffset": 2182032,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 2256,
+			"byteOffset": 2186544,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 2256,
+			"byteOffset": 2188800,
+			"target": 34962
+		}
+	],
+	"images": [
+		{
+			"uri": "M_Chair_fabrick_04_BaseColor.png"
+		},
+		{
+			"uri": "T_Chair_04_BC.png"
+		},
+		{
+			"uri": "T_Chair_04_ORM.png"
+		},
+		{
+			"uri": "T_Chair_04_N.png"
+		},
+		{
+			"uri": "T_Chair_fabrick_04_ORM.png"
+		},
+		{
+			"uri": "T_Chair_fabrick_04_N.png"
+		}
+	],
+	"materials": [
+		{
+			"name": "MI_Chair_04",
+			"pbrMetallicRoughness":
+			{
+				"baseColorTexture":
+				{
+					"index": 0
+				},
+				"metallicRoughnessTexture":
+				{
+					"index": 1
+				}
+			},
+			"normalTexture":
+			{
+				"index": 2
+			},
+			"occlusionTexture":
+			{
+				"index": 1
+			}
+		},
+		{
+			"name": "M_Chair_fabrick_04",
+			"pbrMetallicRoughness":
+			{
+				"baseColorTexture":
+				{
+					"index": 3
+				},
+				"metallicRoughnessTexture":
+				{
+					"index": 4
+				}
+			},
+			"normalTexture":
+			{
+				"index": 5
+			},
+			"occlusionTexture":
+			{
+				"index": 4
+			},
+			"alphaMode": "BLEND",
+			"doubleSided": true,
+			"extensions":
+			{
+				"KHR_materials_ior":
+				{
+					"ior": 1
+				}
+			}
+		}
+	],
+	"meshes": [
+		{
+			"name": "SM_ChairA04",
+			"primitives": [
+				{
+					"attributes":
+					{
+						"POSITION": 1,
+						"NORMAL": 2,
+						"TANGENT": 3,
+						"TEXCOORD_0": 4,
+						"TEXCOORD_1": 5
+					},
+					"indices": 0,
+					"material": 0
+				},
+				{
+					"attributes":
+					{
+						"POSITION": 7,
+						"NORMAL": 8,
+						"TANGENT": 9,
+						"TEXCOORD_0": 10,
+						"TEXCOORD_1": 11
+					},
+					"indices": 6,
+					"material": 1
+				}
+			]
+		}
+	],
+	"nodes": [
+		{
+			"mesh": 0
+		}
+	],
+	"samplers": [
+		{
+			"minFilter": 9987,
+			"magFilter": 9729
+		}
+	],
+	"scenes": [
+		{
+			"nodes": [
+				0
+			]
+		}
+	],
+	"textures": [
+		{
+			"name": "T_Chair_04_BC",
+			"sampler": 0,
+			"source": 1
+		},
+		{
+			"name": "T_Chair_04_ORM",
+			"sampler": 0,
+			"source": 2
+		},
+		{
+			"name": "T_Chair_04_N",
+			"sampler": 0,
+			"source": 3
+		},
+		{
+			"name": "M_Chair_fabrick_04_BaseColor",
+			"sampler": 0,
+			"source": 0
+		},
+		{
+			"name": "T_Chair_fabrick_04_ORM",
+			"sampler": 0,
+			"source": 4
+		},
+		{
+			"name": "T_Chair_fabrick_04_N",
+			"sampler": 0,
+			"source": 5
+		}
+	],
+	"extensionsUsed": [
+		"KHR_materials_ior"
+	]
+}

@@ -1,0 +1,188 @@
+{
+	"asset":
+	{
+		"version": "2.0",
+		"generator": "Unreal Engine 5.8.2"
+	},
+	"scene": 0,
+	"accessors": [
+		{
+			"bufferView": 0,
+			"count": 9429,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"bufferView": 1,
+			"count": 3993,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [
+				-1.34202433,
+				-1.60883331,
+				-1.33511305
+			],
+			"max": [
+				1.344082,
+				0.000572578399,
+				1.34376276
+			]
+		},
+		{
+			"bufferView": 2,
+			"count": 3993,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 3,
+			"count": 3993,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 4,
+			"count": 3993,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 5,
+			"count": 3993,
+			"type": "VEC2",
+			"componentType": 5126
+		}
+	],
+	"buffers": [
+		{
+			"uri": "SM_AdapterPipe01.bin",
+			"byteLength": 242468
+		}
+	],
+	"bufferViews": [
+		{
+			"buffer": 0,
+			"byteLength": 18858,
+			"target": 34963
+		},
+		{
+			"buffer": 0,
+			"byteLength": 47916,
+			"byteOffset": 18860,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 47916,
+			"byteOffset": 66776,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 63888,
+			"byteOffset": 114692,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 31944,
+			"byteOffset": 178580,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 31944,
+			"byteOffset": 210524,
+			"target": 34962
+		}
+	],
+	"images": [
+		{
+			"uri": "T_AdapterPipe01_BC.png"
+		},
+		{
+			"uri": "T_AdapterPipe01_ORM.png"
+		},
+		{
+			"uri": "T_AdapterPipe01_N.png"
+		}
+	],
+	"materials": [
+		{
+			"name": "MI_AdapterPipe01",
+			"pbrMetallicRoughness":
+			{
+				"baseColorTexture":
+				{
+					"index": 0
+				},
+				"metallicRoughnessTexture":
+				{
+					"index": 1
+				}
+			},
+			"normalTexture":
+			{
+				"index": 2
+			},
+			"occlusionTexture":
+			{
+				"index": 1
+			}
+		}
+	],
+	"meshes": [
+		{
+			"name": "SM_AdapterPipe01",
+			"primitives": [
+				{
+					"attributes":
+					{
+						"POSITION": 1,
+						"NORMAL": 2,
+						"TANGENT": 3,
+						"TEXCOORD_0": 4,
+						"TEXCOORD_1": 5
+					},
+					"indices": 0,
+					"material": 0
+				}
+			]
+		}
+	],
+	"nodes": [
+		{
+			"mesh": 0
+		}
+	],
+	"samplers": [
+		{
+			"minFilter": 9987,
+			"magFilter": 9729
+		}
+	],
+	"scenes": [
+		{
+			"nodes": [
+				0
+			]
+		}
+	],
+	"textures": [
+		{
+			"name": "T_AdapterPipe01_BC",
+			"sampler": 0,
+			"source": 0
+		},
+		{
+			"name": "T_AdapterPipe01_ORM",
+			"sampler": 0,
+			"source": 1
+		},
+		{
+			"name": "T_AdapterPipe01_N",
+			"sampler": 0,
+			"source": 2
+		}
+	]
+}

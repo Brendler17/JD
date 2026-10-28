@@ -1,0 +1,184 @@
+{
+	"asset":
+	{
+		"version": "2.0",
+		"generator": "Unreal Engine 5.8.4"
+	},
+	"scene": 0,
+	"accessors": [
+		{
+			"bufferView": 0,
+			"count": 3416769,
+			"type": "SCALAR",
+			"componentType": 5125
+		},
+		{
+			"bufferView": 1,
+			"count": 3416769,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [
+				-18.0192871,
+				-4.3000164,
+				-17.9761944
+			],
+			"max": [
+				7.20861578,
+				3.86038208,
+				0.527549446
+			]
+		},
+		{
+			"bufferView": 2,
+			"count": 3416769,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 3,
+			"count": 3416769,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 4,
+			"count": 3416769,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 5,
+			"count": 3416769,
+			"type": "VEC2",
+			"componentType": 5126
+		}
+	],
+	"buffers": [
+		{
+			"uri": "SM_MERGED_StaticMeshActor_1.bin",
+			"byteLength": 177671988
+		}
+	],
+	"bufferViews": [
+		{
+			"buffer": 0,
+			"byteLength": 13667076,
+			"target": 34963
+		},
+		{
+			"buffer": 0,
+			"byteLength": 41001228,
+			"byteOffset": 13667076,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 41001228,
+			"byteOffset": 54668304,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 27334152,
+			"byteOffset": 95669532,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 27334152,
+			"byteOffset": 123003684,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 27334152,
+			"byteOffset": 150337836,
+			"target": 34962
+		}
+	],
+	"images": [
+		{
+			"uri": "MI_MERGED_StaticMeshActor_1_BaseColor.png"
+		},
+		{
+			"uri": "MI_MERGED_StaticMeshActor_1_Normal.png"
+		}
+	],
+	"materials": [
+		{
+			"name": "MI_MERGED_StaticMeshActor_1",
+			"pbrMetallicRoughness":
+			{
+				"baseColorTexture":
+				{
+					"index": 0
+				},
+				"metallicFactor": 0,
+				"roughnessFactor": 0.498039246
+			},
+			"normalTexture":
+			{
+				"index": 1
+			},
+			"extensions":
+			{
+				"KHR_materials_specular":
+				{
+					"specularFactor": 0.498039246
+				}
+			}
+		}
+	],
+	"meshes": [
+		{
+			"name": "SM_MERGED_StaticMeshActor_1",
+			"primitives": [
+				{
+					"attributes":
+					{
+						"POSITION": 1,
+						"NORMAL": 2,
+						"TEXCOORD_0": 3,
+						"TEXCOORD_1": 4,
+						"TEXCOORD_2": 5
+					},
+					"indices": 0,
+					"material": 0
+				}
+			]
+		}
+	],
+	"nodes": [
+		{
+			"mesh": 0
+		}
+	],
+	"samplers": [
+		{
+			"minFilter": 9987,
+			"magFilter": 9729
+		}
+	],
+	"scenes": [
+		{
+			"nodes": [
+				0
+			]
+		}
+	],
+	"textures": [
+		{
+			"name": "MI_MERGED_StaticMeshActor_1_BaseColor",
+			"sampler": 0,
+			"source": 0
+		},
+		{
+			"name": "MI_MERGED_StaticMeshActor_1_Normal",
+			"sampler": 0,
+			"source": 1
+		}
+	],
+	"extensionsUsed": [
+		"KHR_materials_specular"
+	]
+}

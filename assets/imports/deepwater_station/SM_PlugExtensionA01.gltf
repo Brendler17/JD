@@ -1,0 +1,205 @@
+{
+	"asset":
+	{
+		"version": "2.0",
+		"generator": "Unreal Engine 5.8.2"
+	},
+	"scene": 0,
+	"accessors": [
+		{
+			"bufferView": 0,
+			"count": 40896,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"bufferView": 1,
+			"count": 12357,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [
+				-0.302922368,
+				-3.81469718e-08,
+				-0.00805053674
+			],
+			"max": [
+				0.930349231,
+				0.123248287,
+				1.41533053
+			]
+		},
+		{
+			"bufferView": 2,
+			"count": 12357,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 3,
+			"count": 12357,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 4,
+			"count": 12357,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 5,
+			"count": 12357,
+			"type": "VEC2",
+			"componentType": 5126
+		}
+	],
+	"buffers": [
+		{
+			"uri": "SM_PlugExtensionA01.bin",
+			"byteLength": 773784
+		}
+	],
+	"bufferViews": [
+		{
+			"buffer": 0,
+			"byteLength": 81792,
+			"target": 34963
+		},
+		{
+			"buffer": 0,
+			"byteLength": 148284,
+			"byteOffset": 81792,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 148284,
+			"byteOffset": 230076,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 197712,
+			"byteOffset": 378360,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 98856,
+			"byteOffset": 576072,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 98856,
+			"byteOffset": 674928,
+			"target": 34962
+		}
+	],
+	"images": [
+		{
+			"uri": "MI_Wires01_Emissive.png"
+		},
+		{
+			"uri": "T_Wires01_BC.png"
+		},
+		{
+			"uri": "T_Wires01_ORM.png"
+		},
+		{
+			"uri": "T_Wires01_N.png"
+		}
+	],
+	"materials": [
+		{
+			"name": "MI_Wires01",
+			"pbrMetallicRoughness":
+			{
+				"baseColorTexture":
+				{
+					"index": 0
+				},
+				"metallicRoughnessTexture":
+				{
+					"index": 1
+				}
+			},
+			"normalTexture":
+			{
+				"index": 3
+			},
+			"occlusionTexture":
+			{
+				"index": 1
+			},
+			"emissiveTexture":
+			{
+				"index": 2
+			},
+			"emissiveFactor": [
+				0.56640625,
+				0.56640625,
+				0.56640625
+			]
+		}
+	],
+	"meshes": [
+		{
+			"name": "SM_PlugExtensionA01",
+			"primitives": [
+				{
+					"attributes":
+					{
+						"POSITION": 1,
+						"NORMAL": 2,
+						"TANGENT": 3,
+						"TEXCOORD_0": 4,
+						"TEXCOORD_1": 5
+					},
+					"indices": 0,
+					"material": 0
+				}
+			]
+		}
+	],
+	"nodes": [
+		{
+			"mesh": 0
+		}
+	],
+	"samplers": [
+		{
+			"minFilter": 9987,
+			"magFilter": 9729
+		}
+	],
+	"scenes": [
+		{
+			"nodes": [
+				0
+			]
+		}
+	],
+	"textures": [
+		{
+			"name": "T_Wires01_BC",
+			"sampler": 0,
+			"source": 1
+		},
+		{
+			"name": "T_Wires01_ORM",
+			"sampler": 0,
+			"source": 2
+		},
+		{
+			"name": "MI_Wires01_Emissive",
+			"sampler": 0,
+			"source": 0
+		},
+		{
+			"name": "T_Wires01_N",
+			"sampler": 0,
+			"source": 3
+		}
+	]
+}

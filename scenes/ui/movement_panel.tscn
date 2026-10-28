@@ -2,36 +2,65 @@
 
 [ext_resource type="Script" path="res://scripts/ui/movement_panel.gd" id="1_panel"]
 
-[node name="MovementPanel" type="HBoxContainer"]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -186.0
-offset_top = -80.0
-offset_right = 186.0
-offset_bottom = -24.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_constants/separation = 12
-alignment = 1
+[node name="MovementPanel" type="GridContainer"]
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 3
 script = ExtResource("1_panel")
 
-[node name="RotateLeftButton" type="Button" parent="."]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(116, 56)
-focus_mode = 0
-text = "◀ Girar Esq."
+[node name="Spacer1" type="Control" parent="."]
+layout_mode = 2
 
 [node name="MoveForwardButton" type="Button" parent="."]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(116, 56)
+custom_minimum_size = Vector2(84, 64)
+layout_mode = 2
+tooltip_text = "Avança uma célula na direção atual"
 focus_mode = 0
-text = "▲ Andar"
+text = "▲
+FRENTE"
+
+[node name="Spacer2" type="Control" parent="."]
+layout_mode = 2
+
+[node name="RotateLeftButton" type="Button" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(84, 64)
+layout_mode = 2
+tooltip_text = "Gira 90º para a esquerda"
+focus_mode = 0
+text = "◀ 90º
+GIRAR"
+
+[node name="SonarButton" type="Button" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(84, 64)
+layout_mode = 2
+tooltip_text = "Emite um pulso de sonar nas 4 direções"
+focus_mode = 0
+text = "(( · ))
+SONAR"
 
 [node name="RotateRightButton" type="Button" parent="."]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(116, 56)
+custom_minimum_size = Vector2(84, 64)
+layout_mode = 2
+tooltip_text = "Gira 90º para a direita"
 focus_mode = 0
-text = "Girar Dir. ▶"
+text = "90º ▶
+GIRAR"
+
+[node name="Spacer3" type="Control" parent="."]
+layout_mode = 2
+
+[node name="MoveBackwardButton" type="Button" parent="."]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(84, 64)
+layout_mode = 2
+tooltip_text = "Recua uma célula, sem girar"
+focus_mode = 0
+text = "▼
+RÉ"
+
+[node name="Spacer4" type="Control" parent="."]
+layout_mode = 2

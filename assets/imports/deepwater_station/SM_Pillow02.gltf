@@ -1,0 +1,188 @@
+{
+	"asset":
+	{
+		"version": "2.0",
+		"generator": "Unreal Engine 5.8.2"
+	},
+	"scene": 0,
+	"accessors": [
+		{
+			"bufferView": 0,
+			"count": 13395,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"bufferView": 1,
+			"count": 2292,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [
+				-1.42102897,
+				-1.07859933,
+				-4.40577459
+			],
+			"max": [
+				0.04290957,
+				0.00189818675,
+				0.00759038469
+			]
+		},
+		{
+			"bufferView": 2,
+			"count": 2292,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 3,
+			"count": 2292,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 4,
+			"count": 2292,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 5,
+			"count": 2292,
+			"type": "VEC2",
+			"componentType": 5126
+		}
+	],
+	"buffers": [
+		{
+			"uri": "SM_Pillow02.bin",
+			"byteLength": 155144
+		}
+	],
+	"bufferViews": [
+		{
+			"buffer": 0,
+			"byteLength": 26790,
+			"target": 34963
+		},
+		{
+			"buffer": 0,
+			"byteLength": 27504,
+			"byteOffset": 26792,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 27504,
+			"byteOffset": 54296,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 36672,
+			"byteOffset": 81800,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 18336,
+			"byteOffset": 118472,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 18336,
+			"byteOffset": 136808,
+			"target": 34962
+		}
+	],
+	"images": [
+		{
+			"uri": "T_Casing01_BC.png"
+		},
+		{
+			"uri": "T_Casing01_ORM.png"
+		},
+		{
+			"uri": "T_Casing01_N.png"
+		}
+	],
+	"materials": [
+		{
+			"name": "MI_Casing01",
+			"pbrMetallicRoughness":
+			{
+				"baseColorTexture":
+				{
+					"index": 0
+				},
+				"metallicRoughnessTexture":
+				{
+					"index": 1
+				}
+			},
+			"normalTexture":
+			{
+				"index": 2
+			},
+			"occlusionTexture":
+			{
+				"index": 1
+			}
+		}
+	],
+	"meshes": [
+		{
+			"name": "SM_Pillow02",
+			"primitives": [
+				{
+					"attributes":
+					{
+						"POSITION": 1,
+						"NORMAL": 2,
+						"TANGENT": 3,
+						"TEXCOORD_0": 4,
+						"TEXCOORD_1": 5
+					},
+					"indices": 0,
+					"material": 0
+				}
+			]
+		}
+	],
+	"nodes": [
+		{
+			"mesh": 0
+		}
+	],
+	"samplers": [
+		{
+			"minFilter": 9987,
+			"magFilter": 9729
+		}
+	],
+	"scenes": [
+		{
+			"nodes": [
+				0
+			]
+		}
+	],
+	"textures": [
+		{
+			"name": "T_Casing01_BC",
+			"sampler": 0,
+			"source": 0
+		},
+		{
+			"name": "T_Casing01_ORM",
+			"sampler": 0,
+			"source": 1
+		},
+		{
+			"name": "T_Casing01_N",
+			"sampler": 0,
+			"source": 2
+		}
+	]
+}

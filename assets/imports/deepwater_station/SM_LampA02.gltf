@@ -1,0 +1,205 @@
+{
+	"asset":
+	{
+		"version": "2.0",
+		"generator": "Unreal Engine 5.8.2"
+	},
+	"scene": 0,
+	"accessors": [
+		{
+			"bufferView": 0,
+			"count": 2532,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"bufferView": 1,
+			"count": 832,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [
+				-2.28881822e-06,
+				-0.167152599,
+				-0.0440750122
+			],
+			"max": [
+				1.66552675,
+				1.09031396e-06,
+				0.0432651527
+			]
+		},
+		{
+			"bufferView": 2,
+			"count": 832,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 3,
+			"count": 832,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 4,
+			"count": 832,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 5,
+			"count": 832,
+			"type": "VEC2",
+			"componentType": 5126
+		}
+	],
+	"buffers": [
+		{
+			"uri": "SM_LampA02.bin",
+			"byteLength": 51656
+		}
+	],
+	"bufferViews": [
+		{
+			"buffer": 0,
+			"byteLength": 5064,
+			"target": 34963
+		},
+		{
+			"buffer": 0,
+			"byteLength": 9984,
+			"byteOffset": 5064,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 9984,
+			"byteOffset": 15048,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 13312,
+			"byteOffset": 25032,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 6656,
+			"byteOffset": 38344,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 6656,
+			"byteOffset": 45000,
+			"target": 34962
+		}
+	],
+	"images": [
+		{
+			"uri": "MI_Bathroom02_Emissive.png"
+		},
+		{
+			"uri": "T_Bathroom01_BC.png"
+		},
+		{
+			"uri": "T_Bathroom01_ORM.png"
+		},
+		{
+			"uri": "T_Bathroom01_N.png"
+		}
+	],
+	"materials": [
+		{
+			"name": "MI_Bathroom02",
+			"pbrMetallicRoughness":
+			{
+				"baseColorTexture":
+				{
+					"index": 0
+				},
+				"metallicRoughnessTexture":
+				{
+					"index": 1
+				}
+			},
+			"normalTexture":
+			{
+				"index": 3
+			},
+			"occlusionTexture":
+			{
+				"index": 1
+			},
+			"emissiveTexture":
+			{
+				"index": 2
+			},
+			"emissiveFactor": [
+				0.56640625,
+				0.56640625,
+				0.56640625
+			]
+		}
+	],
+	"meshes": [
+		{
+			"name": "SM_LampA02",
+			"primitives": [
+				{
+					"attributes":
+					{
+						"POSITION": 1,
+						"NORMAL": 2,
+						"TANGENT": 3,
+						"TEXCOORD_0": 4,
+						"TEXCOORD_1": 5
+					},
+					"indices": 0,
+					"material": 0
+				}
+			]
+		}
+	],
+	"nodes": [
+		{
+			"mesh": 0
+		}
+	],
+	"samplers": [
+		{
+			"minFilter": 9987,
+			"magFilter": 9729
+		}
+	],
+	"scenes": [
+		{
+			"nodes": [
+				0
+			]
+		}
+	],
+	"textures": [
+		{
+			"name": "T_Bathroom01_BC",
+			"sampler": 0,
+			"source": 1
+		},
+		{
+			"name": "T_Bathroom01_ORM",
+			"sampler": 0,
+			"source": 2
+		},
+		{
+			"name": "MI_Bathroom02_Emissive",
+			"sampler": 0,
+			"source": 0
+		},
+		{
+			"name": "T_Bathroom01_N",
+			"sampler": 0,
+			"source": 3
+		}
+	]
+}

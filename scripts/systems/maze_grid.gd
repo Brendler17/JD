@@ -61,6 +61,23 @@ func get_cells_of_type(type: CellType) -> Array[Vector2i]:
 	return result
 
 
+## BFS: menor número de passos de `origin` até cada célula andável alcançável
+## ({Vector2i: int}). Usado pelo Enemy para perseguir e medir proximidade.
+func get_distances_from(origin: Vector2i) -> Dictionary:
+	var distances := {origin: 0}
+	var queue: Array[Vector2i] = [origin]
+	var head := 0
+	while head < queue.size():
+		var cell := queue[head]
+		head += 1
+		for dir: Vector2i in [Vector2i.UP, Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT]:
+			var next := cell + dir
+			if is_walkable(next) and not distances.has(next):
+				distances[next] = distances[cell] + 1
+				queue.append(next)
+	return distances
+
+
 func _parse() -> void:
 	height = rows.size()
 	width = rows[0].length() if height > 0 else 0

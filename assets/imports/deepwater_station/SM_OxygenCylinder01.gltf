@@ -1,0 +1,205 @@
+{
+	"asset":
+	{
+		"version": "2.0",
+		"generator": "Unreal Engine 5.8.2"
+	},
+	"scene": 0,
+	"accessors": [
+		{
+			"bufferView": 0,
+			"count": 3285,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"bufferView": 1,
+			"count": 1014,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [
+				-0.0794367641,
+				-0.000109319029,
+				-0.0789075717
+			],
+			"max": [
+				0.0797645152,
+				0.714593649,
+				0.0781453699
+			]
+		},
+		{
+			"bufferView": 2,
+			"count": 1014,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 3,
+			"count": 1014,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 4,
+			"count": 1014,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 5,
+			"count": 1014,
+			"type": "VEC2",
+			"componentType": 5126
+		}
+	],
+	"buffers": [
+		{
+			"uri": "SM_OxygenCylinder01.bin",
+			"byteLength": 63356
+		}
+	],
+	"bufferViews": [
+		{
+			"buffer": 0,
+			"byteLength": 6570,
+			"target": 34963
+		},
+		{
+			"buffer": 0,
+			"byteLength": 12168,
+			"byteOffset": 6572,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 12168,
+			"byteOffset": 18740,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 16224,
+			"byteOffset": 30908,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 8112,
+			"byteOffset": 47132,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 8112,
+			"byteOffset": 55244,
+			"target": 34962
+		}
+	],
+	"images": [
+		{
+			"uri": "MI_Container01_Emissive.png"
+		},
+		{
+			"uri": "T_Container_BC.png"
+		},
+		{
+			"uri": "T_Container_ORM.png"
+		},
+		{
+			"uri": "T_Container_N.png"
+		}
+	],
+	"materials": [
+		{
+			"name": "MI_Container01",
+			"pbrMetallicRoughness":
+			{
+				"baseColorTexture":
+				{
+					"index": 0
+				},
+				"metallicRoughnessTexture":
+				{
+					"index": 1
+				}
+			},
+			"normalTexture":
+			{
+				"index": 3
+			},
+			"occlusionTexture":
+			{
+				"index": 1
+			},
+			"emissiveTexture":
+			{
+				"index": 2
+			},
+			"emissiveFactor": [
+				0.0864868164,
+				0.0864868164,
+				0.0864868164
+			]
+		}
+	],
+	"meshes": [
+		{
+			"name": "SM_OxygenCylinder01",
+			"primitives": [
+				{
+					"attributes":
+					{
+						"POSITION": 1,
+						"NORMAL": 2,
+						"TANGENT": 3,
+						"TEXCOORD_0": 4,
+						"TEXCOORD_1": 5
+					},
+					"indices": 0,
+					"material": 0
+				}
+			]
+		}
+	],
+	"nodes": [
+		{
+			"mesh": 0
+		}
+	],
+	"samplers": [
+		{
+			"minFilter": 9987,
+			"magFilter": 9729
+		}
+	],
+	"scenes": [
+		{
+			"nodes": [
+				0
+			]
+		}
+	],
+	"textures": [
+		{
+			"name": "T_Container_BC",
+			"sampler": 0,
+			"source": 1
+		},
+		{
+			"name": "T_Container_ORM",
+			"sampler": 0,
+			"source": 2
+		},
+		{
+			"name": "MI_Container01_Emissive",
+			"sampler": 0,
+			"source": 0
+		},
+		{
+			"name": "T_Container_N",
+			"sampler": 0,
+			"source": 3
+		}
+	]
+}

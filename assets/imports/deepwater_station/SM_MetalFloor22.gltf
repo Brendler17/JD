@@ -1,0 +1,188 @@
+{
+	"asset":
+	{
+		"version": "2.0",
+		"generator": "Unreal Engine 5.8.2"
+	},
+	"scene": 0,
+	"accessors": [
+		{
+			"bufferView": 0,
+			"count": 8502,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"bufferView": 1,
+			"count": 3040,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [
+				9.07650303e-07,
+				-2.17225306e-06,
+				-2.04902601
+			],
+			"max": [
+				4.95440531,
+				0.18166244,
+				-1.07051972e-06
+			]
+		},
+		{
+			"bufferView": 2,
+			"count": 3040,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 3,
+			"count": 3040,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 4,
+			"count": 3040,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 5,
+			"count": 3040,
+			"type": "VEC2",
+			"componentType": 5126
+		}
+	],
+	"buffers": [
+		{
+			"uri": "SM_MetalFloor22.bin",
+			"byteLength": 187244
+		}
+	],
+	"bufferViews": [
+		{
+			"buffer": 0,
+			"byteLength": 17004,
+			"target": 34963
+		},
+		{
+			"buffer": 0,
+			"byteLength": 36480,
+			"byteOffset": 17004,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 36480,
+			"byteOffset": 53484,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 48640,
+			"byteOffset": 89964,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 24320,
+			"byteOffset": 138604,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 24320,
+			"byteOffset": 162924,
+			"target": 34962
+		}
+	],
+	"images": [
+		{
+			"uri": "T_Wall09_BC.png"
+		},
+		{
+			"uri": "T_Wall09_ORM.png"
+		},
+		{
+			"uri": "T_Wall09_N.png"
+		}
+	],
+	"materials": [
+		{
+			"name": "MI_Wall09",
+			"pbrMetallicRoughness":
+			{
+				"baseColorTexture":
+				{
+					"index": 0
+				},
+				"metallicRoughnessTexture":
+				{
+					"index": 1
+				}
+			},
+			"normalTexture":
+			{
+				"index": 2
+			},
+			"occlusionTexture":
+			{
+				"index": 1
+			}
+		}
+	],
+	"meshes": [
+		{
+			"name": "SM_MetalFloor22",
+			"primitives": [
+				{
+					"attributes":
+					{
+						"POSITION": 1,
+						"NORMAL": 2,
+						"TANGENT": 3,
+						"TEXCOORD_0": 4,
+						"TEXCOORD_1": 5
+					},
+					"indices": 0,
+					"material": 0
+				}
+			]
+		}
+	],
+	"nodes": [
+		{
+			"mesh": 0
+		}
+	],
+	"samplers": [
+		{
+			"minFilter": 9987,
+			"magFilter": 9729
+		}
+	],
+	"scenes": [
+		{
+			"nodes": [
+				0
+			]
+		}
+	],
+	"textures": [
+		{
+			"name": "T_Wall09_BC",
+			"sampler": 0,
+			"source": 0
+		},
+		{
+			"name": "T_Wall09_ORM",
+			"sampler": 0,
+			"source": 1
+		},
+		{
+			"name": "T_Wall09_N",
+			"sampler": 0,
+			"source": 2
+		}
+	]
+}

@@ -1,0 +1,188 @@
+{
+	"asset":
+	{
+		"version": "2.0",
+		"generator": "Unreal Engine 5.8.2"
+	},
+	"scene": 0,
+	"accessors": [
+		{
+			"bufferView": 0,
+			"count": 3171,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"bufferView": 1,
+			"count": 1272,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [
+				-6.59063768,
+				-0.0044527459,
+				-0.40247035
+			],
+			"max": [
+				6.58755732,
+				6.53700447,
+				0.00670416513
+			]
+		},
+		{
+			"bufferView": 2,
+			"count": 1272,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 3,
+			"count": 1272,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 4,
+			"count": 1272,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 5,
+			"count": 1272,
+			"type": "VEC2",
+			"componentType": 5126
+		}
+	],
+	"buffers": [
+		{
+			"uri": "SM_MetalWall07.bin",
+			"byteLength": 77576
+		}
+	],
+	"bufferViews": [
+		{
+			"buffer": 0,
+			"byteLength": 6342,
+			"target": 34963
+		},
+		{
+			"buffer": 0,
+			"byteLength": 15264,
+			"byteOffset": 6344,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 15264,
+			"byteOffset": 21608,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 20352,
+			"byteOffset": 36872,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 10176,
+			"byteOffset": 57224,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 10176,
+			"byteOffset": 67400,
+			"target": 34962
+		}
+	],
+	"images": [
+		{
+			"uri": "T_MetalWall07_BC.png"
+		},
+		{
+			"uri": "T_MetalWall07_ORM.png"
+		},
+		{
+			"uri": "T_MetalWall07_N.png"
+		}
+	],
+	"materials": [
+		{
+			"name": "MI_MetalWall07",
+			"pbrMetallicRoughness":
+			{
+				"baseColorTexture":
+				{
+					"index": 0
+				},
+				"metallicRoughnessTexture":
+				{
+					"index": 1
+				}
+			},
+			"normalTexture":
+			{
+				"index": 2
+			},
+			"occlusionTexture":
+			{
+				"index": 1
+			}
+		}
+	],
+	"meshes": [
+		{
+			"name": "SM_MetalWall07",
+			"primitives": [
+				{
+					"attributes":
+					{
+						"POSITION": 1,
+						"NORMAL": 2,
+						"TANGENT": 3,
+						"TEXCOORD_0": 4,
+						"TEXCOORD_1": 5
+					},
+					"indices": 0,
+					"material": 0
+				}
+			]
+		}
+	],
+	"nodes": [
+		{
+			"mesh": 0
+		}
+	],
+	"samplers": [
+		{
+			"minFilter": 9987,
+			"magFilter": 9729
+		}
+	],
+	"scenes": [
+		{
+			"nodes": [
+				0
+			]
+		}
+	],
+	"textures": [
+		{
+			"name": "T_MetalWall07_BC",
+			"sampler": 0,
+			"source": 0
+		},
+		{
+			"name": "T_MetalWall07_ORM",
+			"sampler": 0,
+			"source": 1
+		},
+		{
+			"name": "T_MetalWall07_N",
+			"sampler": 0,
+			"source": 2
+		}
+	]
+}

@@ -1,58 +1,271 @@
-[gd_scene load_steps=12 format=3 uid="uid://bqqfv4d7oitwm"]
+[gd_scene format=3 uid="uid://bqqfv4d7oitwm"]
 
-[ext_resource type="PackedScene" path="res://scenes/entities/capsule.tscn" id="1_capsule"]
-[ext_resource type="PackedScene" path="res://scenes/ui/movement_panel.tscn" id="2_panel"]
-[ext_resource type="Shader" path="res://assets/shaders/debug_grid.gdshader" id="3_grid"]
-[ext_resource type="Resource" path="res://resources/maze_configs/campaign_01.tres" id="4_maze"]
-[ext_resource type="Script" path="res://scripts/systems/maze_builder.gd" id="5_builder"]
-[ext_resource type="PackedScene" path="res://scenes/ui/oxygen_gauge.tscn" id="6_gauge"]
-[ext_resource type="PackedScene" path="res://scenes/ui/game_over_screen.tscn" id="7_gameover"]
+[ext_resource type="Script" uid="uid://ddbd537ab2n6t" path="res://scripts/systems/level_setup.gd" id="1_setup"]
+[ext_resource type="PackedScene" uid="uid://b08cxcpbdr1nj" path="res://assets/imports/capsula_completa/SM_MERGED_StaticMeshActor_1.gltf" id="2_interior"]
+[ext_resource type="Script" uid="uid://dinbeg2yk1xv" path="res://scripts/entities/interactable.gd" id="3_interactable"]
+[ext_resource type="PackedScene" path="res://scenes/entities/player.tscn" id="4_player"]
+[ext_resource type="PackedScene" path="res://scenes/entities/capsule.tscn" id="5_capsule"]
+[ext_resource type="Shader" uid="uid://bcm0154kctqrp" path="res://assets/shaders/debug_grid.gdshader" id="6_grid"]
+[ext_resource type="Script" uid="uid://cuta0ak46em5" path="res://scripts/systems/maze_builder.gd" id="7_builder"]
+[ext_resource type="Script" uid="uid://c6ghe14a0k452" path="res://scripts/systems/debug_camera_toggle.gd" id="8_debug_cam"]
+[ext_resource type="PackedScene" path="res://scenes/ui/first_person_hud.tscn" id="9_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/navigation_console.tscn" id="10_console"]
+[ext_resource type="PackedScene" path="res://scenes/ui/note_viewer.tscn" id="11_note"]
+[ext_resource type="PackedScene" path="res://scenes/ui/game_over_screen.tscn" id="12_gameover"]
+[ext_resource type="PackedScene" path="res://scenes/entities/enemy.tscn" id="13_enemy"]
+[ext_resource type="Script" uid="uid://cl8kvhpkkxjuq" path="res://scripts/systems/alarm_system.gd" id="14_alarm"]
+[ext_resource type="Script" uid="uid://4a0hf3vnxkov" path="res://scripts/systems/alarm_light.gd" id="15_alarm_light"]
 
-[sub_resource type="Environment" id="Env_debug"]
+[sub_resource type="Environment" id="Env_cabin"]
 background_mode = 1
-background_color = Color(0.02, 0.03, 0.05, 1)
+background_color = Color(0.01, 0.02, 0.03, 1)
 ambient_light_source = 2
-ambient_light_color = Color(0.6, 0.65, 0.7, 1)
-ambient_light_energy = 0.5
+ambient_light_color = Color(0.55, 0.62, 0.7, 1)
+ambient_light_energy = 0.35
+tonemap_mode = 2
+
+[sub_resource type="BoxShape3D" id="Shape_floor"]
+size = Vector3(8, 0.5, 14)
+
+[sub_resource type="BoxShape3D" id="Shape_side_wall"]
+size = Vector3(0.5, 5, 14)
+
+[sub_resource type="BoxShape3D" id="Shape_back_wall"]
+size = Vector3(8, 5, 0.5)
+
+[sub_resource type="BoxShape3D" id="Shape_front_block"]
+size = Vector3(8, 5, 2.55)
+
+[sub_resource type="BoxShape3D" id="Shape_chair"]
+size = Vector3(1.1, 1.5, 1.2)
+
+[sub_resource type="BoxShape3D" id="Shape_panel"]
+size = Vector3(1.5, 1, 0.6)
+
+[sub_resource type="BoxShape3D" id="Shape_desk_device"]
+size = Vector3(0.8, 0.5, 0.6)
+
+[sub_resource type="BoxShape3D" id="Shape_tanks"]
+size = Vector3(0.7, 2.2, 3.2)
+
+[sub_resource type="BoxShape3D" id="Shape_hatch"]
+size = Vector3(1.4, 2.4, 0.3)
+
+[sub_resource type="BoxShape3D" id="Shape_bunk"]
+size = Vector3(1.4, 0.8, 3)
 
 [sub_resource type="ShaderMaterial" id="Mat_grid"]
-shader = ExtResource("3_grid")
+render_priority = 0
+shader = ExtResource("6_grid")
 shader_parameter/cell_size = 4.0
+shader_parameter/line_width = 0.06
+shader_parameter/base_color = Color(0.08, 0.1, 0.13, 1)
+shader_parameter/line_color = Color(0.25, 0.45, 0.55, 1)
 
 [sub_resource type="PlaneMesh" id="Mesh_floor"]
 material = SubResource("Mat_grid")
 size = Vector2(60, 60)
 
-[node name="Main" type="Node3D" unique_id=1514978619]
+[node name="Main" type="Node3D" unique_id=351303188]
+script = ExtResource("1_setup")
+maze_consumers = Array[NodePath]([NodePath("MazeDebug/MazeBuilder"), NodePath("MazeDebug/Capsule"), NodePath("MazeDebug/Enemy"), NodePath("UI/NavigationConsole")])
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Env_debug")
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2091719769]
+environment = SubResource("Env_cabin")
 
-[node name="Sun" type="DirectionalLight3D" parent="."]
-rotation_degrees = Vector3(-60, 30, 0)
+[node name="CapsuleInterior" parent="." unique_id=814285902 instance=ExtResource("2_interior")]
 
-[node name="DebugFloor" type="MeshInstance3D" parent="."]
-position = Vector3(28, 0, 28)
+[node name="CabinLights" type="Node3D" parent="." unique_id=1810467741]
+
+[node name="CeilingLightFront" type="OmniLight3D" parent="CabinLights" unique_id=114677628]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, -4)
+light_color = Color(1, 0.92, 0.8, 1)
+light_energy = 1.4
+omni_range = 9.0
+
+[node name="CeilingLightBack" type="OmniLight3D" parent="CabinLights" unique_id=1827783663]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, -10)
+light_color = Color(0.85, 0.92, 1, 1)
+light_energy = 1.1
+omni_range = 8.0
+
+[node name="ConsoleGlow" type="OmniLight3D" parent="CabinLights" unique_id=1328625812]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, -1.2)
+light_color = Color(0.5, 1, 0.9, 1)
+light_energy = 0.6
+omni_range = 2.5
+
+[node name="AlarmLight" type="OmniLight3D" parent="CabinLights" unique_id=782170824]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, -6)
+light_color = Color(1, 0.08, 0.04, 1)
+light_energy = 0.0
+omni_range = 12.0
+script = ExtResource("15_alarm_light")
+
+[node name="CabinCollision" type="StaticBody3D" parent="." unique_id=1523104123]
+
+[node name="Floor" type="CollisionShape3D" parent="CabinCollision" unique_id=1521313634]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.02, -6.5)
+shape = SubResource("Shape_floor")
+
+[node name="WallLeft" type="CollisionShape3D" parent="CabinCollision" unique_id=36748532]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0.5, -6.5)
+shape = SubResource("Shape_side_wall")
+
+[node name="WallRight" type="CollisionShape3D" parent="CabinCollision" unique_id=1425519]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0.5, -6.5)
+shape = SubResource("Shape_side_wall")
+
+[node name="WallBack" type="CollisionShape3D" parent="CabinCollision" unique_id=2064062462]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -12.55)
+shape = SubResource("Shape_back_wall")
+
+[node name="CommandPost" type="CollisionShape3D" parent="CabinCollision" unique_id=886290185]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -1.275)
+shape = SubResource("Shape_front_block")
+
+[node name="Interactables" type="Node3D" parent="." unique_id=1163630092]
+
+[node name="Chair" type="Area3D" parent="Interactables" unique_id=745359923]
+collision_layer = 2
+collision_mask = 0
+monitoring = false
+script = ExtResource("3_interactable")
+action = 1
+prompt = "Sentar no posto de comando"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Interactables/Chair" unique_id=694110589]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.05, -1.9)
+shape = SubResource("Shape_chair")
+
+[node name="NavigationPanel" type="Area3D" parent="Interactables" unique_id=1847739928]
+collision_layer = 2
+collision_mask = 0
+monitoring = false
+script = ExtResource("3_interactable")
+action = 1
+prompt = "Usar o painel de navegação"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Interactables/NavigationPanel" unique_id=483141267]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, -0.45)
+shape = SubResource("Shape_panel")
+
+[node name="Radio" type="Area3D" parent="Interactables" unique_id=188157158]
+collision_layer = 2
+collision_mask = 0
+monitoring = false
+script = ExtResource("3_interactable")
+prompt = "Examinar o rádio"
+title = "RÁDIO DE SUPERFÍCIE"
+text = "Só estática no canal de emergência.
+
+Uma etiqueta gasta, colada no gabinete:
+\"Perdeu o contato? Confie no sonar. Cada pulso, cada manobra e cada batida no casco consomem o ar dos reguladores.\""
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Interactables/Radio" unique_id=1413493862]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.2, -0.7, -0.7)
+shape = SubResource("Shape_desk_device")
+
+[node name="Terminal" type="Area3D" parent="Interactables" unique_id=1347134796]
+collision_layer = 2
+collision_mask = 0
+monitoring = false
+script = ExtResource("3_interactable")
+prompt = "Ler o terminal"
+title = "TERMINAL DE DIAGNÓSTICO"
+text = "CASCO ............ ÍNTEGRO
+LASTRO ........... ESTÁVEL
+VISÃO EXTERNA .... INDISPONÍVEL
+SONAR ............ OPERACIONAL (alcance: primeiro eco)
+
+Navegação manual pelo painel central. O mapa só registra obstáculos detectados por sonar ou por impacto."
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Interactables/Terminal" unique_id=296768854]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -0.7, -0.7)
+shape = SubResource("Shape_desk_device")
+
+[node name="OxygenTanks" type="Area3D" parent="Interactables" unique_id=234528389]
+collision_layer = 2
+collision_mask = 0
+monitoring = false
+script = ExtResource("3_interactable")
+prompt = "Verificar os cilindros"
+title = "CILINDROS DE O₂"
+text = "Os manômetros tremem a cada estalo do casco.
+
+Todo o ar da cabine vem daqui. O nível atual aparece no painel de navegação — não há reserva extra."
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Interactables/OxygenTanks" unique_id=530640082]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.1, -0.6, -7)
+shape = SubResource("Shape_tanks")
+
+[node name="Hatch" type="Area3D" parent="Interactables" unique_id=452602030]
+collision_layer = 2
+collision_mask = 0
+monitoring = false
+script = ExtResource("3_interactable")
+prompt = "Examinar a escotilha"
+title = "ESCOTILHA"
+text = "Travada pela pressão da água lá fora.
+
+Não há como sair daqui até a cápsula chegar ao ponto de resgate."
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Interactables/Hatch" unique_id=531294908]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, -12.25)
+shape = SubResource("Shape_hatch")
+
+[node name="Bunk" type="Area3D" parent="Interactables" unique_id=1576675418]
+collision_layer = 2
+collision_mask = 0
+monitoring = false
+script = ExtResource("3_interactable")
+prompt = "Pegar o caderno"
+title = "CADERNO DE BORDO"
+text = "Dia 3.
+
+O sonar só devolve o primeiro eco de cada lado — o resto do corredor continua no escuro. Bater às cegas sai caro. Escute antes de avançar."
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Interactables/Bunk" unique_id=1712622098]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4, -1, -10.5)
+shape = SubResource("Shape_bunk")
+
+[node name="SeatView" type="Marker3D" parent="." unique_id=1932815406]
+transform = Transform3D(-1, 0, 0, 0, 0.9613, 0.2756, 0, 0.2756, -0.9613, 0, -0.35, -1.75)
+
+[node name="Player" parent="." unique_id=121172947 node_paths=PackedStringArray("seat_view") instance=ExtResource("4_player")]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0, -1.76, -6)
+seat_view = NodePath("../SeatView")
+
+[node name="MazeDebug" type="Node3D" parent="." unique_id=521696002]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -200, 0)
+
+[node name="DebugFloor" type="MeshInstance3D" parent="MazeDebug" unique_id=1296788603]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 28, 0, 28)
 mesh = SubResource("Mesh_floor")
 
-[node name="DebugCamera" type="Camera3D" parent="."]
-position = Vector3(28, 50, 32)
-rotation_degrees = Vector3(-90, 0, 0)
+[node name="DebugCamera" type="Camera3D" parent="MazeDebug" unique_id=1517799976]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 28, 50, 32)
 projection = 1
 size = 76.0
-current = true
+far = 120.0
+script = ExtResource("8_debug_cam")
 
-[node name="MazeBuilder" type="Node3D" parent="."]
-script = ExtResource("5_builder")
-maze = ExtResource("4_maze")
+[node name="MazeBuilder" type="Node3D" parent="MazeDebug" unique_id=1172646419]
+script = ExtResource("7_builder")
 
-[node name="Capsule" parent="." instance=ExtResource("1_capsule")]
-maze = ExtResource("4_maze")
+[node name="Capsule" parent="MazeDebug" unique_id=2117555680 instance=ExtResource("5_capsule")]
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="Enemy" parent="MazeDebug" unique_id=953616708 instance=ExtResource("13_enemy")]
 
-[node name="MovementPanel" parent="UI" instance=ExtResource("2_panel")]
+[node name="AlarmSystem" type="Node" parent="." unique_id=1549891915]
+script = ExtResource("14_alarm")
 
-[node name="OxygenGauge" parent="UI" instance=ExtResource("6_gauge")]
+[node name="UI" type="CanvasLayer" parent="." unique_id=357913331]
 
-[node name="GameOverScreen" parent="UI" instance=ExtResource("7_gameover")]
+[node name="FirstPersonHud" parent="UI" unique_id=1556772830 instance=ExtResource("9_hud")]
+
+[node name="NavigationConsole" parent="UI" unique_id=661396166 instance=ExtResource("10_console")]
+
+[node name="NoteViewer" parent="UI" unique_id=828522404 instance=ExtResource("11_note")]
+
+[node name="GameOverScreen" parent="UI" unique_id=886079004 instance=ExtResource("12_gameover")]

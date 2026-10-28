@@ -1,0 +1,188 @@
+{
+	"asset":
+	{
+		"version": "2.0",
+		"generator": "Unreal Engine 5.8.2"
+	},
+	"scene": 0,
+	"accessors": [
+		{
+			"bufferView": 0,
+			"count": 2913,
+			"type": "SCALAR",
+			"componentType": 5123
+		},
+		{
+			"bufferView": 1,
+			"count": 1479,
+			"type": "VEC3",
+			"componentType": 5126,
+			"min": [
+				-0.0636714995,
+				9.91821253e-07,
+				-2.03692269
+			],
+			"max": [
+				2.12950134,
+				1.20276773,
+				-2.4414062e-06
+			]
+		},
+		{
+			"bufferView": 2,
+			"count": 1479,
+			"type": "VEC3",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 3,
+			"count": 1479,
+			"type": "VEC4",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 4,
+			"count": 1479,
+			"type": "VEC2",
+			"componentType": 5126
+		},
+		{
+			"bufferView": 5,
+			"count": 1479,
+			"type": "VEC2",
+			"componentType": 5126
+		}
+	],
+	"buffers": [
+		{
+			"uri": "SM_Bridge01.bin",
+			"byteLength": 88652
+		}
+	],
+	"bufferViews": [
+		{
+			"buffer": 0,
+			"byteLength": 5826,
+			"target": 34963
+		},
+		{
+			"buffer": 0,
+			"byteLength": 17748,
+			"byteOffset": 5828,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 17748,
+			"byteOffset": 23576,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 23664,
+			"byteOffset": 41324,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 11832,
+			"byteOffset": 64988,
+			"target": 34962
+		},
+		{
+			"buffer": 0,
+			"byteLength": 11832,
+			"byteOffset": 76820,
+			"target": 34962
+		}
+	],
+	"images": [
+		{
+			"uri": "T_Bridge01_BC.png"
+		},
+		{
+			"uri": "T_Bridge01_ORM.png"
+		},
+		{
+			"uri": "T_Bridge01_N.png"
+		}
+	],
+	"materials": [
+		{
+			"name": "MI_Bridge01",
+			"pbrMetallicRoughness":
+			{
+				"baseColorTexture":
+				{
+					"index": 0
+				},
+				"metallicRoughnessTexture":
+				{
+					"index": 1
+				}
+			},
+			"normalTexture":
+			{
+				"index": 2
+			},
+			"occlusionTexture":
+			{
+				"index": 1
+			}
+		}
+	],
+	"meshes": [
+		{
+			"name": "SM_Bridge01",
+			"primitives": [
+				{
+					"attributes":
+					{
+						"POSITION": 1,
+						"NORMAL": 2,
+						"TANGENT": 3,
+						"TEXCOORD_0": 4,
+						"TEXCOORD_1": 5
+					},
+					"indices": 0,
+					"material": 0
+				}
+			]
+		}
+	],
+	"nodes": [
+		{
+			"mesh": 0
+		}
+	],
+	"samplers": [
+		{
+			"minFilter": 9987,
+			"magFilter": 9729
+		}
+	],
+	"scenes": [
+		{
+			"nodes": [
+				0
+			]
+		}
+	],
+	"textures": [
+		{
+			"name": "T_Bridge01_BC",
+			"sampler": 0,
+			"source": 0
+		},
+		{
+			"name": "T_Bridge01_ORM",
+			"sampler": 0,
+			"source": 1
+		},
+		{
+			"name": "T_Bridge01_N",
+			"sampler": 0,
+			"source": 2
+		}
+	]
+}

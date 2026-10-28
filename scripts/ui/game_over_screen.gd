@@ -18,6 +18,9 @@ func _on_game_over(won: bool) -> void:
 	if won:
 		_title_label.text = "SAÍDA ALCANÇADA"
 		_subtitle_label.text = "A cápsula encontrou o caminho para fora."
+	elif GameState.end_reason == GameState.EndReason.CAUGHT:
+		_title_label.text = "CONTATO"
+		_subtitle_label.text = "Algo no escuro encontrou a cápsula."
 	else:
 		_title_label.text = "OXIGÊNIO ESGOTADO"
 		_subtitle_label.text = "O silêncio tomou conta da cápsula."
