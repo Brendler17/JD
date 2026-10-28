@@ -30,3 +30,6 @@ Thumbs.db
 
 # Configuração local do Claude Code (não deve ir para o repositório)
 CLAUDE.md
+
+# Links de pesquisa de SFX (referência local)
+sfx-links.md
