@@ -27,6 +27,17 @@ const SEAT_EDGE_START := 0.8
 ## Velocidade do giro com o cursor encostado na borda (fração do alcance por segundo).
 const SEAT_EDGE_SPEED := 1.4
 const PANEL_RAY_LENGTH := 4.0
+## Inclinação máxima da câmera (pitch, yaw, roll) no meio de cada manobra da cápsula:
+## andar "empurra" o corpo para trás/frente, girar inclina para o lado da curva.
+const MANEUVER_TILT := {
+	&"forward": Vector3(0.022, 0.0, 0.0),
+	&"backward": Vector3(-0.022, 0.0, 0.0),
+	&"rotate_left": Vector3(0.0, 0.012, 0.045),
+	&"rotate_right": Vector3(0.0, -0.012, -0.045),
+	&"sonar": Vector3.ZERO,
+}
+## Vibração contínua do casco durante deslocamentos (somada ao tremor de colisão).
+const MANEUVER_RUMBLE := 0.0035
 
 @export var walk_speed := 2.5
 @export var mouse_sensitivity := 0.0025
@@ -47,6 +58,11 @@ var _seat_look := Vector2.ZERO
 var _seat_look_smoothed := Vector2.ZERO
 ## Controle do painel sob o cursor / onde o botão do mouse foi pressionado
 ## (PanelScreen ou PanelButton3D — interface forward_mouse/release_hover).
+## Manobra atual da cápsula, para o balanço da câmera (tempo < 0 = nenhuma).
+var _maneuver_kind := &""
+var _maneuver_time := -1.0
+var _maneuver_duration := 1.0
+var _maneuver_tilt := Vector3.ZERO
 var _hovered_control: Node3D
 var _pressed_control: Node3D
 
@@ -61,6 +77,7 @@ func _ready() -> void:
 	EventBus.request_show_note.connect(_on_request_show_note)
 	EventBus.note_closed.connect(_on_note_closed)
 	EventBus.capsule_collided.connect(_on_capsule_collided)
+	EventBus.maneuver_started.connect(_on_maneuver_started)
 	EventBus.game_over.connect(_on_game_over)
 
 
@@ -92,8 +109,31 @@ func _input(event: InputEvent) -> void:
 
 
 func _process(delta: float) -> void:
+	_update_maneuver_motion(delta)
 	if mode == Mode.NAVIGATING and _seated and seat_view:
 		_update_seat_look(delta)
+
+
+func _on_maneuver_started(kind: StringName, duration: float) -> void:
+	_maneuver_kind = kind
+	_maneuver_duration = maxf(duration, 0.01)
+	_maneuver_time = 0.0
+
+
+## Envelope seno (0 → 1 → 0) ao longo da manobra: a cabine inclina e volta.
+## Deslocamentos também vibram (rumble), alimentando o mesmo tremor da colisão.
+func _update_maneuver_motion(delta: float) -> void:
+	if _maneuver_time < 0.0:
+		_maneuver_tilt = _maneuver_tilt.lerp(Vector3.ZERO, 1.0 - exp(-delta * 8.0))
+		return
+	_maneuver_time += delta
+	var t := clampf(_maneuver_time / _maneuver_duration, 0.0, 1.0)
+	var envelope := sin(t * PI)
+	_maneuver_tilt = MANEUVER_TILT.get(_maneuver_kind, Vector3.ZERO) * envelope
+	if _maneuver_kind == &"forward" or _maneuver_kind == &"backward":
+		_shake_strength = maxf(_shake_strength, MANEUVER_RUMBLE * envelope)
+	if t >= 1.0:
+		_maneuver_time = -1.0
 
 
 func _physics_process(delta: float) -> void:
@@ -169,7 +209,8 @@ func _update_seat_look(delta: float) -> void:
 	_seat_look_smoothed = _seat_look_smoothed.lerp(_seat_look, 1.0 - exp(-delta * 10.0))
 	var yaw := -_seat_look_smoothed.x * SEAT_YAW_RANGE
 	var pitch := -_seat_look_smoothed.y * (SEAT_PITCH_UP if _seat_look_smoothed.y < 0.0 else SEAT_PITCH_DOWN)
-	_camera.global_transform = seat_view.global_transform * Transform3D(Basis.from_euler(Vector3(pitch, yaw, 0.0)), Vector3.ZERO)
+	var look := Vector3(pitch, yaw, 0.0) + _maneuver_tilt
+	_camera.global_transform = seat_view.global_transform * Transform3D(Basis.from_euler(look), Vector3.ZERO)
 
 
 func _edge_response(value: float) -> float:
