@@ -14,6 +14,12 @@ const SIREN := preload("res://assets/audio/sfx/siren.mp3")
 const O2_BEEP := preload("res://assets/audio/sfx/o2_beep.wav")
 const ENEMY_ECHO := preload("res://assets/audio/sfx/monster.mp3")
 const CAUGHT := preload("res://assets/audio/sfx/monster2.mp3")
+const MOVE := preload("res://assets/audio/sfx/capsule_move.mp3")
+const ROTATE: Array[AudioStream] = [
+	preload("res://assets/audio/sfx/capsule_rotate_a.wav"),
+	preload("res://assets/audio/sfx/capsule_rotate_b.wav"),
+]
+const MOVE_VOLUME_DB := -4.0
 
 ## A partir desta distância (em passos) o casco começa a ranger.
 const CREAK_RANGE := 4
@@ -24,6 +30,9 @@ var _sonar: AudioStreamPlayer
 var _creak: AudioStreamPlayer
 var _echo: AudioStreamPlayer
 var _caught: AudioStreamPlayer
+var _move: AudioStreamPlayer
+var _rotate: AudioStreamPlayer
+var _move_fade: Tween
 ## Laços do alarme por causa: &"enemy" → sirene, &"low_oxygen" → bipe.
 var _alarm_loops := {}
 
@@ -36,18 +45,55 @@ func _ready() -> void:
 	_creak = _make_player(METAL, &"SFX", -14.0)
 	_echo = _make_player(ENEMY_ECHO, &"SFX", -6.0)
 	_caught = _make_player(CAUGHT, &"SFX", 0.0)
+	_move = _make_player(MOVE, &"SFX", MOVE_VOLUME_DB)
+	_rotate = _make_player(ROTATE[0], &"SFX", -3.0)
 	_alarm_loops[&"enemy"] = _make_player(SIREN, &"Alarm", -12.0, true)
 	_alarm_loops[&"low_oxygen"] = _make_player(O2_BEEP, &"Alarm", -10.0, true)
 	_ambience.play()
 
-	EventBus.capsule_collided.connect(func(_cell: Vector2i, _dir: Vector2i) -> void: _crash.play())
-	EventBus.sonar_pinged.connect(func(_origin: Vector2i, _hits: Array[Vector2i]) -> void: _sonar.play())
+	EventBus.capsule_collided.connect(_on_capsule_collided)
+	EventBus.maneuver_started.connect(_on_maneuver_started)
+	EventBus.maneuver_finished.connect(_on_maneuver_finished)
 	EventBus.enemy_detected.connect(func(_cell: Vector2i) -> void: _echo.play())
 	EventBus.capsule_caught.connect(func(_cell: Vector2i) -> void: _caught.play())
 	EventBus.enemy_proximity_changed.connect(_on_enemy_proximity_changed)
 	EventBus.alarm_started.connect(_on_alarm_started)
 	EventBus.alarm_stopped.connect(_on_alarm_stopped)
 	EventBus.alarm_muted_changed.connect(_on_alarm_muted_changed)
+
+
+## Manobras: o som começa junto com a manobra (o resultado só vem no fim dela).
+## Sonar: o ping sai agora; o mapa revela quando o "eco volta" (fim da manobra).
+func _on_maneuver_started(kind: StringName, _duration: float) -> void:
+	match kind:
+		&"forward", &"backward":
+			if _move_fade:
+				_move_fade.kill()
+			_move.volume_db = MOVE_VOLUME_DB
+			_move.pitch_scale = 1.0 if kind == &"forward" else 0.9
+			_move.play()
+		&"rotate_left", &"rotate_right":
+			_rotate.stream = ROTATE.pick_random()
+			_rotate.pitch_scale = randf_range(0.9, 1.1)
+			_rotate.play()
+		&"sonar":
+			_sonar.play()
+
+
+## Deslocamento concluído: o motor some em fade (na colisão ele já foi cortado).
+func _on_maneuver_finished(kind: StringName) -> void:
+	if (kind == &"forward" or kind == &"backward") and _move.playing:
+		_move_fade = create_tween()
+		_move_fade.tween_property(_move, "volume_db", -40.0, 0.35)
+		_move_fade.tween_callback(_move.stop)
+
+
+## Impacto: corta o motor seco e toca a batida.
+func _on_capsule_collided(_cell: Vector2i, _direction: Vector2i) -> void:
+	if _move_fade:
+		_move_fade.kill()
+	_move.stop()
+	_crash.play()
 
 
 ## Metal rangendo: mais alto quanto mais perto; não reinicia se ainda está tocando.
