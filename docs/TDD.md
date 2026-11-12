@@ -18,12 +18,18 @@ Autoloads (Singletons) — persistem entre cenas
 ├── GameState      → estado do jogo (State Pattern)
 └── AudioManager   → toca áudio conforme sinais do EventBus
 
-Cena: Cápsula — instanciada a cada partida
-├── Capsule        → recebe input do painel, emite sinais via EventBus
-├── SonarSystem    → calcula distância/risco do sonar
-├── MazeGrid (Resource) → grade do labirinto (dados, fonte de verdade das regras)
-├── MazeBuilder    → constrói o labirinto em 3D a partir da MazeGrid (só visual)
-└── Enemy          → reage ao uso do sonar
+Cena: Main (cabine) — recarregada a cada partida
+├── LevelSetup (script da Main) → gera a MazeGrid e a injeta nos consumidores
+├── CapsuleInterior → malha importada da Unreal (atlas único, ver §11)
+├── CabinLights / AlarmLight / AlarmSystem
+├── Interactables   → Area3D acionadas pela mira (textos, sentar no posto)
+├── Player          → 1ª pessoa; modos WALKING / NAVIGATING / READING / DISABLED
+├── CommandPanel    → painel diegético: PanelScreens sobre a malha (§5.2)
+├── MazeDebug (y = −200, invisível da cabine)
+│   ├── Capsule     → executa as intenções, sonar e colisão na grade
+│   ├── MazeBuilder → labirinto 3D a partir da MazeGrid (só visual/debug)
+│   └── Enemy       → turnos, caça a origem do sonar
+└── UI (CanvasLayer) → só mira/prompt, visualizador de texto e tela de fim
 ```
 
 *(Diagrama de origem: `classes.svg`. Manter este documento sincronizado se o diagrama mudar.)*
@@ -44,6 +50,9 @@ O jogo é **3D desde a base**: a cápsula e o labirinto existem no mundo 3D, sem
 | Observer / Event Bus | `EventBus` autoload | Desacoplar emissores (Capsule, SonarSystem) de consumidores (GameState, AudioManager) |
 | State Pattern | `GameState` | Controlar estados do jogo (menu, jogando, morto, vitória, etc.) |
 | Resource | `MazeGrid` | Representar a grade do labirinto como dado serializável, independente de nós de cena |
+| State Pattern (enum) | `Player.Mode` | Separar o controle em pé (mira), sentado (cursor no painel), lendo e fim de partida |
+| Component | `PanelScreen` | Qualquer cena 2D vira uma tela 3D clicável sobre a malha, sem código específico por tela |
+| Dependency Injection (manual) | `LevelSetup.maze_consumers` | O labirinto gerado é entregue a quem precisa (`maze`) antes do `_ready()` |
 
 *(A detalhar conforme mais sistemas forem implementados: Component Pattern, Object Pooling, etc., se/quando forem adotados.)*
 
@@ -53,59 +62,84 @@ O jogo é **3D desde a base**: a cápsula e o labirinto existem no mundo 3D, sem
 scripts/
 ├── autoload/   → EventBus, GameState, AudioManager
 ├── systems/    → SonarSystem, MazeGrid e outros sistemas de gameplay
-├── entities/   → Capsule, Enemy
-└── ui/         → painel de movimentação e demais telas
+├── entities/   → Capsule, Enemy, Player, Interactable
+├── cockpit/    → PanelScreen, CommandPanel e scripts das telas do painel
+└── ui/         → mapa do sonar, HUD, textos, fim de partida
 scenes/
 ├── main/       → cena principal
 ├── entities/   → cena da Cápsula, Enemy
 ├── levels/     → cenas de labirinto/nível
-└── ui/         → painel de botões, HUD
+├── cockpit/    → command_panel.tscn + screens/ (conteúdo 2D de cada tela)
+└── ui/         → teclado, HUD, textos, fim de partida
+resources/
+├── maze_configs/ → labirintos escritos à mão
+└── ui/           → cockpit_theme.tres (tema das telas do painel)
 ```
 
 ## 5. Sistema de Movimentação (Painel de Botões)
 
-A cápsula **não** é controlada por teclado. O input vem de um **painel de UI** com 3 botões clicáveis (mouse):
+A cápsula **não** é controlada por teclado. O input vem do **teclado em cruz do painel diegético** (5 botões, clicados com o cursor, ver §5.2):
 
-| Botão | Efeito | Consome oxigênio? |
+| Botão | Intenção no `EventBus` | O₂ |
 |---|---|---|
-| Andar | Move a cápsula 1 célula para frente, na direção atual | Sim |
-| Girar 90º Esquerda | Rotaciona a cápsula -90º, sem deslocamento | Não |
-| Girar 90º Direita | Rotaciona a cápsula +90º, sem deslocamento | Não |
+| ▲ Frente | `request_move_forward` | 1 |
+| ▼ Ré | `request_move_backward` (anda no sentido oposto, sem girar) | 1 |
+| ◀ Girar 90º | `request_rotate_left` | 1 |
+| Girar 90º ▶ | `request_rotate_right` | 1 |
+| (( · )) Sonar | `request_sonar_ping` | 4 |
 
 Notas técnicas:
-- Movimentação em grade (grid-based), não livre — cada "Andar" desloca a cápsula por exatamente uma célula da `MazeGrid`.
+- Movimentação em grade (grid-based), não livre: cada passo desloca a cápsula por exatamente uma célula da `MazeGrid`.
 - Rotação em incrementos fixos de 90º (4 direções possíveis: cima/baixo/esquerda/direita).
-- Cada clique nos botões deve emitir um sinal via `EventBus` (ex.: `capsule_moved`, `capsule_rotated`, `capsule_collided`) para que `GameState`/`AudioManager` reajam sem acoplamento direto ao painel de UI.
-- Consumo de oxigênio deve ser tratado pelo `GameState` (ou sistema de recursos dedicado) ouvindo o sinal de movimento — **não** diretamente pelo botão de UI, para manter a UI "burra" (dumb UI / thin view).
-- **Implementação atual:** `scenes/ui/movement_panel.tscn` (`HBoxContainer` ancorado no centro-inferior da tela) + `scripts/ui/movement_panel.gd`. Os botões são acessados por nome único (`%RotateLeftButton`, `%MoveForwardButton`, `%RotateRightButton`) e o sinal `pressed` de cada um é conectado direto ao `emit` do sinal correspondente no `EventBus`. Os botões usam `focus_mode = NONE`, então teclado (Espaço/Enter) não aciona o painel — input é exclusivamente por mouse, como definido no design.
-- Na `main.tscn`, o painel fica dentro de um `CanvasLayer` (`UI`) para ficar fixo na tela, independente de câmera; a `Capsule` é instanciada como filha direta de `Main`.
+- Os botões só emitem **intenções**. A `Capsule` executa e emite os fatos (`capsule_moved`, `capsule_rotated`, `capsule_collided`, `sonar_pinged`). O `GameState` cobra o oxigênio ouvindo esses fatos, e a UI continua "burra" (dumb UI / thin view).
+- **Implementação atual:** teclas físicas `PanelButton3D` (§5.2) no `CommandPanel` › `Keypad`. Cada uma emite a intenção correspondente no `EventBus` ao ser solta sobre si mesma e se desabilita em `game_over`. O antigo `MovementPanel` (botões 2D) foi removido.
 - **Capsule em 3D:** `Node3D`; rotação apenas no eixo Y. No Godot, `+Y` gira no sentido anti-horário visto de cima, então `RIGHT = -90º` e `LEFT = +90º` (`FACING_ROTATION_DEGREES`). Visual provisório: `Body` (caixa 1.8 × 1.2 × 2.2 m) + `Nose` (cone laranja apontando para `-Z`) para tornar a direção legível.
 - **Movimento e rotação instantâneos** (sem tween) por enquanto — a animação entra junto com o trabalho de game feel.
 
-### 5.1 Cena de debug (`main.tscn`)
+### 5.1 Mundo lógico e câmera de debug
 
-Enquanto não há câmera de cockpit, a `main.tscn` é uma cena 3D de debug:
-- `DebugCamera`: `Camera3D` **top-down fixa**, projeção **ortográfica** (`size = 76`), em `(30, 50, 34)` olhando para baixo (tela "cima" = `-Z` = "cima" na matriz).
-- `DebugFloor`: `PlaneMesh` 64 × 64 m (16 × 16 células, cobrindo as células `0..15`) com o shader `assets/shaders/debug_grid.gdshader`, que desenha as bordas das células em coordenadas de mundo a partir de `cell_size`.
-- `Sun` (`DirectionalLight3D`) + `WorldEnvironment` com fundo escuro e luz ambiente.
-- A câmera final será em primeira pessoa dentro da cápsula; a câmera de debug deve virar um toggle de desenvolvimento quando ela existir.
+- A `main.tscn` é a cabine. O labirinto 3D (`MazeDebug`: `DebugFloor`, `MazeBuilder`, `Capsule`, `Enemy`) fica em **y = −200**, longe e invisível da cabine.
+- `DebugCamera` (`scripts/systems/debug_camera_toggle.gd`): `Camera3D` top-down ortográfica (`size = 76`) sobre o labirinto. **F3** alterna entre ela e a câmera do jogador (a esfera vermelha do inimigo só aparece aqui).
+- `DebugFloor`: `PlaneMesh` 60 × 60 m com o shader `assets/shaders/debug_grid.gdshader`, que desenha as bordas das células em coordenadas de mundo a partir de `cell_size`.
 
-### 5.2 Alvo final: cockpit em 1ª pessoa e interação por mira (planejado)
+### 5.2 Cockpit em 1ª pessoa e painel diegético (implementado)
 
-Ainda não implementado (depende de assets do interior da cápsula). Direção técnica prevista:
-- `Camera3D` filha da `Capsule` (posição do "piloto"), com **mouse-look** limitado (yaw/pitch com limites) para olhar o interior da cabine; mouse capturado (`Input.MOUSE_MODE_CAPTURED`).
-- **Mira:** um único `Control` (ponto) centralizado num `CanvasLayer` — é o único elemento 2D na tela.
-- **Botões físicos:** cada botão do painel é um nó 3D com `Area3D`/`StaticBody3D` + um componente `InteractableButton` que, ao ser acionado, emite a **mesma intenção** de hoje no `EventBus` (`request_move_forward`, `request_rotate_left`, ...). Feedback (afundar o botão, clique sonoro) fica no próprio componente.
-- **Detecção:** um `RayCast3D` a partir do centro da câmera (ou `PhysicsDirectSpaceState3D.intersect_ray`) identifica o botão sob a mira; o clique do mouse aciona o botão apontado. Destacar o botão sob a mira (hover) é desejável para legibilidade.
-- Instrumentos (oxigênio etc.) migram para mostradores 3D na cabine que escutam os mesmos sinais (`oxygen_changed`, `game_over`) que a HUD 2D escuta hoje.
-- **Consequência para a arquitetura atual:** como `MovementPanel`, `OxygenGauge` e `GameOverScreen` só falam com o `EventBus`, a troca para o cockpit é uma substituição da camada de apresentação — `Capsule`, `GameState` e `MazeGrid` não mudam.
-- O mundo externo (labirinto em 3D) continua existindo para lógica/debug, mas não é visível de dentro da cápsula (cabine fechada).
+**Em pé (WALKING):** `Player` (`CharacterBody3D`) com WASD + mouse-look e mouse capturado. Um `RayCast3D` (camada 2) a partir da câmera aciona o `Interactable` sob a mira com o clique esquerdo. A HUD 2D (`FirstPersonHud`) mostra só a mira e o prompt.
 
-*(A detalhar: valores exatos de consumo, se cliques repetidos rápidos são bloqueados durante a animação de movimento/rotação.)*
+**Sentado (NAVIGATING):** `Interactable.ENTER_NAVIGATION` (cadeira/painel) → `EventBus.request_enter_navigation` → o `Player` anima a câmera até o `SeatView` (tween de 0,6 s). Ao fim da animação, `_seated = true` e emite `navigation_mode_changed(true)`.
+- **Cursor livre + olhar por edge-pan:** em `_process`, a posição do cursor (−1..1 por eixo) só gera giro a partir de `SEAT_EDGE_START = 0.8` (faixa externa de 10% da tela), com intensidade em `smoothstep` até a borda. O giro **acumula** em `_seat_look` (velocidade `SEAT_EDGE_SPEED`, limitado a −1..1), que é suavizado e aplicado como yaw ±20° e pitch +34°/−14° relativos ao `SeatView`. Fora da faixa, a orientação fica parada. *Motivo:* a versão anterior (olhar proporcional à posição do cursor, voltando ao centro) fazia o alvo escorregar de baixo do cursor quando o jogador descia o mouse da borda para clicar, por exemplo, no knob do alarme.
+- **Entrada no painel:** em `_input`, todo `InputEventMouseMotion`/`InputEventMouseButton` vira um raio da câmera (`project_ray_origin/normal`) na camada `PanelScreen.PANEL_LAYER` (layer 4, só áreas). O nó pai da área atingida recebe o evento via `forward_mouse(event, world_position)`. Pode ser uma `PanelScreen` ou uma `PanelButton3D`, e o `Player` só exige esse método (*duck typing*). Trocar de controle chama `release_hover()` no anterior. Soltar o botão sempre vai para o controle onde ele foi pressionado (interseção com o plano dele), senão uma tecla ficaria presa ao arrastar para fora. Clique direito (`exit_navigation`) levanta.
+- Raycast próprio em vez de `physics_object_picking`: o picking da Godot atinge qualquer `CollisionObject3D` pickable (colisões da cabine, outros `Interactable`), e a máscara dedicada evita esse conflito.
+
+**`PanelScreen`** (`scripts/cockpit/panel_screen.gd`, `class_name`, componente reutilizável):
+- Cria um `SubViewport` (`resolution`, `UPDATE_ALWAYS`) com a cena `content` instanciada e o exibe num `QuadMesh` (`size` em metros, plano XY local, virado para +Z) com material *unshaded* (`brightness` multiplica a cor, e valores > 1 alimentam o glow). `transparent` serve para os mostradores redondos.
+- Se `interactive`, adiciona uma `Area3D` fina (layer 4). `world_to_pixel()` converte o ponto 3D atingido em UV/pixel, e `forward_mouse()` duplica o evento com essa posição e o injeta com `SubViewport.push_input()`. Os Controls de dentro funcionam como UI 2D normal (hover, pressed, disabled).
+- `content_node` expõe a raiz instanciada para injeção de dados.
+
+**`PanelButton3D`** (`scripts/cockpit/panel_button_3d.gd`, `class_name`): tecla física montada em código. `BoxMesh` (ou `CylinderMesh` com `round`) cuja face fica em z = 0 e que cresce para +Z, com `Label3D` gravado na tecla, `Area3D` na layer 4 e `AudioStreamPlayer3D` (`panel_click.wav`, bus SFX).
+- `forward_mouse`: hover liga emissão ciano. Ao pressionar, a tecla afunda `travel` (tween de 0,05 s) e toca o clique com pitch levemente aleatório. Ao soltar, a tecla volta e só aciona se ainda estiver em hover (`release_hover` já foi chamado se o cursor saiu).
+- `Action`: `MOVE_FORWARD`, `MOVE_BACKWARD`, `ROTATE_LEFT`, `ROTATE_RIGHT`, `SONAR` e `TOGGLE_ALARM_MUTE`. Este último também escuta `alarm_muted_changed` para acender em âmbar (indicador).
+- `game_over` desabilita a tecla (escurece e ignora entrada).
+
+**`CommandPanel`** (`scenes/cockpit/command_panel.tscn` + `scripts/cockpit/command_panel.gd`): instanciado na `Main` com transform identidade (mesmo espaço da malha da cabine). Os filhos são `PanelScreen` posicionadas sobre a malha. As posições foram obtidas por raycast na malha (colisão trimesh temporária) a partir de screenshots. Base do plano do painel amarelo: X = (−1, 0, 0), Y = (0, 0,9627, 0,2707), Z = (0, 0,2707, −0,9627).
+
+| Tela | Conteúdo (`scenes/cockpit/screens/`) | Tamanho | Interativa |
+|---|---|---|---|
+| `Keypad/HeadingScreen` (faixa superior da área cinza) | `heading_screen.tscn`: rumo, alerta, dica de levantar | 0,46 × 0,20 m | Não |
+| `SonarScreen` (CRT) | `sonar_screen.tscn`: `navigation_map.gd` em tela cheia | 0,47 × 0,56 m | Não |
+| `OxygenDial` / `InterferenceDial` (relógios) | `gauge_dial.gd` (`Kind.OXYGEN` / `Kind.INTERFERENCE`), desenhado em `_draw()` | Ø 0,25 m | Não |
+| `StatusMonitor` (monitor superior) | `status_monitor.tscn`: log rolante (10 linhas), `OxygenGauge` e custos | 1,30 × 0,76 m | Não |
+
+- **`Keypad`** (`Node3D` com a base do painel amarelo, origem no centro da área cinza + 3,5 cm na normal, para cobrir os botões modelados): `HeadingScreen`, `Plate` (`BoxMesh` 0,46 × 0,46 m escuro) e 5 `PanelButton3D` de 0,10 × 0,10 × 0,03 m em cruz (passo de 0,125 m).
+- **`AlarmMuteKnob`** (`PanelButton3D`, `round`, Ø 0,075 m, vermelho) sobre o primeiro knob modelado sob o monitor superior (`(0,858; 0,687; −0,575)`, base do monitor), com legenda `Label3D` "SILENCIAR ALARME".
+- `CommandPanel.maze` é um consumidor do `LevelSetup` e repassa a `MazeGrid` ao mapa do CRT.
+- Todas as telas continuam "dumb UI" e só escutam o `EventBus`. `Capsule`, `GameState`, `Enemy` e `MazeGrid` não mudaram.
+- Tema compartilhado das telas: `resources/ui/cockpit_theme.tres` (fonte/cor padrão dos `Label`).
+- Removidos: `scenes/ui/navigation_console.tscn` e `scripts/ui/navigation_console.gd` (o console 2D). A lógica de rumo/alerta foi para `heading_screen.gd` e a de status para `status_monitor.gd`. O medidor de interferência virou mostrador.
 
 ## 6. Sistema de Sonar
 
-*(A detalhar: fórmula de cálculo de distância, alcance máximo, custo/cooldown, probabilidade de atrair o inimigo.)*
+Implementado na `Capsule` (não há `SonarSystem` separado): `request_sonar_ping` → para cada uma das 4 direções, percorre a grade a partir da célula atual até a primeira célula não andável (pode estar fora dos limites) → `EventBus.sonar_pinged(origin, hits)`. O `GameState` cobra `OXYGEN_COST_SONAR` (4). O `Enemy` passa a caçar `origin`. O mapa (`navigation_map.gd`) revela os `hits` e anima o pulso, e o `Enemy` emite `enemy_detected` se estiver no trajeto (§9). Sem limite de usos nem cooldown.
 
 ## 7. Sistema de Oxigênio
 
@@ -115,11 +149,12 @@ Implementado no autoload **`GameState`** (`scripts/autoload/game_state.gd`), que
 
 | Constante | Valor |
 |---|---|
-| `MAX_OXYGEN` | 150 |
-| `OXYGEN_COST_MOVE` | 1 por "Andar" bem-sucedido |
-| `OXYGEN_COST_COLLISION` | 5 por "Andar" contra parede |
-
-Girar não consome. Oxigênio é `float` (permite drenos fracionários futuros, ex.: por tempo) e é exibido arredondado para cima. Valores são constantes no script por enquanto; se o balanceamento exigir iteração frequente, migrar para um Resource de configuração.
+| `MAX_OXYGEN` | 200 |
+| `OXYGEN_COST_MOVE` | 1 por Frente/Ré bem-sucedido |
+| `OXYGEN_COST_ROTATE` | 1 por giro |
+| `OXYGEN_COST_SONAR` | 4 por pulso |
+| `OXYGEN_COST_COLLISION` | 8 por Frente/Ré contra parede |
+ Oxigênio é `float` (permite drenos fracionários futuros, ex.: por tempo) e é exibido arredondado para cima. Valores são constantes no script por enquanto; se o balanceamento exigir iteração frequente, migrar para um Resource de configuração.
 
 ### 7.2 Estados da partida (State Pattern via enum)
 
@@ -141,9 +176,9 @@ WON/LOST ──request_restart──────▶ PLAYING (recarrega a cena)
 
 ### 7.4 UI de estado
 
-- `scenes/ui/oxygen_gauge.tscn` (`OxygenGauge`, canto superior esquerdo): `Label` "O₂ atual / máximo" + `ProgressBar`; muda para a cor de alerta (vermelho) em ≤ 25% do máximo. Não captura mouse.
+- `scenes/ui/oxygen_gauge.tscn` (`OxygenGauge`): `Label` "O₂ atual / máximo" + `ProgressBar`. Muda para a cor de alerta (vermelho) em ≤ 25% do máximo. Hoje fica dentro do monitor superior do painel (§5.2). O mostrador analógico de O₂ (`gauge_dial.gd`) lê os mesmos sinais.
 - `scenes/ui/game_over_screen.tscn` (`GameOverScreen`, tela cheia, oculta por padrão): escurece a tela e mostra título/subtítulo de vitória ou derrota e o botão "Tentar novamente", que emite `request_restart`.
-- `MovementPanel` desabilita seus botões ao receber `game_over`.
+- As teclas `PanelButton3D` se desabilitam ao receber `game_over`.
 
 ## 8. Labirinto (MazeGrid)
 
@@ -174,7 +209,7 @@ Dividido em **dados** (`MazeGrid`) e **representação** (`MazeBuilder`), seguin
 ### 8.3 Colisão
 
 - A `Capsule` recebe a mesma `MazeGrid` (`@export var maze`), posiciona-se em `maze.start_cell` no `_ready()` e, a cada "Andar", consulta `maze.is_walkable(alvo)`. Se bloqueado: **não se move** e emite `EventBus.capsule_collided(blocked_cell, direction)`; caso contrário, move e emite `capsule_moved`. Sem `maze` definido, a cápsula anda livremente (útil para testes isolados).
-- O custo de oxigênio da colisão será aplicado pelo `GameState` ouvindo `capsule_collided` (ainda não implementado).
+- O custo de oxigênio da colisão é aplicado pelo `GameState` ouvindo `capsule_collided` (§7).
 
 ## 9. Inimigo (Enemy)
 
@@ -186,25 +221,62 @@ Implementado em `scripts/entities/enemy.gd` + `scenes/entities/enemy.tscn` (fica
 - **Contato:** mesma célula que a cápsula (por movimento de qualquer um dos dois) → `capsule_caught` → `GameState` encerra com `LOST` / `EndReason.CAUGHT`.
 - **Proximidade:** após cada turno emite `enemy_proximity_changed(steps)` (distância pelo labirinto, via `MazeGrid.get_distances_from()`).
 - **Sonar:** se o inimigo está no trecho reto entre a cápsula e o obstáculo atingido por um dos 4 sinais, emite `enemy_detected(cell)` — o mapa mostra um eco vermelho que some em 2,5 s (nunca fica registrado). O sinal não para no inimigo: a parede atrás dele também é revelada.
-- **Apresentação:** `AlarmSystem` (`scripts/systems/alarm_system.gd`) emite `alarm_started/stopped(&"enemy")` com o inimigo a ≤ 4 passos e `(&"low_oxygen")` com O₂ ≤ 25%. `AlarmLight` (`OmniLight3D` vermelha na cabine) pisca enquanto houver alarme (mais rápido para o inimigo). No painel: texto "ALERTA: ..." piscando no cabeçalho e medidor de **interferência** (cheio a 1 passo, zerado a partir de 9).
-- Áudio (sirene, metal rangendo, estática do rádio) ainda não existe — os sinais acima já são os ganchos para o `AudioManager`.
+- **Apresentação:** `AlarmSystem` (`scripts/systems/alarm_system.gd`) emite `alarm_started/stopped(&"enemy")` com o inimigo a ≤ 4 passos e `(&"low_oxygen")` com O₂ ≤ 25%. `AlarmLight` (`OmniLight3D` vermelha na cabine) pisca enquanto houver alarme (mais rápido para o inimigo). No painel: alerta piscando na tela do teclado, linha no log do monitor superior e mostrador de **interferência** (cheio a 1 passo, zerado a partir de 9, com ponteiro tremendo proporcional à proximidade).
+- Áudio: sirene, bipe e metal rangendo tocam pelo `AudioManager` (§10). O mudo do alarme fica no `AlarmSystem`: `request_toggle_alarm_mute` (só com alarme ativo) → `muted` + `alarm_muted_changed(muted)`. Qualquer `alarm_started` novo, ou o fim de todos os alarmes, rearma (`muted = false`). A luz não é afetada.
 
 ## 10. Áudio
 
-*(Planejado — nada implementado ainda. Ver GDD §6.)*
+Implementado parcialmente (sem rádio ainda). Ver GDD §6.
 
-- **`AudioManager` (autoload):** escuta sinais do `EventBus` (`capsule_moved`, `capsule_rotated`, `capsule_collided`, sonar, inimigo, `game_over`) e toca o som correspondente. Nenhum sistema de gameplay toca som diretamente.
-- **Buses de áudio:** `Master` › `Ambience`, `SFX`, `Alarm`, `Radio`. O bus `Radio` aplica o efeito de transmissão em tempo real (`AudioEffectBandPassFilter` ~300–3400 Hz + `AudioEffectDistortion` leve + camada de estática), de modo que as falas são gravadas "limpas" e o efeito é ajustável sem regravar. A intensidade da interferência pode ser controlada por código (proximidade do inimigo).
-- **`RadioSystem`:** toca falas a partir de dados — Resource `RadioLine` (`stream`, `subtitle`, `trigger`, `once`). Gatilhos previstos: `intro`, `first_collision`, `first_sonar`, `low_oxygen`, `first_enemy_encounter`. Emite `radio_line_started/finished(subtitle)` para a UI de legendas.
-- **`AlarmSystem`:** decide quando há perigo (ouve `oxygen_changed` com limiar de 25% e um futuro sinal de proximidade do inimigo) e emite `alarm_started(reason)` / `alarm_stopped(reason)`. Apresentação desacoplada: a luz vermelha da cabine (`OmniLight3D` piscando via `Tween`/`AnimationPlayer`) e o som do bus `Alarm` só escutam esses sinais. No protótipo 2D, um `ColorRect` vermelho piscando pode cumprir o papel da luz.
-- Sinais futuros previstos no `EventBus`: `alarm_started(reason)`, `alarm_stopped(reason)`, `radio_line_started(subtitle)`, `radio_line_finished`, e um sinal de proximidade do inimigo (a definir com o `Enemy`).
+- **`AudioManager` (autoload, `scripts/autoload/audio_manager.gd`, registrado após o `GameState`):** escuta o `EventBus` e toca:
 
-## 11. Build & Ferramentas
+| Sinal | Som (`assets/audio/sfx/`) | Bus |
+|---|---|---|
+| (sempre, em laço) | `ambience.mp3` | Ambience |
+| `capsule_collided` | `crash.mp3` | SFX |
+| `sonar_pinged` | `sonar.mp3` | SFX |
+| `enemy_detected` | `monster.mp3` | SFX |
+| `enemy_proximity_changed` (≤ 4 passos) | `metal.mp3`, −18 dB + 4 dB por passo mais perto; não reinicia se já está tocando | SFX |
+| `capsule_caught` | `monster2.mp3` | SFX |
+| `alarm_started/stopped(&"enemy")` | `siren.mp3` em laço | Alarm |
+| `alarm_started/stopped(&"low_oxygen")` | `o2_beep.wav` em laço (bipe duplo gerado em Python) | Alarm |
+| `alarm_muted_changed` | `AudioServer.set_bus_mute("Alarm")` | — |
+
+- Laços: reinício no `finished` (vale para MP3 e WAV sem mexer nas opções de importação). `stop()` não emite `finished`. `PROCESS_MODE_ALWAYS`. Como é autoload, o ambiente não corta ao reiniciar a partida.
+- Exceção à regra "só o AudioManager toca som": o clique das teclas (`PanelButton3D`) é feedback do próprio objeto e posicional (`AudioStreamPlayer3D`).
+- **Buses (`default_bus_layout.tres`):** `Master` › `Ambience`, `SFX`, `Alarm`. *Planejado:* bus `Radio` com `AudioEffectBandPassFilter` (~300–3400 Hz) + `AudioEffectDistortion` leve + estática, com intensidade controlada pela proximidade do inimigo.
+- **Sem som ainda:** andar e girar (não há SFX de motor/servo na pasta).
+- **`RadioSystem` (planejado):** falas a partir de dados (Resource `RadioLine`: `stream`, `subtitle`, `trigger`, `once`). Gatilhos `intro`, `first_collision`, `first_sonar`, `low_oxygen`, `first_enemy_encounter`. Emite `radio_line_started/finished(subtitle)` para legendas no monitor superior.
+
+## 11. Assets da Cabine & Iluminação
+
+- **Origem:** `assets/imports/capsula_completa/SM_MERGED_StaticMeshActor_1.gltf`, exportado da Unreal com *Merge Actors*: **1 malha, 1 material, 1 atlas 2048×2048** (BaseColor + Normal), sem colisão própria. Por isso tudo fica borrado de perto (o painel amarelo ocupa uma fração pequena do atlas) e as variações de material da Unreal se perderam (paredes ferrugem viraram brancas).
+- `assets/imports/deepwater_station/` (~1,1 GB, 61 glTFs com texturas próprias em alta resolução) **não é usado** por nenhuma cena. Não contém o painel amarelo (que veio de outro pacote).
+- **Solução aplicada às telas:** `PanelScreen` sobrepõe telas renderizadas em tempo real à malha (§5.2). Isso resolve nitidez e interação de uma vez.
+- **Opções para o restante (por custo/benefício):**
+  1. **Reexportar da Unreal sem mesclar** (ou com *Merge Actors* gerando um material/atlas por grupo e em 4096+). É a solução de verdade: cada objeto volta com a própria textura em resolução original.
+  2. **Reexportar só o painel e os objetos próximos ao posto** como malhas separadas e substituí-los na cena (escondendo a parte da malha mesclada atrás). Menor esforço com o maior ganho visual.
+  3. **Upscale por IA do atlas** (ex.: Real-ESRGAN / Upscayl, ou ferramentas de textura por IA). Ganho limitado: o atlas tem poucos pixels por objeto, então a IA "inventa" detalhe e pode borrar as costuras entre ilhas de UV. Usar só como paliativo.
+  4. **Retexturizar via IA generativa** (ex.: geração de textura a partir do modelo). Exige malhas separadas com UV próprio, ou seja, depende do item 1 ou 2.
+- **Pipeline recomendado para reexportar da Unreal com fidelidade** (o objetivo é trazer cada objeto com **as texturas originais do pacote**, sem rebake):
+  1. **Não usar *Merge Actors*.** Na Unreal, selecionar os atores da cabine na viewport/Outliner → *File › Export Selected…* → **FBX**. Um único FBX com vários atores mantém cada um como **nó e malha separados**, com transform e slots de material próprios. A Godot 4 importa FBX nativamente (ufbx). Exportar em partes (paredes, painel, props) facilita reimportar só o que mudar.
+  2. **Exportar as texturas originais**, não as "bakeadas": no Content Browser, *Browse to Asset* no material de cada objeto → selecionar as texturas (`T_*_BC`, `T_*_ORM`, `T_*_N`, emissivas) → *Asset Actions › Bulk Export* (PNG/TGA). Nos pacotes usados, o ORM (Occlusion-Roughness-Metallic) já vem no mesmo layout do **`ORMMaterial3D`** da Godot, que aceita a textura direto, sem conversão.
+  3. **Recriar os materiais na Godot** (`ORMMaterial3D`: albedo = BC, ORM = ORM, normal = N, emissão). Copiar os **parâmetros dos Material Instances** (tintas de cor, intensidade de emissão, tiling). É aqui que volta o tom ferrugem das paredes, que na Unreal é um parâmetro de cor sobre a textura base. Para automatizar, um script de importação (`EditorScenePostImport`) pode trocar os materiais pelo nome do slot.
+  4. **Normal map:** a Unreal usa convenção DirectX (Y−) e a Godot OpenGL (Y+). Na importação da textura, marcar *Normal Map* e inverter o canal verde (`process/normal_map_invert_y = true`), senão os relevos ficam "afundados".
+  5. **Escala/eixos:** Unreal em cm e Z-up; no export FBX, manter as unidades e conferir escala 0,01 na importação (ou *Convert Scene* no exportador). Validar com o `CabinCollision` atual.
+  6. **Telas emissivas** (monitores, CRT): na Unreal são materiais com textura de UI/emissiva. Na Godot elas continuam sendo `PanelScreen`, que já é mais fiel e é interativa.
+  7. **Alternativa mais rápida (menos fiel):** o exportador **glTF** da Unreal com *Bake Material Inputs* e *Default Material Bake Size* em 2048/4096 **por material**. Ainda faz bake, mas um por objeto em vez de um atlas para a cena toda.
+  - **Iluminação equivalente:** boa parte do visual da demo vem do **Lumen** (iluminação global) + exposição/pós-processamento da Unreal. No renderer GL Compatibility não há GI. Trocar para **Forward+** liberaria SDFGI/VoxelGI, SSAO, SSR e névoa volumetrica, muito mais perto da demo, ao custo da build web e de PCs fracos. Decisão de projeto em aberto.
+- **Iluminação (`main.tscn` › `WorldEnvironment`/`CabinLights`):** ambiente 0,22, tonemap ACES (`tonemap_white` 6), glow (threshold 0,85) e ajuste de contraste/saturação. Luzes de teto em y = 1,75 (dentro do volume da cabine). A traseira tem sombra; a frontal ficou sem sombra para não projetar a cadeira serrilhada no painel. Dois `AccentLeft/Right` laranja perto do teto e `ConsoleGlow` reduzido (0,2) para não esverdear o painel. Compatível com o renderer GL Compatibility (sem SSAO/volumetria).
+
+## 12. Build & Ferramentas
 
 - Repositório Git, branch `main`.
 - Export para PC (Windows/Linux) obrigatório; export web (itch.io) como meta secundária.
 
-## 12. Registro de Implementações
+- **Captura visual para debug:** o Godot (snap) grava frames com `--write-movie <arquivo>.png --fixed-fps 30 --quit-after N`. O snap não enxerga `/tmp`, então é preciso gravar em `~/snap/godot-4/common/`. Scripts `--script` (estendendo `SceneTree`) servem para posicionar a câmera, tirar screenshots, fazer raycast de pixels para coordenadas 3D e simular cliques (`Input.parse_input_event`). Nesses scripts, autoloads devem ser acessados por `root.get_node("EventBus")`. Depois de criar um `class_name` novo fora do editor, rodar `godot --headless --import` para atualizar o cache de classes.
+
+## 13. Registro de Implementações
 
 > Cada implementação deve ser registrada aqui, com data e um resumo curto do que foi construído/alterado.
 
@@ -218,3 +290,6 @@ Implementado em `scripts/entities/enemy.gd` + `scenes/entities/enemy.tscn` (fica
 - **2026-10-06 — Arquitetura planejada de áudio/alarme (não implementada):** documentados `AudioManager`, buses (`Ambience`/`SFX`/`Alarm`/`Radio`) com efeito de rádio aplicado em tempo real, `RadioSystem` orientado a dados (`RadioLine`) e `AlarmSystem` emitindo `alarm_started/stopped(reason)` para luz vermelha e sirene. Ver §10.
 - **2026-10-27 — Cabine em 1ª pessoa + painel de navegação + labirinto procedural + sonar:** a `main.tscn` agora é a cabine (`assets/imports/capsula_completa`, modelo único sem colisão própria) com colisão simplificada por caixas (`CabinCollision`: piso em y ≈ −1,77, paredes laterais/fundo e o bloco do posto de comando). **Jogador** (`scenes/entities/player.tscn` + `scripts/entities/player.gd`): `CharacterBody3D` sem malha, WASD/setas + mouse-look, clique esquerdo aciona o `Interactable` sob a mira (`RayCast3D` na camada 2). Modos `WALKING / NAVIGATING / READING / DISABLED`. **Interactable** (`scripts/entities/interactable.gd`, `Area3D` layer 2): `SHOW_TEXT` emite `request_show_note` (abre `NoteViewer`) e `ENTER_NAVIGATION` emite `request_enter_navigation` (cadeira e painel central). Ao sentar, a câmera vai para `SeatView` e aparece o `NavigationConsole` (O₂ à esquerda, mapa no centro, teclado à direita); clique direito levanta. **Teclado** (`MovementPanel`, agora `GridContainer` em cruz): Frente, Ré, Girar E/D e Sonar. **Capsule**: `request_move_backward` (anda no sentido oposto, sem girar) e `request_sonar_ping` → `sonar_pinged(origin, hits)` com o primeiro obstáculo nas 4 direções. **Oxigênio**: máx. 200; mover/ré 1, girar 1, sonar 4, colisão 8 (colisão não move). **Mapa** (`scripts/ui/navigation_map.gd`): top-down desenhado em `_draw()`, começa sem paredes; revela por colisão e sonar, mostra rastro, posição/rumo e a saída. **Labirinto procedural** (`scripts/systems/maze_generator.gd`, recursive backtracker + laços opcionais) gera as mesmas linhas textuais da `MazeGrid`; garante caminho até a saída com menor caminho ≥ 1/4 das células livres. `LevelSetup` (script da `Main`) gera o labirinto em `_enter_tree()` e o injeta em `MazeBuilder`, `Capsule` e `NavigationConsole`; cada reinício gera um novo (`fixed_seed`/`fixed_maze` permitem reproduzir). O mundo lógico (`MazeDebug`) fica em y = −200, com câmera top-down alternável por F3. Novos sinais no `EventBus`: `request_move_backward`, `request_sonar_ping`, `sonar_pinged`, `request_show_note`, `request_enter_navigation`, `interaction_prompt_changed`, `note_closed`, `navigation_mode_changed`. HUD 2D antiga (painel no rodapé e O₂ no canto) substituída por `FirstPersonHud` (mira + prompt).
 - **2026-10-27 — Inimigo, alarme e derrota por contato:** `Enemy` em turnos (vaga; caça a origem de cada pulso de sonar; persegue a cápsula a ≤ 2 passos; contato = derrota). `MazeGrid.get_distances_from()` (BFS) adicionado. `GameState` ganhou `EndReason` (`REACHED_EXIT`, `OUT_OF_OXYGEN`, `CAUGHT`), lido pela tela de fim ("CONTATO"). `AlarmSystem` + `AlarmLight` (luz vermelha da cabine). Painel: alerta no cabeçalho, medidor de interferência e eco vermelho no mapa. Novos sinais: `enemy_proximity_changed`, `enemy_detected`, `capsule_caught`, `alarm_started`, `alarm_stopped`. Ver §9.
+- **2026-11-11 — Painel diegético (`CommandPanel` + `PanelScreen`), remoção do console 2D e passada de iluminação:** criado o componente `PanelScreen` (SubViewport → quad 3D, com entrada de mouse por raycast na layer 4 e `push_input`) e a cena `scenes/cockpit/command_panel.tscn`, com cinco telas sobre a malha da cabine: teclado (interativo), sonar no CRT, mostradores de O₂ e interferência e monitor de log. `Player` no modo NAVIGATING agora encaminha os eventos de mouse às telas, gira o olhar quando o cursor chega às bordas e tem o `SeatView` recuado e mais alto, enquadrando o painel inteiro. Removidos `navigation_console.tscn/.gd`. A lógica foi para `keypad_screen.gd` e `status_monitor.gd`. Novo `gauge_dial.gd` e tema `resources/ui/cockpit_theme.tres`. As teclas do `MovementPanel` cresceram (140 × 124). Iluminação da `main.tscn` refeita para o clima da demo em Unreal. Documentada a limitação do atlas único da cabine e as opções de correção (§11). Sem novos sinais no `EventBus`. Ver §5.2 e §11.
+- **2026-11-11 — Diagnóstico: "andar e girar a câmera ao mesmo tempo não funciona":** não é bug de código (a física lê o teclado e `_unhandled_input` lê o mouse de forma independente). No notebook de desenvolvimento (touchpad ELAN, GNOME/Wayland), a opção do sistema *desativar touchpad enquanto digita* bloqueia o touchpad enquanto W/A/S/D está pressionado. Com mouse externo ou com a opção desligada, funciona.
+- **2026-11-11 — Teclas físicas (`PanelButton3D`), silenciar alarme, `AudioManager` e edge-pan:** criado `PanelButton3D` (tecla/knob 3D com curso, hover, clique posicional e cancelamento ao soltar fora). O `Keypad` do `CommandPanel` agora tem `HeadingScreen` + placa + 5 teclas, e `AlarmMuteKnob` fica sob o monitor. Removidos `MovementPanel` (`scenes/ui/movement_panel.tscn`, `scripts/ui/movement_panel.gd`) e `keypad_screen` (virou `heading_screen`). `Player` aceita qualquer controle com `forward_mouse/release_hover` e o olhar sentado virou edge-pan acumulado. Novos sinais: `request_toggle_alarm_mute` e `alarm_muted_changed(muted)`, com mudo implementado no `AlarmSystem`. Novo autoload `AudioManager` + `default_bus_layout.tres` (Ambience/SFX/Alarm). SFX gerados: `panel_click.wav` e `o2_beep.wav`. Documentado o pipeline de reexportação fiel da Unreal (§11). Ver §5.2, §9 e §10.
