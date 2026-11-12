@@ -27,6 +27,10 @@ signal navigation_mode_changed(active: bool)
 # --- Intenções vindas da UI (fluxo de partida) ---
 signal request_restart
 
+# --- Intenções vindas do painel físico (botões 3D do posto de comando) ---
+## Knob "silenciar alarme": alterna o mudo da sirene/bipe (a luz continua piscando).
+signal request_toggle_alarm_mute
+
 # --- Fatos emitidos pela Capsule após executar uma ação ---
 signal capsule_moved(new_position: Vector2i, direction: Vector2i)
 signal capsule_rotated(new_direction: Vector2i)
@@ -52,6 +56,8 @@ signal capsule_caught(cell: Vector2i)
 ## `reason`: &"enemy" (inimigo próximo) ou &"low_oxygen" (oxigênio baixo).
 signal alarm_started(reason: StringName)
 signal alarm_stopped(reason: StringName)
+## O som do alarme foi silenciado (true) ou rearmado (false). Um novo perigo rearma sozinho.
+signal alarm_muted_changed(muted: bool)
 
 # --- Fatos emitidos por sistemas de estado/recursos ---
 signal oxygen_changed(current: float, maximum: float)
