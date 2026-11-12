@@ -9,7 +9,9 @@ extends Node3D
 ##               a cápsula diretamente, onde quer que ela esteja.
 ## Ocupar a mesma célula que a cápsula (ela entra na célula do inimigo ou o
 ## inimigo entra na dela) emite capsule_caught → derrota.
-## Sonar que passa pelo inimigo antes da parede emite enemy_detected (eco).
+## Sonar emite enemy_detected (eco) se o inimigo estiver a até SONAR_DETECT_RADIUS
+## células da origem (em linha reta, através das paredes) ou no feixe reto de
+## uma das 4 direções antes da parede.
 ## A posição 3D só existe para a cena de debug; da cabine ele nunca é visto.
 
 enum State { WANDERING, HUNTING }
@@ -55,11 +57,14 @@ func _on_capsule_moved(new_position: Vector2i, _direction: Vector2i) -> void:
 
 
 ## O pulso é barulho: o inimigo passa a caçar a célula de onde ele veio.
-## Se algum dos 4 sinais passou por ele antes de bater na parede, há um eco.
+## Há eco se ele está dentro do raio do pulso ou no caminho de um dos 4 sinais.
 func _on_sonar_pinged(origin: Vector2i, hits: Array[Vector2i]) -> void:
+	var detected := Vector2(grid_position - origin).length() <= GameState.SONAR_DETECT_RADIUS
 	for hit in hits:
 		if _is_between(origin, hit, grid_position):
-			EventBus.enemy_detected.emit(grid_position)
+			detected = true
+	if detected:
+		EventBus.enemy_detected.emit(grid_position)
 	state = State.HUNTING
 	_target = origin
 	EventBus.enemy_heard_sonar.emit(maze.get_distances_from(origin).get(grid_position, -1))

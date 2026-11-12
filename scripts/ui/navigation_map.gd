@@ -3,7 +3,8 @@ extends Control
 ## Começa sem nenhum obstáculo visível; só mostra o que a cápsula "descobriu":
 ##   - paredes reveladas por colisão (capsule_collided) e por sonar (sonar_pinged);
 ##   - o rastro de células já visitadas, a posição/direção atual e a saída;
-##   - ecos do inimigo no sonar (enemy_detected): um ponto vermelho que some sozinho.
+##   - ecos do inimigo no sonar (enemy_detected): um ponto vermelho que some sozinho;
+##   - o raio de detecção do pulso (GameState.SONAR_DETECT_RADIUS), como um anel.
 ## "Dumb UI": não consulta a MazeGrid para regras, só para dimensões e saída;
 ## todo o conhecimento de paredes vem dos sinais do EventBus.
 
@@ -153,7 +154,12 @@ func _draw_sonar(origin: Vector2, cell_px: float) -> void:
 		draw_line(from, from.lerp(to, travel), Color(SONAR_COLOR, alpha * 0.8), 2.0)
 		if travel >= 1.0:
 			draw_arc(to, cell_px * (0.3 + t), 0.0, TAU, 20, Color(SONAR_COLOR, alpha), 2.0)
-	draw_arc(from, cell_px * t * maze.width * 0.5, 0.0, TAU, 48, Color(SONAR_COLOR, 0.4 * (1.0 - t)), 2.0)
+	# Raio de detecção da criatura: o anel se expande até o limite e o círculo some.
+	var radius_px := GameState.SONAR_DETECT_RADIUS * cell_px
+	var ring := ease(clampf(t * 1.6, 0.0, 1.0), 0.4)
+	draw_circle(from, radius_px, Color(SONAR_COLOR, 0.07 * (1.0 - t)))
+	draw_arc(from, radius_px * ring, 0.0, TAU, 64, Color(SONAR_COLOR, 0.55 * (1.0 - t)), 2.0)
+	draw_arc(from, radius_px, 0.0, TAU, 64, Color(SONAR_COLOR, 0.25 * (1.0 - t)), 1.0)
 
 
 ## Triângulo apontando para a direção atual.

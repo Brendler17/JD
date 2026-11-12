@@ -14,6 +14,9 @@ const OXYGEN_COST_MOVE := 1.0
 const OXYGEN_COST_ROTATE := 1.0
 const OXYGEN_COST_SONAR := 4.0
 const OXYGEN_COST_COLLISION := 8.0
+## Raio (em células, distância em linha reta) em que um pulso de sonar revela a
+## criatura, atravessando paredes. Além dele, só o feixe reto das 4 direções a pega.
+const SONAR_DETECT_RADIUS := 4.5
 
 var state: State = State.PLAYING
 var oxygen: float = MAX_OXYGEN

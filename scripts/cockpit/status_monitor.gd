@@ -55,7 +55,7 @@ func _on_sonar_pinged(_origin: Vector2i, hits: Array[Vector2i]) -> void:
 
 
 func _on_enemy_detected(_cell: Vector2i) -> void:
-	_log("!! ECO NÃO IDENTIFICADO NO FEIXE")
+	_log("!! ECO NÃO IDENTIFICADO NO RAIO DO SONAR")
 
 
 func _on_alarm_started(reason: StringName) -> void:
