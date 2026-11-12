@@ -184,7 +184,9 @@ prompt = "Examinar o rádio"
 title = "RÁDIO DE SUPERFÍCIE"
 text = "Só estática no canal de emergência.
 
-Uma etiqueta gasta, colada no gabinete:
+Na lista de canais colada no gabinete, o \"CANAL 4 — ESTAÇÃO TÉTIS\" foi riscado à caneta, com força.
+
+Embaixo, outra etiqueta, mais nova:
 \"Perdeu o contato? Confie no sonar. Cada pulso, cada manobra e cada batida no casco consomem o ar dos reguladores.\""
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Interactables/Radio" unique_id=1413493862]
@@ -203,7 +205,11 @@ LASTRO ........... ESTÁVEL
 VISÃO EXTERNA .... INDISPONÍVEL
 SONAR ............ OPERACIONAL (alcance: primeiro eco)
 
-Navegação manual pelo painel central. O mapa só registra obstáculos detectados por sonar ou por impacto."
+Navegação manual pelo painel central. O mapa só registra obstáculos detectados por sonar ou por impacto.
+
+ÚLTIMA SINCRONIZAÇÃO DE ROTA:
+C-09 ... 4.012 m ... SIN##L P#RDIDO
+(registro não deveria constar nesta unidade)"
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Interactables/Terminal" unique_id=296768854]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.2, -0.7, -0.7)
@@ -218,7 +224,9 @@ prompt = "Verificar os cilindros"
 title = "CILINDROS DE O₂"
 text = "Os manômetros tremem a cada estalo do casco.
 
-Todo o ar da cabine vem daqui. O nível atual aparece no painel de navegação — não há reserva extra."
+Todo o ar da cabine vem daqui. O nível atual aparece no mostrador do painel — não há reserva extra.
+
+Na etiqueta de inspeção, alguém anotou à mão: \"reguladores reaproveitados do estoque da C-07\"."
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Interactables/OxygenTanks" unique_id=530640082]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.1, -0.6, -7)
@@ -233,7 +241,9 @@ prompt = "Examinar a escotilha"
 title = "ESCOTILHA"
 text = "Travada pela pressão da água lá fora.
 
-Não há como sair daqui até a cápsula chegar ao ponto de resgate."
+Não há como sair daqui até a cápsula chegar ao ponto de resgate.
+
+Na borda do aro, alguém gravou dez riscos na tinta. O último parece recente."
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Interactables/Hatch" unique_id=531294908]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, -12.25)
@@ -246,9 +256,13 @@ monitoring = false
 script = ExtResource("3_interactable")
 prompt = "Pegar o caderno"
 title = "CADERNO DE BORDO"
-text = "Dia 3.
+text = "Caderno do técnico de preparação. A última página:
 
-O sonar só devolve o primeiro eco de cada lado — o resto do corredor continua no escuro. Bater às cegas sai caro. Escute antes de avançar."
+\"Pediram a Dez pronta em três dias. Ninguém fala da Tétis no refeitório.
+
+O sonar só devolve o primeiro eco de cada lado — o resto do corredor continua no escuro. Bater às cegas sai caro. Escute antes de avançar.
+
+E se ouvir alguma coisa respondendo o pulso... pare.\""
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Interactables/Bunk" unique_id=1712622098]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4, -1, -10.5)
