@@ -62,6 +62,7 @@ func _on_sonar_pinged(origin: Vector2i, hits: Array[Vector2i]) -> void:
 			EventBus.enemy_detected.emit(grid_position)
 	state = State.HUNTING
 	_target = origin
+	EventBus.enemy_heard_sonar.emit(maze.get_distances_from(origin).get(grid_position, -1))
 	_take_turn()
 
 

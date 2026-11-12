@@ -2,11 +2,31 @@ extends Node
 ## Autoload de áudio: escuta fatos do EventBus e toca o som correspondente.
 ## Nenhum sistema de gameplay toca som diretamente (exceção: o clique dos botões
 ## físicos do painel, que é feedback do próprio objeto 3D e fica nele).
-## Buses (default_bus_layout.tres): Ambience, SFX e Alarm. O mudo do alarme
-## (knob do painel → AlarmSystem → alarm_muted_changed) muta só o bus Alarm.
+## Buses (default_bus_layout.tres): Ambience, SFX, Alarm, Radio e Distant. O mudo
+## do alarme (knob do painel → AlarmSystem → alarm_muted_changed) muta só o bus Alarm.
+## O rádio (voz/estática) é tocado pelo RadioSystem; aqui só a mixagem reage a ele
+## (o ambiente abaixa durante as falas).
 ## Persiste entre reinícios (é autoload): o ambiente não corta ao recarregar a cena.
 
-const AMBIENCE := preload("res://assets/audio/sfx/ambience.mp3")
+## Cama de ambiente: as faixas se revezam com crossfade, começando a próxima em
+## `loop_at` segundos. `ambience.mp3` tem fade-out próprio nos últimos ~10 s, então
+## a troca começa antes dele (em laço simples, ficaria um buraco de silêncio).
+const AMBIENCE_BED := [
+	{"stream": preload("res://assets/audio/sfx/ambience.mp3"), "volume_db": -10.0, "loop_at": 36.0},
+	{"stream": preload("res://assets/audio/sfx/ambience2.mp3"), "volume_db": -1.0, "loop_at": 46.0},
+]
+## Camada de tensão (ronco grave) que cresce com a proximidade do inimigo.
+const TENSION_BED := [
+	{"stream": preload("res://assets/audio/sfx/ambience3.mp3"), "volume_db": 3.0, "loop_at": 40.0},
+]
+## Mesma escala do mostrador INTERF.: cheio a 1 passo, zerado a partir de 9.
+const TENSION_RANGE := 8.0
+## Chamado distante da criatura quando ela ouve o sonar (bus Distant: abafado e com eco).
+const DISTANT_CALL := preload("res://assets/audio/sfx/monster3.mp3")
+const DISTANT_CALL_RANGE := 10
+const DISTANT_CALL_COOLDOWN := 20.0
+## Quanto o ambiente abaixa enquanto o comandante fala.
+const RADIO_DUCK_DB := -6.0
 const CRASH := preload("res://assets/audio/sfx/crash.mp3")
 const SONAR := preload("res://assets/audio/sfx/sonar.mp3")
 const METAL := preload("res://assets/audio/sfx/metal.mp3")
@@ -24,7 +44,13 @@ const MOVE_VOLUME_DB := -4.0
 ## A partir desta distância (em passos) o casco começa a ranger.
 const CREAK_RANGE := 4
 
-var _ambience: AudioStreamPlayer
+var _ambience_bed: CrossfadeLoop
+var _tension_bed: CrossfadeLoop
+var _tension_level := 0.0
+var _tension_target := 0.0
+var _distant_call: AudioStreamPlayer
+var _last_distant_call := -INF
+var _duck_tween: Tween
 var _crash: AudioStreamPlayer
 var _sonar: AudioStreamPlayer
 var _creak: AudioStreamPlayer
@@ -39,7 +65,12 @@ var _alarm_loops := {}
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	_ambience = _make_player(AMBIENCE, &"Ambience", -10.0, true)
+	_ambience_bed = CrossfadeLoop.new(AMBIENCE_BED, &"Ambience")
+	add_child(_ambience_bed)
+	_tension_bed = CrossfadeLoop.new(TENSION_BED, &"Ambience")
+	_tension_bed.gain_db = -80.0
+	add_child(_tension_bed)
+	_distant_call = _make_player(DISTANT_CALL, &"Distant", -6.0)
 	_crash = _make_player(CRASH, &"SFX", -2.0)
 	_sonar = _make_player(SONAR, &"SFX", -4.0)
 	_creak = _make_player(METAL, &"SFX", -14.0)
@@ -49,7 +80,6 @@ func _ready() -> void:
 	_rotate = _make_player(ROTATE[0], &"SFX", -3.0)
 	_alarm_loops[&"enemy"] = _make_player(SIREN, &"Alarm", -12.0, true)
 	_alarm_loops[&"low_oxygen"] = _make_player(O2_BEEP, &"Alarm", -10.0, true)
-	_ambience.play()
 
 	EventBus.capsule_collided.connect(_on_capsule_collided)
 	EventBus.maneuver_started.connect(_on_maneuver_started)
@@ -60,6 +90,16 @@ func _ready() -> void:
 	EventBus.alarm_started.connect(_on_alarm_started)
 	EventBus.alarm_stopped.connect(_on_alarm_stopped)
 	EventBus.alarm_muted_changed.connect(_on_alarm_muted_changed)
+	EventBus.enemy_heard_sonar.connect(_on_enemy_heard_sonar)
+	EventBus.game_over.connect(func(_won: bool) -> void: _tension_target = 0.0)
+	EventBus.radio_line_started.connect(func(_id: StringName, _text: String, _duration: float) -> void:
+		_duck_ambience(RADIO_DUCK_DB, 0.3))
+	EventBus.radio_line_finished.connect(func(_id: StringName) -> void: _duck_ambience(0.0, 1.0))
+
+
+func _process(delta: float) -> void:
+	_tension_level = lerpf(_tension_level, _tension_target, 1.0 - exp(-delta * 0.8))
+	_tension_bed.gain_db = linear_to_db(maxf(_tension_level, 0.0001))
 
 
 ## Manobras: o som começa junto com a manobra (o resultado só vem no fim dela).
@@ -98,10 +138,32 @@ func _on_capsule_collided(_cell: Vector2i, _direction: Vector2i) -> void:
 
 ## Metal rangendo: mais alto quanto mais perto; não reinicia se ainda está tocando.
 func _on_enemy_proximity_changed(steps: int) -> void:
+	_tension_target = 0.0 if steps < 0 else clampf(1.0 - float(steps - 1) / TENSION_RANGE, 0.0, 1.0)
 	if steps < 0 or steps > CREAK_RANGE or _creak.playing:
 		return
 	_creak.volume_db = -18.0 + float(CREAK_RANGE - steps) * 4.0
 	_creak.play()
+
+
+## A criatura ouviu o pulso: se estiver perto o bastante, um chamado distante
+## responde depois de um instante (o som "viaja"). Feedback do risco do sonar.
+func _on_enemy_heard_sonar(steps: int) -> void:
+	var now := Time.get_ticks_msec() / 1000.0
+	if steps < 0 or steps > DISTANT_CALL_RANGE or now - _last_distant_call < DISTANT_CALL_COOLDOWN:
+		return
+	_last_distant_call = now
+	_distant_call.volume_db = -2.0 - float(steps) * 1.2
+	_distant_call.pitch_scale = randf_range(0.8, 0.92)
+	get_tree().create_timer(randf_range(1.2, 2.0)).timeout.connect(_distant_call.play)
+
+
+func _duck_ambience(volume_db: float, time: float) -> void:
+	if _duck_tween:
+		_duck_tween.kill()
+	var bus := AudioServer.get_bus_index(&"Ambience")
+	_duck_tween = create_tween()
+	_duck_tween.tween_method(func(db: float) -> void: AudioServer.set_bus_volume_db(bus, db),
+		AudioServer.get_bus_volume_db(bus), volume_db, time)
 
 
 func _on_alarm_started(reason: StringName) -> void:
@@ -132,3 +194,60 @@ func _make_player(stream: AudioStream, bus: StringName, volume_db: float, loop :
 	if loop:
 		player.finished.connect(player.play)
 	return player
+
+
+## Laço com crossfade entre faixas (ou da faixa com ela mesma): a próxima começa
+## em `loop_at` com fade-in de XFADE s enquanto a anterior some no mesmo tempo.
+## Evita o clique da emenda e o silêncio de faixas com fade-out próprio.
+## `gain_db` é somado a tudo (usado para a camada de tensão).
+class CrossfadeLoop extends Node:
+	const XFADE := 6.0
+
+	var gain_db := 0.0
+
+	var _tracks: Array
+	var _players: Array[AudioStreamPlayer] = []
+	var _track := 0
+	var _active := 0
+	var _elapsed := 0.0
+	var _previous_elapsed := 0.0
+	var _previous_db := 0.0
+
+	func _init(tracks: Array, bus: StringName) -> void:
+		_tracks = tracks
+		for i in 2:
+			var player := AudioStreamPlayer.new()
+			player.bus = bus
+			player.volume_db = -80.0
+			_players.append(player)
+			add_child(player)
+
+	func _ready() -> void:
+		_play_current()
+
+	func _process(delta: float) -> void:
+		_elapsed += delta
+		var current := _players[_active]
+		var fade_in := clampf(_elapsed / XFADE, 0.0, 1.0)
+		current.volume_db = float(_tracks[_track].volume_db) + gain_db + linear_to_db(maxf(fade_in, 0.001))
+		var previous := _players[1 - _active]
+		if previous.playing:
+			_previous_elapsed += delta
+			var fade_out := 1.0 - _previous_elapsed / XFADE
+			if fade_out <= 0.0:
+				previous.stop()
+			else:
+				previous.volume_db = _previous_db + gain_db + linear_to_db(fade_out)
+		if _elapsed >= float(_tracks[_track].loop_at):
+			_previous_db = float(_tracks[_track].volume_db)
+			_previous_elapsed = 0.0
+			_active = 1 - _active
+			_track = (_track + 1) % _tracks.size()
+			_play_current()
+
+	func _play_current() -> void:
+		_elapsed = 0.0
+		var player := _players[_active]
+		player.stream = _tracks[_track].stream
+		player.volume_db = -80.0
+		player.play()
