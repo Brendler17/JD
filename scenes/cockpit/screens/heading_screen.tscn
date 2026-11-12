@@ -1,0 +1,52 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/cockpit/heading_screen.gd" id="1_heading"]
+[ext_resource type="Theme" path="res://resources/ui/cockpit_theme.tres" id="2_theme"]
+
+[sub_resource type="StyleBoxFlat" id="Style_bg"]
+bg_color = Color(0.06, 0.08, 0.08, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.04, 0.04, 0.04, 1)
+
+[node name="HeadingScreen" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("2_theme")
+theme_override_styles/panel = SubResource("Style_bg")
+script = ExtResource("1_heading")
+
+[node name="Rows" type="VBoxContainer" parent="."]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+alignment = 1
+
+[node name="HeadingLabel" type="Label" parent="Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.82, 0.3, 1)
+theme_override_font_sizes/font_size = 52
+text = "RUMO  N"
+horizontal_alignment = 1
+
+[node name="AlertLabel" type="Label" parent="Rows"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.3, 0.22, 1)
+theme_override_font_sizes/font_size = 30
+horizontal_alignment = 1
+
+[node name="HintLabel" type="Label" parent="Rows"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.6, 0.58, 1)
+theme_override_font_sizes/font_size = 22
+text = "BOTÃO DIREITO: LEVANTAR"
+horizontal_alignment = 1

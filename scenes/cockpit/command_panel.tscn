@@ -1,0 +1,124 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/cockpit/command_panel.gd" id="1_panel"]
+[ext_resource type="Script" path="res://scripts/cockpit/panel_screen.gd" id="2_screen"]
+[ext_resource type="PackedScene" path="res://scenes/cockpit/screens/heading_screen.tscn" id="3_heading"]
+[ext_resource type="Script" path="res://scripts/cockpit/panel_button_3d.gd" id="8_button"]
+[ext_resource type="PackedScene" path="res://scenes/cockpit/screens/sonar_screen.tscn" id="4_sonar"]
+[ext_resource type="PackedScene" path="res://scenes/cockpit/screens/oxygen_dial.tscn" id="5_o2"]
+[ext_resource type="PackedScene" path="res://scenes/cockpit/screens/interference_dial.tscn" id="6_interf"]
+[ext_resource type="PackedScene" path="res://scenes/cockpit/screens/status_monitor.tscn" id="7_monitor"]
+
+[sub_resource type="StandardMaterial3D" id="Mat_plate"]
+albedo_color = Color(0.09, 0.1, 0.1, 1)
+metallic = 0.4
+roughness = 0.6
+
+[sub_resource type="BoxMesh" id="Mesh_plate"]
+material = SubResource("Mat_plate")
+size = Vector3(0.46, 0.46, 0.012)
+
+[node name="CommandPanel" type="Node3D"]
+script = ExtResource("1_panel")
+
+[node name="Keypad" type="Node3D" parent="."]
+transform = Transform3D(-1, 0, 0, 0, 0.9627, 0.2707, 0, 0.2707, -0.9627, 0.27, -0.144, -0.821)
+
+[node name="HeadingScreen" type="Node3D" parent="Keypad"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.23, 0)
+script = ExtResource("2_screen")
+content = ExtResource("3_heading")
+size = Vector2(0.46, 0.2)
+resolution = Vector2i(512, 222)
+
+[node name="Plate" type="MeshInstance3D" parent="Keypad"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, -0.006)
+mesh = SubResource("Mesh_plate")
+
+[node name="MoveForwardButton" type="Node3D" parent="Keypad"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.035, 0)
+script = ExtResource("8_button")
+label_text = "▲
+FRENTE"
+
+[node name="RotateLeftButton" type="Node3D" parent="Keypad"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.125, -0.09, 0)
+script = ExtResource("8_button")
+action = 2
+label_text = "◀ 90º
+GIRAR"
+
+[node name="SonarButton" type="Node3D" parent="Keypad"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.09, 0)
+script = ExtResource("8_button")
+action = 4
+label_text = "(( · ))
+SONAR"
+cap_color = Color(0.12, 0.26, 0.25, 1)
+
+[node name="RotateRightButton" type="Node3D" parent="Keypad"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.125, -0.09, 0)
+script = ExtResource("8_button")
+action = 3
+label_text = "90º ▶
+GIRAR"
+
+[node name="MoveBackwardButton" type="Node3D" parent="Keypad"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.215, 0)
+script = ExtResource("8_button")
+action = 1
+label_text = "▼
+RÉ"
+
+[node name="SonarScreen" type="Node3D" parent="."]
+transform = Transform3D(-1, 0, 0, 0, 0.9627, 0.2707, 0, 0.2707, -0.9627, -0.381, -0.088, -0.852)
+script = ExtResource("2_screen")
+content = ExtResource("4_sonar")
+size = Vector2(0.47, 0.56)
+resolution = Vector2i(528, 630)
+brightness = 1.3
+
+[node name="OxygenDial" type="Node3D" parent="."]
+transform = Transform3D(-1, 0, 0, 0, 0.9627, 0.2707, 0, 0.2707, -0.9627, 0.79, 0.022, -0.707)
+script = ExtResource("2_screen")
+content = ExtResource("5_o2")
+size = Vector2(0.25, 0.25)
+resolution = Vector2i(256, 256)
+transparent = true
+brightness = 0.85
+
+[node name="InterferenceDial" type="Node3D" parent="."]
+transform = Transform3D(-1, 0, 0, 0, 0.9627, 0.2707, 0, 0.2707, -0.9627, 0.79, -0.353, -0.817)
+script = ExtResource("2_screen")
+content = ExtResource("6_interf")
+size = Vector2(0.25, 0.25)
+resolution = Vector2i(256, 256)
+transparent = true
+brightness = 0.85
+
+[node name="StatusMonitor" type="Node3D" parent="."]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0.308, 1.214, -0.574)
+script = ExtResource("2_screen")
+content = ExtResource("7_monitor")
+size = Vector2(1.3, 0.76)
+resolution = Vector2i(1024, 600)
+brightness = 1.2
+
+[node name="AlarmMuteKnob" type="Node3D" parent="."]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0.858, 0.687, -0.575)
+script = ExtResource("8_button")
+action = 5
+label_text = ""
+cap_size = Vector3(0.075, 0.075, 0.05)
+round = true
+cap_color = Color(0.55, 0.08, 0.06, 1)
+travel = 0.018
+
+[node name="AlarmMuteCaption" type="Label3D" parent="."]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0.858, 0.615, -0.568)
+pixel_size = 0.0004
+modulate = Color(0.9, 0.85, 0.8, 1)
+text = "SILENCIAR
+ALARME"
+font_size = 30
+outline_size = 0

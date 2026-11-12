@@ -1,0 +1,73 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/cockpit/status_monitor.gd" id="1_monitor"]
+[ext_resource type="Theme" path="res://resources/ui/cockpit_theme.tres" id="2_theme"]
+[ext_resource type="PackedScene" path="res://scenes/ui/oxygen_gauge.tscn" id="3_gauge"]
+
+[sub_resource type="StyleBoxFlat" id="Style_bg"]
+content_margin_left = 28.0
+content_margin_top = 22.0
+content_margin_right = 28.0
+content_margin_bottom = 22.0
+bg_color = Color(0.07, 0.02, 0.025, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.35, 0.06, 0.06, 1)
+
+[node name="StatusMonitor" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_theme")
+theme_override_styles/panel = SubResource("Style_bg")
+script = ExtResource("1_monitor")
+
+[node name="Rows" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="TitleLabel" type="Label" parent="Rows"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.25, 0.22, 1)
+theme_override_font_sizes/font_size = 40
+text = "CÁPSULA 10  ·  NAVEGAÇÃO MANUAL"
+
+[node name="Separator" type="ColorRect" parent="Rows"]
+custom_minimum_size = Vector2(0, 3)
+layout_mode = 2
+color = Color(0.6, 0.1, 0.08, 1)
+
+[node name="Body" type="HBoxContainer" parent="Rows"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 36
+
+[node name="LeftColumn" type="VBoxContainer" parent="Rows/Body"]
+custom_minimum_size = Vector2(330, 0)
+layout_mode = 2
+theme_override_constants/separation = 28
+
+[node name="OxygenGauge" parent="Rows/Body/LeftColumn" instance=ExtResource("3_gauge")]
+layout_mode = 2
+
+[node name="CostsLabel" type="Label" parent="Rows/Body/LeftColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.55, 0.4, 1)
+theme_override_font_sizes/font_size = 28
+
+[node name="LogLabel" type="Label" parent="Rows/Body"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(1, 0.42, 0.36, 1)
+theme_override_font_sizes/font_size = 24
+vertical_alignment = 2
+autowrap_mode = 3
+clip_text = true
+max_lines_visible = 12
