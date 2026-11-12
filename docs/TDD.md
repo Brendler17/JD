@@ -94,7 +94,10 @@ Notas técnicas:
 - Os botões só emitem **intenções**. A `Capsule` executa e emite os fatos (`capsule_moved`, `capsule_rotated`, `capsule_collided`, `sonar_pinged`). O `GameState` cobra o oxigênio ouvindo esses fatos, e a UI continua "burra" (dumb UI / thin view).
 - **Implementação atual:** teclas físicas `PanelButton3D` (§5.2) no `CommandPanel` › `Keypad`. Cada uma emite a intenção correspondente no `EventBus` ao ser solta sobre si mesma e se desabilita em `game_over`. O antigo `MovementPanel` (botões 2D) foi removido.
 - **Capsule em 3D:** `Node3D`; rotação apenas no eixo Y. No Godot, `+Y` gira no sentido anti-horário visto de cima, então `RIGHT = -90º` e `LEFT = +90º` (`FACING_ROTATION_DEGREES`). Visual provisório: `Body` (caixa 1.8 × 1.2 × 2.2 m) + `Nose` (cone laranja apontando para `-Z`) para tornar a direção legível.
-- **Movimento e rotação instantâneos** (sem tween) por enquanto — a animação entra junto com o trabalho de game feel.
+- **Manobras com duração (implementado):** cada intenção vira uma manobra em `Capsule._begin_maneuver(kind, duration, action)`. Ela emite `maneuver_started(kind, duration)`, arma um `Timer` filho (one-shot) e, no `timeout`, executa `action` (só se `GameState` ainda estiver `PLAYING`) e emite `maneuver_finished(kind)`. Durações exportadas: `move_duration` 1,0, `rotate_duration` 0,8, `sonar_duration` 0,9. `maneuvering = true` faz pedidos novos serem **ignorados**, sem fila. `kind`: `&"forward"`, `&"backward"`, `&"rotate_left"`, `&"rotate_right"`, `&"sonar"`.
+  - Timer filho em vez de `SceneTreeTimer`: é liberado com a cena no reinício, então uma ação pendente nunca roda numa cápsula já liberada.
+  - Regras não mudaram: `GameState`, `Enemy` e o mapa continuam reagindo aos fatos (`capsule_moved/collided/rotated`, `sonar_pinged`), que agora chegam no fim da manobra. `maneuver_*` serve só para a apresentação.
+  - A posição/rotação 3D do nó `Capsule` (só visível na câmera de debug) continua instantânea no fim da manobra.
 
 ### 5.1 Mundo lógico e câmera de debug
 
@@ -120,6 +123,9 @@ Notas técnicas:
 - `forward_mouse`: hover liga emissão ciano. Ao pressionar, a tecla afunda `travel` (tween de 0,05 s) e toca o clique com pitch levemente aleatório. Ao soltar, a tecla volta e só aciona se ainda estiver em hover (`release_hover` já foi chamado se o cursor saiu).
 - `Action`: `MOVE_FORWARD`, `MOVE_BACKWARD`, `ROTATE_LEFT`, `ROTATE_RIGHT`, `SONAR` e `TOGGLE_ALARM_MUTE`. Este último também escuta `alarm_muted_changed` para acender em âmbar (indicador).
 - `game_over` desabilita a tecla (escurece e ignora entrada).
+- Teclas de manobra escutam `maneuver_started/finished`: `busy` ignora entrada e escurece. A tecla que disparou a manobra (`_engaged`) fica afundada e acesa até `maneuver_finished`. Como os sinais são síncronos, ao voltar de `_trigger()` o `busy` já indica se a `Capsule` aceitou. Se ela recusou (fim de partida), a tecla sobe na hora.
+- **Balanço da câmera (`Player`):** em `maneuver_started`, um envelope `sin(πt)` ao longo da duração aplica `MANEUVER_TILT[kind]` (pitch/yaw/roll em rad: andar ±0,022 de pitch, girar ±0,045 de roll e ±0,012 de yaw), somado à orientação sentada. Deslocamentos alimentam o tremor existente com `MANEUVER_RUMBLE` (0,0035).
+- `HeadingScreen` mostra o estado da manobra (`ManeuverLabel`, piscando durante a manobra).
 
 **`CommandPanel`** (`scenes/cockpit/command_panel.tscn` + `scripts/cockpit/command_panel.gd`): instanciado na `Main` com transform identidade (mesmo espaço da malha da cabine). Os filhos são `PanelScreen` posicionadas sobre a malha. As posições foram obtidas por raycast na malha (colisão trimesh temporária) a partir de screenshots. Base do plano do painel amarelo: X = (−1, 0, 0), Y = (0, 0,9627, 0,2707), Z = (0, 0,2707, −0,9627).
 
@@ -234,7 +240,9 @@ Implementado parcialmente (sem rádio ainda). Ver GDD §6.
 |---|---|---|
 | (sempre, em laço) | `ambience.mp3` | Ambience |
 | `capsule_collided` | `crash.mp3` | SFX |
-| `sonar_pinged` | `sonar.mp3` | SFX |
+| `maneuver_started(&"sonar")` | `sonar.mp3`: o ping sai no início, e o mapa revela no fim (eco voltando) | SFX |
+| `maneuver_started(&"forward"/&"backward")` | `capsule_move.mp3` (pitch 0,9 na ré). Em `maneuver_finished` some em fade de 0,35 s; em `capsule_collided` é cortado seco | SFX |
+| `maneuver_started(&"rotate_*")` | `capsule_rotate_a/b.wav`, sorteado, pitch 0,9–1,1 | SFX |
 | `enemy_detected` | `monster.mp3` | SFX |
 | `enemy_proximity_changed` (≤ 4 passos) | `metal.mp3`, −18 dB + 4 dB por passo mais perto; não reinicia se já está tocando | SFX |
 | `capsule_caught` | `monster2.mp3` | SFX |
@@ -245,7 +253,7 @@ Implementado parcialmente (sem rádio ainda). Ver GDD §6.
 - Laços: reinício no `finished` (vale para MP3 e WAV sem mexer nas opções de importação). `stop()` não emite `finished`. `PROCESS_MODE_ALWAYS`. Como é autoload, o ambiente não corta ao reiniciar a partida.
 - Exceção à regra "só o AudioManager toca som": o clique das teclas (`PanelButton3D`) é feedback do próprio objeto e posicional (`AudioStreamPlayer3D`).
 - **Buses (`default_bus_layout.tres`):** `Master` › `Ambience`, `SFX`, `Alarm`. *Planejado:* bus `Radio` com `AudioEffectBandPassFilter` (~300–3400 Hz) + `AudioEffectDistortion` leve + estática, com intensidade controlada pela proximidade do inimigo.
-- **Sem som ainda:** andar e girar (não há SFX de motor/servo na pasta).
+- Origem/licença dos SFX: `assets/audio/CREDITS.md`.
 - **`RadioSystem` (planejado):** falas a partir de dados (Resource `RadioLine`: `stream`, `subtitle`, `trigger`, `once`). Gatilhos `intro`, `first_collision`, `first_sonar`, `low_oxygen`, `first_enemy_encounter`. Emite `radio_line_started/finished(subtitle)` para legendas no monitor superior.
 
 ## 11. Assets da Cabine & Iluminação
@@ -293,3 +301,4 @@ Implementado parcialmente (sem rádio ainda). Ver GDD §6.
 - **2026-11-11 — Painel diegético (`CommandPanel` + `PanelScreen`), remoção do console 2D e passada de iluminação:** criado o componente `PanelScreen` (SubViewport → quad 3D, com entrada de mouse por raycast na layer 4 e `push_input`) e a cena `scenes/cockpit/command_panel.tscn`, com cinco telas sobre a malha da cabine: teclado (interativo), sonar no CRT, mostradores de O₂ e interferência e monitor de log. `Player` no modo NAVIGATING agora encaminha os eventos de mouse às telas, gira o olhar quando o cursor chega às bordas e tem o `SeatView` recuado e mais alto, enquadrando o painel inteiro. Removidos `navigation_console.tscn/.gd`. A lógica foi para `keypad_screen.gd` e `status_monitor.gd`. Novo `gauge_dial.gd` e tema `resources/ui/cockpit_theme.tres`. As teclas do `MovementPanel` cresceram (140 × 124). Iluminação da `main.tscn` refeita para o clima da demo em Unreal. Documentada a limitação do atlas único da cabine e as opções de correção (§11). Sem novos sinais no `EventBus`. Ver §5.2 e §11.
 - **2026-11-11 — Diagnóstico: "andar e girar a câmera ao mesmo tempo não funciona":** não é bug de código (a física lê o teclado e `_unhandled_input` lê o mouse de forma independente). No notebook de desenvolvimento (touchpad ELAN, GNOME/Wayland), a opção do sistema *desativar touchpad enquanto digita* bloqueia o touchpad enquanto W/A/S/D está pressionado. Com mouse externo ou com a opção desligada, funciona.
 - **2026-11-11 — Teclas físicas (`PanelButton3D`), silenciar alarme, `AudioManager` e edge-pan:** criado `PanelButton3D` (tecla/knob 3D com curso, hover, clique posicional e cancelamento ao soltar fora). O `Keypad` do `CommandPanel` agora tem `HeadingScreen` + placa + 5 teclas, e `AlarmMuteKnob` fica sob o monitor. Removidos `MovementPanel` (`scenes/ui/movement_panel.tscn`, `scripts/ui/movement_panel.gd`) e `keypad_screen` (virou `heading_screen`). `Player` aceita qualquer controle com `forward_mouse/release_hover` e o olhar sentado virou edge-pan acumulado. Novos sinais: `request_toggle_alarm_mute` e `alarm_muted_changed(muted)`, com mudo implementado no `AlarmSystem`. Novo autoload `AudioManager` + `default_bus_layout.tres` (Ambience/SFX/Alarm). SFX gerados: `panel_click.wav` e `o2_beep.wav`. Documentado o pipeline de reexportação fiel da Unreal (§11). Ver §5.2, §9 e §10.
+- **2026-11-11 — Manobras com duração (game feel):** `Capsule` executa cada ação depois de um tempo (`_begin_maneuver` + `Timer`), ignorando pedidos durante a manobra. Novos sinais `maneuver_started(kind, duration)` e `maneuver_finished(kind)`. `PanelButton3D` trava as teclas e mantém afundada a tecla acionada. `HeadingScreen` mostra o estado. `AudioManager` toca motor (fade/corte na colisão), rangido no giro e o ping do sonar no início. `Player` inclina e vibra a câmera. Novos SFX CC0 `capsule_move.mp3` e `capsule_rotate_a/b.wav`, com créditos em `assets/audio/CREDITS.md`. Ver §5, §5.2 e §10.
