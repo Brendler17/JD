@@ -10,19 +10,19 @@
 
 ## Resumo (foco em gameplay)
 
-O jogador está preso dentro de uma cápsula submersa, sem qualquer visão do ambiente externo, guiando-a por um labirinto (representado como uma matriz com no mínimo um caminho válido) usando apenas um **painel visual de botões** e um sonar de uso limitado. Cada ativação do sonar revela a distância até o obstáculo mais próximo à frente — mas também carrega o risco de atrair algo no escuro. Colisões consomem oxigênio, o recurso central do jogo; esgotá-lo ou colidir repetidamente leva à morte. O objetivo é alcançar a saída administrando informação, risco e recursos escassos, em uma atmosfera construída quase inteiramente por áudio.
+O jogador está preso dentro de uma cápsula submersa, sem qualquer visão do ambiente externo, guiando-a por um labirinto (representado como uma matriz com no mínimo um caminho válido) usando apenas o **painel físico do posto de comando** e um sonar. Cada pulso do sonar revela os obstáculos mais próximos ao redor — mas também carrega o risco de atrair algo no escuro. Colisões consomem oxigênio, o recurso central do jogo; esgotá-lo ou colidir repetidamente leva à morte. O objetivo é alcançar a saída administrando informação, risco e recursos escassos, em uma atmosfera construída quase inteiramente por áudio.
 
 ## Controles / Painel de movimentação
 
-O jogo é em **primeira pessoa, dentro da cápsula**. Na tela há apenas um pequeno ponto central (a mira): o mouse movimenta o olhar pela cabine e o clique aciona o botão apontado. A movimentação **não** ocorre por teclado (setas/WASD), e sim por um **painel físico de botões dentro da cápsula**:
+O jogo é em **primeira pessoa, dentro da cápsula**. Em pé, o jogador anda pela cabine e examina objetos com a mira. Para navegar, ele **senta no posto de comando e opera o painel físico com o mouse**: não existe tela sobreposta, e oxigênio, sonar, rumo e alertas aparecem nos próprios instrumentos da cabine (mostradores, tela CRT, monitor). A cápsula **não** é pilotada por teclado, e sim pelos botões do painel:
 
-| Botão | Ação | Consome oxigênio? |
+| Botão | Ação | Custo de oxigênio |
 |---|---|---|
-| **Andar** | Move a cápsula uma célula para frente, na direção atual | **Sim** |
-| **Girar 90º Esquerda** | Rotaciona a cápsula 90º para a esquerda, sem se deslocar | Não |
-| **Girar 90º Direita** | Rotaciona a cápsula 90º para a direita, sem se deslocar | Não |
+| **Frente / Ré** | Move a cápsula uma célula para frente ou para trás | 1 |
+| **Girar 90º Esq./Dir.** | Rotaciona a cápsula 90º, sem se deslocar | 1 |
+| **Sonar** | Revela o primeiro obstáculo nas 4 direções e atrai a criatura | 4 |
 
-Não existe movimento livre nem strafe: a cápsula sempre anda "para frente" na direção em que está apontada, e vira em incrementos de 90º. Apenas o ato de andar gasta oxigênio — girar é uma ação "gratuita" que só custa tempo/risco (ex.: se houver inimigo se aproximando por turno).
+Não existe movimento livre nem strafe: a cápsula anda só na direção em que está apontada e vira em incrementos de 90º. Bater numa parede custa caro (8).
 
 ## Modos de gameplay
 
