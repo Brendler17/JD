@@ -20,11 +20,17 @@
 
 - **Primeira pessoa, sempre dentro da cápsula 3D.** O jogador nunca vê o exterior: não há janelas, câmera externa nem mapa. Tudo o que se sabe do lado de fora chega por **som** (ambiente, colisões, sonar, inimigo).
 - **Mira:** no centro da tela há apenas um pequeno ponto (a "mira"); não há HUD flutuante tradicional. O mouse movimenta o olhar dentro da cabine e o ponto indica o que está sendo apontado.
-- **Painel físico (diegético):** os botões de movimentação (Andar / Girar Esq. / Girar Dir.) e demais controles (sonar, etc.) são objetos 3D num painel **dentro da cápsula**. O jogador aponta a mira para um botão e clica para acioná-lo.
-- **Jogador parado (MVP):** o personagem fica sentado/fixo no posto de comando; só o olhar se move (mouse). Não há deslocamento dentro da cabine.
-- **Stretch goal — andar pela cabine (WASD):** se sobrar tempo, permitir que o jogador se mova dentro da cápsula para interagir com outros pontos do submarino, como **anotações clicáveis** que abrem em tela e contam parte da história/lore. Fora do MVP (ver §8).
-- **Indicadores diegéticos:** informações como oxigênio devem, idealmente, viver em instrumentos da própria cabine (mostradores, luzes, sons de alarme), e não em elementos 2D sobre a tela.
-- **Estado atual (protótipo):** ainda não há assets nem texturas. Enquanto isso, o painel de botões, o medidor de oxigênio e a tela de fim são **UI 2D provisória** e a câmera é top-down de debug — todos substituíveis sem mudar as regras do jogo, pois se comunicam apenas por sinais.
+- **Painel físico (diegético) — implementado:** toda a operação da cápsula acontece **no próprio painel do posto de comando**, dentro da cabine (ver §7). Não existe mais tela 2D sobreposta ao sentar.
+- **Andando pela cabine (implementado):** em pé, o jogador anda com WASD/setas e olha com o mouse; a mira central indica o que pode ser acionado (clique esquerdo). Objetos examináveis (rádio, terminal, cilindros, escotilha, caderno) abrem um texto curto de lore/dica. O antigo "jogador parado (MVP)" foi superado por essa implementação.
+- **Sentado no posto:** clicar na cadeira ou no painel senta o jogador. O **cursor fica livre** e o jogador clica diretamente nos controles do painel. Encostar o cursor nas bordas da tela gira o olhar naquela direção (para cima, o monitor superior e o knob do alarme), e o olhar **fica onde parou** quando o cursor volta ao meio (*edge-pan*). Assim o que se vê não escorrega de baixo do cursor na hora de clicar. Clique direito levanta. *Decisão:* em pé usa-se a mira; sentado, o cursor — mais preciso para um painel com vários controles pequenos, sem perder a diegese.
+- **Indicadores diegéticos:** oxigênio e interferência são **mostradores analógicos** do painel, o mapa do sonar aparece na **tela CRT**, o registro de eventos no **monitor superior**, e o perigo pisca na luz vermelha da cabine — nada flutua sobre a tela.
+- **Estado atual:** a cabine usa o modelo importado da demo em Unreal (ver §2.2). Restam como UI 2D apenas a mira/prompt (em pé), o visualizador de textos e a tela de fim de partida.
+
+### 2.2 Direção de arte (referência: demo em Unreal)
+
+- **Referência visual:** vídeo da demo em Unreal (`Profundidade Zero - Demo Unreal.mp4`, fora do repositório). Cabine **escura**, iluminada por poucas luzes pontuais quentes, com paredes metálicas em tons de ferrugem, faixas de luz laranja e telas emissivas nítidas (monitor vermelho, CRT ciano) como principais fontes de cor.
+- **Iluminação na Godot:** ajustada para se aproximar desse clima (pouca luz ambiente, contraste, luzes de acento laranja e brilho/bloom nas telas).
+- **Limitação conhecida:** a cabine foi exportada da Unreal como **uma única malha mesclada com um único atlas de textura 2048×2048** (*Merge Actors*). Cada objeto recebe poucos pixels dessa imagem, então tudo fica borrado de perto, sobretudo o painel. O tom ferrugem das paredes também se perdeu na mesclagem (na Godot as paredes saem brancas). As telas do painel já foram resolvidas sobrepondo telas renderizadas pelo jogo (§7). Para o resto, ver opções no TDD §11.
 
 *(A detalhar: referências de tom, moodboard, exemplos de "momentos" que o jogo deve gerar.)*
 
@@ -40,25 +46,27 @@
 
 ### 4.1 Painel de Movimentação
 
-O jogador **não** controla a cápsula por teclado. A movimentação ocorre por um **painel visual de botões**, clicado com o mouse:
+O jogador **não** controla a cápsula por teclado. A movimentação ocorre por um **teclado em cruz no painel do posto de comando** (área central do painel amarelo), clicado com o mouse:
 
 | Botão | Ação | Custo de oxigênio |
 |---|---|---|
-| Andar | Move a cápsula uma célula para frente, na direção em que está apontada | Sim |
-| Girar 90º Esquerda | Rotaciona a cápsula 90º à esquerda, sem deslocamento | Não |
-| Girar 90º Direita | Rotaciona a cápsula 90º à direita, sem deslocamento | Não |
+| ▲ Frente | Move a cápsula uma célula para frente, na direção em que está apontada | 1 |
+| ▼ Ré | Recua uma célula, sem girar | 1 |
+| ◀ Girar 90º | Rotaciona a cápsula 90º à esquerda, sem deslocamento | 1 |
+| Girar 90º ▶ | Rotaciona a cápsula 90º à direita, sem deslocamento | 1 |
+| (( · )) Sonar | Pulso de sonar nas 4 direções (§4.2) | 4 |
 
 Regras:
-- A cápsula sempre se move "para frente" em relação à direção atual — não há strafe nem movimento livre.
-- Apenas o botão **Andar** consome oxigênio. Girar é uma ação sem custo de recurso (mas pode ter custo de tempo/risco a definir, ex.: turnos de aproximação de inimigo).
+- A cápsula só se move para frente ou para trás em relação à direção atual — não há strafe nem movimento livre.
+- Toda ação custa oxigênio e dá um turno ao inimigo (§4.5); colidir custa mais (§4.3).
 
 ### 4.2 Sonar
 
-- Uso limitado (quantidade a definir).
-- Revela a distância até o obstáculo mais próximo à frente da cápsula.
-- Risco: cada ativação pode atrair um inimigo invisível e intransponível.
+- **Implementado:** cada pulso revela, nas **4 direções**, o primeiro obstáculo atingido, que fica registrado no mapa da tela CRT. O resto do corredor continua desconhecido.
+- **Custo:** 4 de oxigênio por pulso, sem limite de usos (o custo em O₂ e o risco já limitam o uso).
+- **Risco:** cada pulso atrai o inimigo para o ponto de onde saiu (§4.5). Um eco que passa pela criatura aparece como **ponto vermelho passageiro**.
 
-*(A detalhar: alcance, cooldown, feedback sonoro/visual, custo exato de recarga.)*
+*(A detalhar: feedback sonoro do ping/eco.)*
 
 ### 4.3 Oxigênio
 
@@ -68,16 +76,18 @@ Regras:
 
 | Parâmetro | Valor (MVP, ponto de partida) |
 |---|---|
-| Oxigênio inicial | 150 |
-| Custo por "Andar" | 1 |
-| Custo por colisão | 5 |
-| Custo por girar | 0 |
+| Oxigênio inicial | 200 |
+| Custo por Frente/Ré | 1 |
+| Custo por girar | 1 |
+| Custo por sonar | 4 |
+| Custo por colisão | 8 |
 | Regeneração | Nenhuma |
 
-- Com o primeiro labirinto (menor caminho de 88 passos), sobram ~62 de margem: o equivalente a ~12 colisões ou a uma boa quantidade de becos sem saída. É um valor inicial para playtest, não final.
-- Uma colisão custa o mesmo que 5 passos: bater na parede deve doer o suficiente para fazer o jogador hesitar antes de andar às cegas.
+- Valores atuais de playtest (revisados em 2026-10-27, junto com o labirinto procedural, quando girar e sonar passaram a custar). Não são finais.
+- Uma colisão custa o mesmo que 8 passos: bater na parede deve doer o suficiente para fazer o jogador hesitar antes de andar às cegas.
+- **Leitura:** mostrador analógico de O₂ no painel (faixa vermelha nos últimos 25%) e valor numérico no monitor superior.
 - **Chegar à saída com o último ponto de oxigênio conta como vitória.**
-- Fim da partida: tela de vitória ("Saída alcançada") ou derrota ("Oxigênio esgotado"), com opção de tentar novamente (reinicia o mesmo labirinto).
+- Fim da partida: tela de vitória ("Saída alcançada") ou derrota ("Oxigênio esgotado"), com opção de tentar novamente (gera um labirinto novo, ver §4.4).
 
 ### 4.4 Labirinto
 
@@ -86,7 +96,7 @@ Regras:
 - Modo Roguelike (pós-MVP): múltiplos mapas gerados, dificuldade crescente.
 - Células: parede, livre, início (1) e saída (1). Tudo além dos limites do mapa é parede.
 - **Colisão:** tentar andar para uma parede **não move** a cápsula — o comando é "desperdiçado" e conta como colisão (que custará oxigênio, conforme §4.3). O jogador sente a parede, mas não atravessa nem é empurrado.
-- Primeiro labirinto do MVP: 15 × 15 células (4 m cada), início no canto inferior esquerdo, saída no canto superior direito, menor caminho de 88 passos. Tamanho e comprimento serão rebalanceados quando o consumo de oxigênio estiver definido.
+- **Geração procedural (implementada):** cada partida, e cada "Tentar novamente", gera um labirinto novo de 15 × 15 células (4 m cada), com alguns caminhos alternativos. O menor caminho até a saída é sempre ≥ 1/4 das células livres. Ainda é possível fixar uma semente ou um mapa escrito à mão para testes e balanceamento.
 
 ### 4.5 Inimigo
 
@@ -129,42 +139,62 @@ A atmosfera é construída quase inteiramente por áudio, já que o jogador não
 - **Som:** sirene apitando.
 - **Visual:** luz vermelha piscando dentro da cabine, bem *oldschool* (giroflex/lâmpada de alerta). No protótipo atual, pode ser um piscar vermelho sobre a tela até o cockpit existir.
 - **Proposta (a validar) — distinguir as causas:** mesma luz vermelha, mas **sons diferentes** — oxigênio baixo = bipe de alarme ritmado; inimigo = sirene + metal rangendo. Se as duas causas soarem igual, o jogador não sabe se deve economizar ar ou fugir.
+- **Implementado — silenciar alarme:** knob vermelho sob o monitor superior. Corta o **som** dos alarmes ativos (sirene e bipe), mas a luz vermelha continua piscando. Só funciona com algum alarme tocando. Um perigo **novo**, ou o fim de todos os alarmes, rearma o som sozinho, para o jogador não silenciar uma vez e esquecer. O monitor registra "ALARME SILENCIADO" e "ALARME REARMADO".
+- **Implementado — sons distintos:** inimigo = sirene; O₂ baixo = bipe duplo (gerado proceduralmente, distinto da sirene).
 - **Proposta (a validar) — não mascarar o áudio do jogo:** como o jogo depende de ouvir o ambiente, a sirene não deve tocar contínua em volume alto. Opções: tocar em pulsos com pausas, abaixar a música/ambiente só nos picos, ou ter um **botão "silenciar alarme" no painel** — a luz continua piscando, mas o jogador escolhe recuperar a audição (decisão de risco extra, e um ótimo momento de tensão).
 
 ### 6.4 Camadas sonoras previstas
 
+Status: ✅ = implementado (`AudioManager`, com SFX em `assets/audio/sfx/`).
+
 | Camada | Quando |
 |---|---|
-| Ambiente submarino (pressão, correntes, bolhas) | Sempre |
+| Ambiente submarino (pressão, correntes, bolhas) | Sempre ✅ |
 | Motor/propulsão | Ao andar |
 | Servo/engrenagem | Ao girar |
-| Impacto metálico forte | Colisão |
-| Ping do sonar + eco | Uso do sonar |
-| Metal rangendo / sendo espremido | Inimigo próximo (cresce com a proximidade) |
-| Sirene | Perigo (inimigo) |
-| Bipe de alarme | Oxigênio baixo |
+| Impacto metálico forte | Colisão ✅ |
+| Ping do sonar + eco | Uso do sonar ✅ (+ rosnado quando o eco passa pelo inimigo ✅) |
+| Metal rangendo / sendo espremido | Inimigo a ≤ 4 passos, mais alto quanto mais perto ✅ |
+| Sirene | Perigo (inimigo) ✅ |
+| Bipe de alarme | Oxigênio baixo ✅ |
 | Rádio do comandante (voz + estática) | Introdução, eventos e encontros (ver §6.1–6.2) |
+| Clique mecânico | Teclas e knob do painel ✅ |
+| Criatura alcança a cápsula | Derrota por contato ✅ |
 
 ## 7. UI/UX
 
-- Painel de botões de movimentação, centralizado na parte inferior da tela, na ordem **[◀ Girar Esq.] [▲ Andar] [Girar Dir. ▶]** — a ordem espacial espelha a ação (esquerda à esquerda, frente no centro), reduzindo erro de clique sob tensão. Acionado apenas por mouse (teclado não ativa os botões).
-- Indicador de oxigênio no canto superior esquerdo (texto "O₂ atual / máximo" + barra), que fica vermelho com 25% ou menos.
-- Tela de fim de partida (vitória/derrota) com botão "Tentar novamente"; o painel de movimentação é desabilitado ao fim.
-- Indicador/feedback do sonar (quando ativado).
-- **Na versão final, todos esses elementos ficam no painel 3D dentro da cápsula e são acionados pela mira central** (ver §2.1); o layout 2D atual é provisório e serve de referência para a disposição dos botões no painel físico.
+### 7.1 Posto de comando (painel diegético) — implementado
 
-*(A detalhar: layout do painel, indicadores visuais mínimos já que o jogo é majoritariamente às escuras.)*
+Tudo vive no painel físico em frente à cadeira, operado com o cursor quando o jogador está sentado (§2.1):
+
+| Instrumento do painel | O que mostra / faz |
+|---|---|
+| Relógio superior esquerdo | **O₂**: ponteiro cai a cada ação; faixa vermelha nos 25% finais |
+| Relógio inferior esquerdo | **Interferência**: sobe e treme conforme o inimigo se aproxima (sensor diegético de proximidade) |
+| Área central — tela | **Rumo** atual e alerta piscando (CONTATO PRÓXIMO / O₂ BAIXO) |
+| Área central — teclas | **Teclas físicas 3D** em cruz Frente/Ré/Girar/Sonar (§4.1). Brilham no hover e afundam com clique sonoro ao pressionar. Só acionam se soltas em cima da tecla, então dá para desistir arrastando para fora |
+| Knob vermelho (sob o monitor) | **Silenciar alarme** (§6.3): acende em âmbar enquanto o som está silenciado |
+| Tela CRT (direita) | **Mapa do sonar**: paredes descobertas por sonar/colisão, rastro, posição e rumo, saída em verde, eco vermelho do inimigo |
+| Monitor superior (vermelho) | **Registro** de eventos (deslocamento, impacto, pulso, alertas), O₂ numérico e tabela de custos |
+
+- Layout do teclado em cruz: a disposição espacial espelha a ação (frente em cima, ré embaixo, giros nas laterais), reduzindo erro de clique sob tensão. Acionado apenas por mouse.
+- No fim da partida, o teclado é desabilitado e aparece a tela de fim (vitória/derrota) com "Tentar novamente" (ainda 2D).
+
+*(A detalhar: legendas do rádio no monitor superior; usar os outros 3 knobs (ex.: volume do rádio, brilho do sonar).)*
 
 ## 8. Escopo & Fora do Escopo (MVP)
 
 **Dentro do MVP:**
-- Movimentação por painel (Andar/Girar).
-- Consumo de oxigênio por movimento e colisão.
-- Um labirinto único, modo Campanha.
+- Movimentação pelo painel diegético (Frente/Ré/Girar/Sonar).
+- Consumo de oxigênio por ação e colisão.
+- Inimigo atraído pelo sonar.
+- Modo Campanha, ponto A → ponto B.
+
+**Já implementado além do escopo original do MVP:**
+- Andar dentro da cabine (WASD) e textos examináveis de lore.
+- Geração procedural de labirintos.
 
 **Fora do MVP (pós-MVP / roguelike / stretch goals):**
-- Andar dentro da cabine (WASD) e anotações clicáveis de lore.
-- Geração procedural de labirintos.
 - Progressão meta (upgrades/moedas entre tentativas).
 - Múltiplos inimigos ou variações de inimigo.
 
@@ -178,4 +208,7 @@ A atmosfera é construída quase inteiramente por áudio, já que o jogador não
 - **2026-10-06 — Valores iniciais de oxigênio e fim de partida:** oxigênio 150, −1 por passo, −5 por colisão, girar grátis, sem regeneração (valores de partida para playtest). Chegar à saída com o último ponto de oxigênio é vitória. Ao fim, tela de vitória/derrota com "Tentar novamente". O labirinto segue fixo por enquanto (facilita o balanceamento); geração procedural com seed foi discutida como próximo passo provável, para evitar que o jogador decore o mapa — decisão sobre a Campanha também ser procedural ainda em aberto.
 - **2026-10-06 — Perspectiva final e interação por mira:** o jogo é em 1ª pessoa, dentro de uma cápsula 3D sem qualquer visão externa (informação só por som). Na tela há apenas um ponto central (mira); o mouse movimenta o olhar e o clique aciona o botão apontado, em um painel físico dentro da cabine. Assets/texturas ainda não existem; a UI 2D e a câmera top-down atuais são provisórias. Ver §2.1.
 - **2026-10-06 — Jogador parado, rádio, alarme:** no MVP o jogador fica parado no posto de comando, só olhando com o mouse e interagindo com o painel; andar pela cabine com WASD e anotações de lore são stretch goals. Toda a introdução/tutorial chega por **rádio**, na voz de um comandante do lado de fora, com áudio realista e interferências. Situações de perigo (inimigo ou oxigênio baixo) disparam **sirene + luz vermelha piscando** (estilo *oldschool*), e o inimigo também traz **sons de metal sendo espremido**. Propostas registradas para validação: tutorial contextual, voz só no primeiro encontro com o inimigo + interferência como indicador de proximidade, sons de alarme distintos por causa e botão de silenciar alarme. Ver §6.
+- **2026-10-27 — Cabine 3D, andar pela cabine, painel em cruz e labirinto procedural** *(registro retroativo, a partir do TDD)*: a cabine importada da demo em Unreal virou a cena principal. O jogador anda com WASD, examina objetos com a mira e senta no posto para navegar. O teclado ganhou Ré e Sonar, e o oxigênio foi rebalanceado (200; mover/ré/girar 1; sonar 4; colisão 8). Cada partida gera um labirinto novo. Ver §2.1, §4.1, §4.3 e §4.4.
 - **2026-10-27 — Inimigo implementado:** turnos atrelados às ações do jogador; sonar atrai a criatura para o ponto do pulso (fugir depois de usar o sonar é a resposta ao risco); a 2 células ela sente a cápsula; contato = derrota. Proximidade comunicada por interferência no painel, eco vermelho no sonar e luz vermelha a ≤ 4 células. Valores iniciais para playtest. Ver §4.5.
+- **2026-11-11 — Painel diegético, direção de arte e iluminação:** a tela 2D que abria ao sentar (O₂, mapa, teclado e status sobrepostos à cena) foi removida, porque quebrava a imersão proposta. Agora **tudo acontece no painel da cabine**: O₂ e interferência em mostradores analógicos, teclado na área central do painel amarelo, mapa do sonar no CRT e registro de eventos no monitor superior. Sentado, o jogador usa o **cursor livre** para clicar no painel, e levar o cursor às bordas gira o olhar. Em pé, segue a mira. A iluminação foi escurecida para se aproximar da demo em Unreal (pouca luz ambiente, acentos laranja, brilho nas telas). Registrada a limitação do atlas único da cabine importada (texturas borradas e paredes sem o tom ferrugem). Ver §2.1, §2.2 e §7.1.
+- **2026-11-11 — Teclas físicas, silenciar alarme, áudio e olhar por edge-pan:** as teclas desenhadas na tela viraram **teclas 3D** com curso, brilho de hover e clique sonoro (dá para desistir soltando fora da tecla). Um knob vermelho sob o monitor **silencia o som do alarme**, mantendo a luz, e se rearma com um perigo novo ou quando os alarmes acabam. Primeiro áudio no jogo: ambiente, impacto, sonar, eco do inimigo, metal rangendo por proximidade, sirene (inimigo), bipe (O₂) e som de captura. O olhar sentado passou a ser *edge-pan*, que mantém a orientação, porque no modelo anterior o olhar voltava ao centro e o knob escorregava de baixo do cursor. Ver §2.1, §6.3, §6.4 e §7.1.
