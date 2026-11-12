@@ -52,7 +52,8 @@ func _reveal_when_radio_free() -> void:
 
 func _on_radio_busy_changed(busy: bool) -> void:
 	_radio_busy = busy
-	if not busy and _pending:
+	# O RadioSystem avisa "livre" ao sair da árvore no reinício: aí não há o que mostrar.
+	if not busy and _pending and is_inside_tree():
 		get_tree().create_timer(AFTER_RADIO_DELAY).timeout.connect(_reveal)
 
 

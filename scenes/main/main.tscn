@@ -17,6 +17,7 @@
 [ext_resource type="Script" uid="uid://4a0hf3vnxkov" path="res://scripts/systems/alarm_light.gd" id="15_alarm_light"]
 [ext_resource type="PackedScene" path="res://scenes/systems/radio_system.tscn" id="16_radio"]
 [ext_resource type="PackedScene" path="res://scenes/ui/radio_subtitles.tscn" id="17_subs"]
+[ext_resource type="Script" path="res://scripts/systems/caught_sequence.gd" id="18_caught"]
 
 [sub_resource type="Environment" id="Env_cabin"]
 background_mode = 1
@@ -304,6 +305,13 @@ script = ExtResource("7_builder")
 script = ExtResource("14_alarm")
 
 [node name="RadioSystem" parent="." instance=ExtResource("16_radio")]
+
+[node name="CaughtSequence" type="Node" parent="." node_paths=PackedStringArray("cabin_lights", "alarm_light", "command_panel", "world_environment")]
+script = ExtResource("18_caught")
+cabin_lights = NodePath("../CabinLights")
+alarm_light = NodePath("../CabinLights/AlarmLight")
+command_panel = NodePath("../CommandPanel")
+world_environment = NodePath("../WorldEnvironment")
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=357913331]
 

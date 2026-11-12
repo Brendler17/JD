@@ -27,6 +27,9 @@ const DISTANT_CALL_RANGE := 10
 const DISTANT_CALL_COOLDOWN := 20.0
 ## Quanto o ambiente abaixa enquanto o comandante fala.
 const RADIO_DUCK_DB := -6.0
+## Derrota por contato: o ambiente morre junto com a cápsula (e volta no reinício).
+const CAUGHT_SILENCE_DELAY := 2.0
+const CAUGHT_SILENCE_FADE := 2.0
 const CRASH := preload("res://assets/audio/sfx/crash.mp3")
 const SONAR := preload("res://assets/audio/sfx/sonar.mp3")
 const METAL := preload("res://assets/audio/sfx/metal.mp3")
@@ -51,6 +54,8 @@ var _tension_target := 0.0
 var _distant_call: AudioStreamPlayer
 var _last_distant_call := -INF
 var _duck_tween: Tween
+var _bed_tween: Tween
+var _crush: AudioStreamPlayer
 var _crash: AudioStreamPlayer
 var _sonar: AudioStreamPlayer
 var _creak: AudioStreamPlayer
@@ -72,6 +77,7 @@ func _ready() -> void:
 	add_child(_tension_bed)
 	_distant_call = _make_player(DISTANT_CALL, &"Distant", -6.0)
 	_crash = _make_player(CRASH, &"SFX", -2.0)
+	_crush = _make_player(METAL, &"SFX", 0.0)
 	_sonar = _make_player(SONAR, &"SFX", -4.0)
 	_creak = _make_player(METAL, &"SFX", -14.0)
 	_echo = _make_player(ENEMY_ECHO, &"SFX", -6.0)
@@ -91,7 +97,9 @@ func _ready() -> void:
 	EventBus.alarm_stopped.connect(_on_alarm_stopped)
 	EventBus.alarm_muted_changed.connect(_on_alarm_muted_changed)
 	EventBus.enemy_heard_sonar.connect(_on_enemy_heard_sonar)
-	EventBus.game_over.connect(func(_won: bool) -> void: _tension_target = 0.0)
+	EventBus.game_over.connect(_on_game_over)
+	EventBus.request_restart.connect(_on_request_restart)
+	EventBus.cabin_impact.connect(_on_cabin_impact)
 	EventBus.radio_line_started.connect(func(_id: StringName, _text: String, _duration: float) -> void:
 		_duck_ambience(RADIO_DUCK_DB, 0.3))
 	EventBus.radio_line_finished.connect(func(_id: StringName) -> void: _duck_ambience(0.0, 1.0))
@@ -155,6 +163,34 @@ func _on_enemy_heard_sonar(steps: int) -> void:
 	_distant_call.volume_db = -2.0 - float(steps) * 1.2
 	_distant_call.pitch_scale = randf_range(0.8, 0.92)
 	get_tree().create_timer(randf_range(1.2, 2.0)).timeout.connect(_distant_call.play)
+
+
+func _on_game_over(_won: bool) -> void:
+	_tension_target = 0.0
+	if GameState.end_reason == GameState.EndReason.CAUGHT:
+		_fade_bed(-60.0, CAUGHT_SILENCE_FADE, CAUGHT_SILENCE_DELAY)
+
+
+func _on_request_restart() -> void:
+	_fade_bed(0.0, 3.0)
+
+
+## Golpe no casco: impacto seco + metal sendo esmagado, mais grave quanto mais forte.
+func _on_cabin_impact(strength: float) -> void:
+	_crash.volume_db = -2.0 + (strength - 1.0) * 8.0
+	_crash.pitch_scale = randf_range(0.7, 0.85)
+	_crash.play()
+	_crush.volume_db = -1.0 + (strength - 1.0) * 6.0
+	_crush.pitch_scale = randf_range(0.6, 0.75)
+	_crush.play()
+
+
+func _fade_bed(gain_db: float, time: float, delay := 0.0) -> void:
+	if _bed_tween:
+		_bed_tween.kill()
+	_bed_tween = create_tween()
+	_bed_tween.tween_interval(delay)
+	_bed_tween.tween_property(_ambience_bed, "gain_db", gain_db, time)
 
 
 func _duck_ambience(volume_db: float, time: float) -> void:

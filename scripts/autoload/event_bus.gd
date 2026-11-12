@@ -63,6 +63,11 @@ signal capsule_caught(cell: Vector2i)
 ## `steps`: distância dele até a cápsula pelo labirinto (-1 = sem caminho).
 signal enemy_heard_sonar(steps: int)
 
+# --- Apresentação: golpes no casco ---
+## Algo atingiu a cápsula com força (0..1): câmera dá um tranco, casco estala.
+## Emitido pela sequência de contato (CaughtSequence).
+signal cabin_impact(strength: float)
+
 # --- Fatos emitidos pelo RadioSystem (rádio do comandante) ---
 ## Uma fala começou. `duration` em segundos (do áudio, ou estimada pelo texto
 ## quando o arquivo não existe). Legendas e mixagem (ducking) escutam isto.

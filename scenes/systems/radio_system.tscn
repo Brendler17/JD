@@ -7,6 +7,7 @@
 script = ExtResource("2_line")
 id = &"intro"
 subtitle = "Cápsula Dez, aqui é a Superfície. Está me ouvindo? Vocês estão a quatro mil metros. O cabo de reboque rompeu... não conseguimos puxar vocês daí. Sem janelas, sem câmeras. Daqui pra frente, você só tem o painel e o som. Marcamos um ponto de resgate no seu sonar. Traga essa cápsula até ele."
+priority = 1
 max_wait = 60.0
 
 [sub_resource type="Resource" id="Line_idle_seat"]
@@ -86,7 +87,7 @@ id = &"lost_caught"
 subtitle = "Cápsula Dez, perdemos sua telemetria! Dez? ... Responda... ... Igual às outras."
 priority = 2
 max_wait = 12.0
-delay = 3.0
+delay = 4.0
 
 [node name="RadioSystem" type="Node"]
 script = ExtResource("1_radio")

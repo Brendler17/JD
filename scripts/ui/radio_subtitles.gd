@@ -35,6 +35,8 @@ func _on_radio_line_started(_id: StringName, subtitle: String, duration: float) 
 
 
 func _on_radio_line_finished(_id: StringName) -> void:
+	if not is_inside_tree():
+		return
 	if _tween:
 		_tween.kill()
 	_text_label.visible_ratio = 1.0

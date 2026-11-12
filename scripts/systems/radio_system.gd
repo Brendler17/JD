@@ -208,6 +208,11 @@ func _on_game_over(won: bool) -> void:
 func _try_next() -> void:
 	if _current or _final_pending or _gap > 0.0:
 		return
+	# Nada fala antes da introdução (ex.: sentar no posto nos primeiros segundos).
+	if not _played.has(&"intro") and _lines_by_id.has(&"intro") \
+			and (_queue.is_empty() or (_queue[0].line as RadioLine).id != &"intro"):
+		_update_busy()
+		return
 	while not _queue.is_empty():
 		var entry: Dictionary = _queue.pop_front()
 		var line: RadioLine = entry.line

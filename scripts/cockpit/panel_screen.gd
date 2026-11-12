@@ -29,7 +29,14 @@ var viewport: SubViewport
 ## Raiz instanciada de `content` (para quem precisa injetar dados, ex.: o labirinto).
 var content_node: Node
 
+## Energia da tela (0 = apagada, 1 = normal, > 1 = surto). Usado por falhas e apagões.
+var power := 1.0:
+	set(value):
+		power = value
+		_apply_color()
+
 var _last_pixel := Vector2(-1.0, -1.0)
+var _material: StandardMaterial3D
 
 
 func _ready() -> void:
@@ -49,7 +56,8 @@ func _ready() -> void:
 	var material := StandardMaterial3D.new()
 	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	material.albedo_texture = viewport.get_texture()
-	material.albedo_color = Color(brightness, brightness, brightness)
+	_material = material
+	_apply_color()
 	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR
 	if transparent:
 		material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
@@ -72,6 +80,12 @@ func _ready() -> void:
 		shape.shape = box
 		area.add_child(shape)
 		add_child(area)
+
+
+func _apply_color() -> void:
+	if _material:
+		var level := brightness * power
+		_material.albedo_color = Color(level, level, level)
 
 
 ## Converte um ponto 3D (sobre o quad) no pixel correspondente do SubViewport.
