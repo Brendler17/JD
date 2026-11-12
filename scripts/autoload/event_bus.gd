@@ -31,6 +31,14 @@ signal request_restart
 ## Knob "silenciar alarme": alterna o mudo da sirene/bipe (a luz continua piscando).
 signal request_toggle_alarm_mute
 
+# --- Manobras da Capsule (cada ação leva um tempo; o resultado só sai no fim) ---
+## Uma manobra começou. `kind`: &"forward", &"backward", &"rotate_left",
+## &"rotate_right" ou &"sonar". Enquanto durar, novos pedidos são ignorados.
+## Apresentação (som, câmera, teclas) usa isto; regras usam os fatos abaixo.
+signal maneuver_started(kind: StringName, duration: float)
+## A manobra terminou (já emitidos os fatos dela: moved/collided/rotated/sonar_pinged).
+signal maneuver_finished(kind: StringName)
+
 # --- Fatos emitidos pela Capsule após executar uma ação ---
 signal capsule_moved(new_position: Vector2i, direction: Vector2i)
 signal capsule_rotated(new_direction: Vector2i)
