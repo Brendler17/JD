@@ -15,6 +15,8 @@
 [ext_resource type="PackedScene" path="res://scenes/entities/enemy.tscn" id="13_enemy"]
 [ext_resource type="Script" uid="uid://cl8kvhpkkxjuq" path="res://scripts/systems/alarm_system.gd" id="14_alarm"]
 [ext_resource type="Script" uid="uid://4a0hf3vnxkov" path="res://scripts/systems/alarm_light.gd" id="15_alarm_light"]
+[ext_resource type="PackedScene" path="res://scenes/systems/radio_system.tscn" id="16_radio"]
+[ext_resource type="PackedScene" path="res://scenes/ui/radio_subtitles.tscn" id="17_subs"]
 
 [sub_resource type="Environment" id="Env_cabin"]
 background_mode = 1
@@ -76,7 +78,7 @@ size = Vector2(60, 60)
 
 [node name="Main" type="Node3D" unique_id=351303188]
 script = ExtResource("1_setup")
-maze_consumers = Array[NodePath]([NodePath("MazeDebug/MazeBuilder"), NodePath("MazeDebug/Capsule"), NodePath("MazeDebug/Enemy"), NodePath("CommandPanel")])
+maze_consumers = Array[NodePath]([NodePath("MazeDebug/MazeBuilder"), NodePath("MazeDebug/Capsule"), NodePath("MazeDebug/Enemy"), NodePath("CommandPanel"), NodePath("RadioSystem")])
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2091719769]
 environment = SubResource("Env_cabin")
@@ -301,6 +303,8 @@ script = ExtResource("7_builder")
 [node name="AlarmSystem" type="Node" parent="." unique_id=1549891915]
 script = ExtResource("14_alarm")
 
+[node name="RadioSystem" parent="." instance=ExtResource("16_radio")]
+
 [node name="UI" type="CanvasLayer" parent="." unique_id=357913331]
 
 [node name="FirstPersonHud" parent="UI" unique_id=1556772830 instance=ExtResource("9_hud")]
@@ -308,3 +312,5 @@ script = ExtResource("14_alarm")
 [node name="NoteViewer" parent="UI" unique_id=828522404 instance=ExtResource("11_note")]
 
 [node name="GameOverScreen" parent="UI" unique_id=886079004 instance=ExtResource("12_gameover")]
+
+[node name="RadioSubtitles" parent="UI" instance=ExtResource("17_subs")]

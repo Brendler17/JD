@@ -1,0 +1,93 @@
+[gd_scene load_steps=16 format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/radio_system.gd" id="1_radio"]
+[ext_resource type="Script" path="res://scripts/systems/radio_line.gd" id="2_line"]
+
+[sub_resource type="Resource" id="Line_intro"]
+script = ExtResource("2_line")
+id = &"intro"
+subtitle = "Cápsula Dez, aqui é a Superfície. Está me ouvindo? Vocês estão a quatro mil metros. O cabo de reboque rompeu... não conseguimos puxar vocês daí. Sem janelas, sem câmeras. Daqui pra frente, você só tem o painel e o som. Marcamos um ponto de resgate no seu sonar. Traga essa cápsula até ele."
+max_wait = 60.0
+
+[sub_resource type="Resource" id="Line_idle_seat"]
+script = ExtResource("2_line")
+id = &"idle_seat"
+subtitle = "Cápsula Dez, vá para o posto de comando. O ponto de resgate não vai até você."
+max_wait = 6.0
+
+[sub_resource type="Resource" id="Line_first_seat"]
+script = ExtResource("2_line")
+id = &"first_seat"
+subtitle = "Ótimo. Esse painel é tudo o que você tem. Frente e ré movem a cápsula uma seção. As setas giram noventa graus. Cada comando gasta oxigênio dos reguladores... e bater no casco gasta muito mais. Vá com calma."
+max_wait = 45.0
+
+[sub_resource type="Resource" id="Line_first_collision"]
+script = ExtResource("2_line")
+id = &"first_collision"
+subtitle = "Cuidado com as paredes, Cápsula Dez! Cada batida compromete o casco e queima o seu ar. Se não sabe o que tem à frente, use o sonar."
+max_wait = 10.0
+
+[sub_resource type="Resource" id="Line_first_sonar"]
+script = ExtResource("2_line")
+id = &"first_sonar"
+subtitle = "O sonar mostra o caminho. Mas lá embaixo... ... o pulso viaja longe. Use só quando precisar."
+max_wait = 10.0
+
+[sub_resource type="Resource" id="Line_first_alarm"]
+script = ExtResource("2_line")
+id = &"first_alarm"
+subtitle = "Se a sirene atrapalhar, o botão vermelho acima do painel silencia o alarme. A luz continua acesa."
+max_wait = 15.0
+
+[sub_resource type="Resource" id="Line_first_enemy"]
+script = ExtResource("2_line")
+id = &"first_enemy"
+subtitle = "Espera... o que foi isso no seu sonar? ... Não. De novo não... Cápsula, repita. Cápsula Dez, repita... sinal... perdendo..."
+priority = 1
+max_wait = 6.0
+
+[sub_resource type="Resource" id="Line_low_oxygen"]
+script = ExtResource("2_line")
+id = &"low_oxygen"
+subtitle = "Cápsula Dez, seus reguladores estão no limite. Não desperdice nenhum movimento. Pense antes de cada comando."
+max_wait = 15.0
+
+[sub_resource type="Resource" id="Line_station"]
+script = ExtResource("2_line")
+id = &"station"
+subtitle = "Cápsula Dez... se o seu rádio captar qualquer chamado da Estação Tétis... não responda. Só nos informe."
+max_wait = 30.0
+
+[sub_resource type="Resource" id="Line_near_exit"]
+script = ExtResource("2_line")
+id = &"near_exit"
+subtitle = "Cápsula Dez, estamos captando vocês! Ninguém chegou tão... ... Vocês estão perto. Continue. Só mais um pouco."
+max_wait = 6.0
+
+[sub_resource type="Resource" id="Line_win"]
+script = ExtResource("2_line")
+id = &"win"
+subtitle = "Contato confirmado! Cabo travado... estamos trazendo vocês para cima. Cápsula Dez... você foi a primeira a voltar."
+priority = 2
+max_wait = 12.0
+delay = 1.2
+
+[sub_resource type="Resource" id="Line_lost_oxygen"]
+script = ExtResource("2_line")
+id = &"lost_oxygen"
+subtitle = "Cápsula Dez? ... Cápsula Dez, responda. ... Registre. Cápsula Dez, sinal perdido. Preparem a Onze."
+priority = 2
+max_wait = 12.0
+delay = 2.0
+
+[sub_resource type="Resource" id="Line_lost_caught"]
+script = ExtResource("2_line")
+id = &"lost_caught"
+subtitle = "Cápsula Dez, perdemos sua telemetria! Dez? ... Responda... ... Igual às outras."
+priority = 2
+max_wait = 12.0
+delay = 3.0
+
+[node name="RadioSystem" type="Node"]
+script = ExtResource("1_radio")
+lines = Array[ExtResource("2_line")]([SubResource("Line_intro"), SubResource("Line_idle_seat"), SubResource("Line_first_seat"), SubResource("Line_first_collision"), SubResource("Line_first_sonar"), SubResource("Line_first_alarm"), SubResource("Line_first_enemy"), SubResource("Line_low_oxygen"), SubResource("Line_station"), SubResource("Line_near_exit"), SubResource("Line_win"), SubResource("Line_lost_oxygen"), SubResource("Line_lost_caught")])

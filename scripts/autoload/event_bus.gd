@@ -59,6 +59,19 @@ signal enemy_proximity_changed(steps: int)
 signal enemy_detected(cell: Vector2i)
 ## O inimigo alcançou a cápsula (derrota).
 signal capsule_caught(cell: Vector2i)
+## Um pulso de sonar chamou a atenção do inimigo (ele passa a caçar a origem).
+## `steps`: distância dele até a cápsula pelo labirinto (-1 = sem caminho).
+signal enemy_heard_sonar(steps: int)
+
+# --- Fatos emitidos pelo RadioSystem (rádio do comandante) ---
+## Uma fala começou. `duration` em segundos (do áudio, ou estimada pelo texto
+## quando o arquivo não existe). Legendas e mixagem (ducking) escutam isto.
+signal radio_line_started(id: StringName, subtitle: String, duration: float)
+## A fala terminou ou foi cortada por uma fala de fim de partida.
+signal radio_line_finished(id: StringName)
+## true = há fala tocando, na fila ou agendada (ex.: a fala final logo após o
+## game_over). A tela de fim espera o rádio ficar livre antes de aparecer.
+signal radio_busy_changed(busy: bool)
 
 # --- Fatos emitidos pelo AlarmSystem ---
 ## `reason`: &"enemy" (inimigo próximo) ou &"low_oxygen" (oxigênio baixo).

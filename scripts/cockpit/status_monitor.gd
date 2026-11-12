@@ -30,6 +30,8 @@ func _ready() -> void:
 	EventBus.game_over.connect(_on_game_over)
 	EventBus.alarm_muted_changed.connect(func(muted: bool) -> void:
 		_log("ALARME SILENCIADO (LUZ MANTIDA)." if muted else "ALARME REARMADO."))
+	EventBus.radio_line_started.connect(func(_id: StringName, _text: String, _duration: float) -> void:
+		_log(">> TRANSMISSÃO RECEBIDA — SUPERFÍCIE"))
 
 
 func _on_capsule_moved(new_position: Vector2i, _direction: Vector2i) -> void:
