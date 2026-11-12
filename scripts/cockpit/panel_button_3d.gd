@@ -5,7 +5,7 @@ extends Node3D
 ## ela mesma, emite a intenção correspondente no EventBus — como os botões 2D
 ## antigos, não conhece a Capsule nem o oxigênio.
 ## Mesma interface de entrada da PanelScreen (forward_mouse / release_hover):
-## o Player lança o cursor como raio na PANEL_LAYER e repassa o evento.
+## o Player lança a mira (centro da tela) como raio na PANEL_LAYER e repassa o evento.
 ## Teclas de manobra (todas menos o knob do alarme) ficam travadas enquanto a
 ## cápsula manobra (maneuver_started/finished): a tecla acionada permanece
 ## afundada até o fim e as outras escurecem e ignoram cliques.
@@ -19,6 +19,15 @@ const PRESS_TIME := 0.05
 const RELEASE_TIME := 0.12
 const HOVER_COLOR := Color(0.45, 0.95, 0.85)
 const LIT_COLOR := Color(1.0, 0.55, 0.1)
+## Texto do prompt da HUD com a tecla sob a mira.
+const PROMPTS := {
+	Action.MOVE_FORWARD: "Avançar",
+	Action.MOVE_BACKWARD: "Ré",
+	Action.ROTATE_LEFT: "Girar 90º à esquerda",
+	Action.ROTATE_RIGHT: "Girar 90º à direita",
+	Action.SONAR: "Pulso de sonar",
+	Action.TOGGLE_ALARM_MUTE: "Silenciar / rearmar alarme",
+}
 
 @export var action := Action.MOVE_FORWARD
 ## Texto gravado na tecla (símbolo + legenda, pode ter quebra de linha).
@@ -167,6 +176,13 @@ func forward_mouse(event: InputEventMouse, _world_position: Vector3) -> void:
 		_animate_cap(-travel, PRESS_TIME)
 		_click.pitch_scale = randf_range(0.95, 1.05)
 		_click.play()
+
+
+## Ação mostrada na HUD com a tecla sob a mira ("" se travada).
+func get_prompt() -> String:
+	if disabled or busy:
+		return ""
+	return PROMPTS.get(action, "")
 
 
 func release_hover() -> void:

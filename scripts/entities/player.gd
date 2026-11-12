@@ -2,14 +2,14 @@ extends CharacterBody3D
 ## Jogador em 1ª pessoa dentro da cabine da cápsula (sem malha própria).
 ## Dono dos modos de controle (State Pattern via enum):
 ##   WALKING    → WASD + mouse-look; clique esquerdo aciona o Interactable sob a mira.
-##   NAVIGATING → sentado no posto: câmera vai para `seat_view` e o cursor fica livre.
-##                Com o cursor na faixa das bordas, o olhar gira naquela direção e
-##                fica onde parou quando o cursor sai dela (edge-pan): o que se vê
-##                não escorrega de baixo do cursor na hora de clicar. Cliques/movimento do cursor são
-##                lançados como raio na camada do painel (PanelScreen.PANEL_LAYER) e
-##                repassados ao controle atingido — tela (PanelScreen) ou tecla física
-##                (PanelButton3D), ambos com forward_mouse()/release_hover().
-##                Clique direito levanta e volta a WALKING.
+##   NAVIGATING → sentado no posto: câmera vai para `seat_view`. O mouse continua
+##                capturado e move o olhar (mouse-look), limitado a SEAT_YAW_RANGE /
+##                SEAT_PITCH_UP / SEAT_PITCH_DOWN em torno do seat_view. A mira central
+##                é lançada como raio na camada do painel (PanelScreen.PANEL_LAYER) a
+##                cada frame (hover) e no clique; o evento vai ao controle atingido —
+##                tela (PanelScreen) ou tecla física (PanelButton3D), ambos com
+##                forward_mouse()/release_hover(). A ação da tecla sob a mira aparece
+##                no prompt da HUD. Clique direito levanta e volta a WALKING.
 ##   READING    → um texto está aberto; o jogador fica parado até note_closed.
 ##   DISABLED   → fim de partida; mouse livre para a tela de fim.
 ## Fala com a UI só pelo EventBus (navigation_mode_changed, interaction_prompt_changed).
@@ -18,14 +18,12 @@ enum Mode { WALKING, NAVIGATING, READING, DISABLED }
 
 const PITCH_LIMIT := deg_to_rad(85.0)
 const SEAT_TWEEN_TIME := 0.6
-## Quanto o olhar gira quando o cursor encosta nas bordas, sentado no posto.
-const SEAT_YAW_RANGE := deg_to_rad(20.0)
-const SEAT_PITCH_UP := deg_to_rad(34.0)
-const SEAT_PITCH_DOWN := deg_to_rad(14.0)
-## A partir desta fração (0..1, do centro até a borda) o cursor gira o olhar.
-const SEAT_EDGE_START := 0.8
-## Velocidade do giro com o cursor encostado na borda (fração do alcance por segundo).
-const SEAT_EDGE_SPEED := 1.4
+## Limites do olhar sentado no posto, em torno do seat_view. Medidos a partir dele:
+## knob do alarme a 29,5° de lado e 26° acima; mostradores de O₂/interferência a ~30°
+## de lado; centro do monitor superior a 42° acima. Os limites dão folga sobre isso.
+const SEAT_YAW_RANGE := deg_to_rad(40.0)
+const SEAT_PITCH_UP := deg_to_rad(50.0)
+const SEAT_PITCH_DOWN := deg_to_rad(20.0)
 const PANEL_RAY_LENGTH := 4.0
 ## Inclinação máxima da câmera (pitch, yaw, roll) no meio de cada manobra da cápsula:
 ## andar "empurra" o corpo para trás/frente, girar inclina para o lado da curva.
@@ -38,6 +36,9 @@ const MANEUVER_TILT := {
 }
 ## Vibração contínua do casco durante deslocamentos (somada ao tremor de colisão).
 const MANEUVER_RUMBLE := 0.0035
+## Tranco máximo (pitch, yaw, roll em rad) de um golpe no casco com força 1 (cabin_impact).
+const IMPACT_KICK := Vector3(0.14, 0.05, 0.1)
+const IMPACT_SHAKE := 0.14
 
 @export var walk_speed := 2.5
 @export var mouse_sensitivity := 0.0025
@@ -52,10 +53,8 @@ var _shake_strength := 0.0
 var _seat_tween: Tween
 ## Sentado e com a câmera já no posto (fim da animação de sentar).
 var _seated := false
-## Olhar atual relativo ao seat_view, em -1..1 por eixo (fração do alcance).
+## Olhar atual relativo ao seat_view, em radianos (x = yaw, y = pitch; + = cima).
 var _seat_look := Vector2.ZERO
-## Valor suavizado aplicado à câmera.
-var _seat_look_smoothed := Vector2.ZERO
 ## Controle do painel sob o cursor / onde o botão do mouse foi pressionado
 ## (PanelScreen ou PanelButton3D — interface forward_mouse/release_hover).
 ## Manobra atual da cápsula, para o balanço da câmera (tempo < 0 = nenhuma).
@@ -64,6 +63,11 @@ var _maneuver_time := -1.0
 var _maneuver_duration := 1.0
 var _maneuver_tilt := Vector3.ZERO
 var _hovered_control: Node3D
+## Tranco atual da câmera (golpe no casco), decai sozinho.
+var _kick := Vector3.ZERO
+## Pose local da câmera sobre a qual o tranco é aplicado fora do posto
+## (identidade andando; a pose do posto congelada no fim da partida).
+var _camera_rest := Transform3D.IDENTITY
 var _pressed_control: Node3D
 
 @onready var _head: Node3D = $Head
@@ -79,6 +83,7 @@ func _ready() -> void:
 	EventBus.capsule_collided.connect(_on_capsule_collided)
 	EventBus.maneuver_started.connect(_on_maneuver_started)
 	EventBus.game_over.connect(_on_game_over)
+	EventBus.cabin_impact.connect(_on_cabin_impact)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -96,22 +101,46 @@ func _unhandled_input(event: InputEvent) -> void:
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 
-## Clique direito precisa ser lido em _input: no modo de navegação o painel (Controls)
-## consome os cliques do mouse antes de chegarem a _unhandled_input.
+## Sentado, o mouse é lido em _input (antes de qualquer Control): movimento gira o
+## olhar, clique esquerdo vai para o controle sob a mira, clique direito levanta.
 func _input(event: InputEvent) -> void:
 	if mode != Mode.NAVIGATING:
 		return
 	if event.is_action_pressed("exit_navigation"):
 		get_viewport().set_input_as_handled()
 		_exit_navigation()
-	elif _seated and (event is InputEventMouseMotion or event is InputEventMouseButton):
-		_forward_to_panel(event as InputEventMouse)
+		return
+	if not _seated:
+		return
+	if event.is_action_pressed("ui_cancel"):
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		return
+	if Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
+		# Cursor liberado (Esc): o primeiro clique só recaptura.
+		if event is InputEventMouseButton and event.pressed:
+			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+			get_viewport().set_input_as_handled()
+		return
+	if event is InputEventMouseMotion:
+		_seat_look.x = clampf(_seat_look.x - event.relative.x * mouse_sensitivity, -SEAT_YAW_RANGE, SEAT_YAW_RANGE)
+		_seat_look.y = clampf(_seat_look.y - event.relative.y * mouse_sensitivity, -SEAT_PITCH_DOWN, SEAT_PITCH_UP)
+		get_viewport().set_input_as_handled()
+	elif event is InputEventMouseButton and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT:
+		var click := event.duplicate() as InputEventMouseButton
+		click.position = _screen_center()
+		click.global_position = click.position
+		_forward_to_panel(click)
+		get_viewport().set_input_as_handled()
 
 
 func _process(delta: float) -> void:
 	_update_maneuver_motion(delta)
+	_kick = _kick.lerp(Vector3.ZERO, 1.0 - exp(-delta * 3.5))
 	if mode == Mode.NAVIGATING and _seated and seat_view:
-		_update_seat_look(delta)
+		_update_seat_look()
+		_update_panel_hover()
+	elif not (_seat_tween and _seat_tween.is_running()):
+		_camera.transform = _camera_rest * Transform3D(Basis.from_euler(_kick), Vector3.ZERO)
 
 
 func _on_maneuver_started(kind: StringName, duration: float) -> void:
@@ -148,7 +177,8 @@ func _physics_process(delta: float) -> void:
 	velocity.z = direction.z * walk_speed
 	move_and_slide()
 
-	_update_prompt()
+	if mode != Mode.NAVIGATING:
+		_update_prompt()
 	_update_shake(delta)
 
 
@@ -173,7 +203,7 @@ func _on_request_enter_navigation() -> void:
 	if mode != Mode.WALKING:
 		return
 	mode = Mode.NAVIGATING
-	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	var tween := _new_seat_tween()
 	if seat_view:
 		tween.tween_property(_camera, "global_transform", seat_view.global_transform, SEAT_TWEEN_TIME)
@@ -183,7 +213,6 @@ func _on_request_enter_navigation() -> void:
 func _on_seated() -> void:
 	_seated = true
 	_seat_look = Vector2.ZERO
-	_seat_look_smoothed = Vector2.ZERO
 	EventBus.navigation_mode_changed.emit(true)
 
 
@@ -191,33 +220,41 @@ func _exit_navigation() -> void:
 	_seated = false
 	_set_hovered_control(null)
 	_pressed_control = null
+	EventBus.interaction_prompt_changed.emit("")
+	_current_prompt = ""
 	mode = Mode.WALKING
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	EventBus.navigation_mode_changed.emit(false)
 	_new_seat_tween().tween_property(_camera, "transform", Transform3D.IDENTITY, SEAT_TWEEN_TIME)
 
 
-## Olhar sentado (edge-pan): só gira enquanto o cursor está na faixa das bordas,
-## mais rápido quanto mais perto da borda, e mantém a orientação quando o cursor
-## volta para o meio. Cima tem mais alcance (monitor superior e knob do alarme).
-func _update_seat_look(delta: float) -> void:
-	var viewport := get_viewport()
-	var screen := viewport.get_visible_rect().size
-	var cursor := viewport.get_mouse_position() / screen * 2.0 - Vector2.ONE
-	var push := Vector2(_edge_response(cursor.x), _edge_response(cursor.y))
-	_seat_look = (_seat_look + push * SEAT_EDGE_SPEED * delta).clampf(-1.0, 1.0)
-	_seat_look_smoothed = _seat_look_smoothed.lerp(_seat_look, 1.0 - exp(-delta * 10.0))
-	var yaw := -_seat_look_smoothed.x * SEAT_YAW_RANGE
-	var pitch := -_seat_look_smoothed.y * (SEAT_PITCH_UP if _seat_look_smoothed.y < 0.0 else SEAT_PITCH_DOWN)
-	var look := Vector3(pitch, yaw, 0.0) + _maneuver_tilt
+## Olhar sentado: ângulos do mouse-look + balanço da manobra + tranco de golpe.
+func _update_seat_look() -> void:
+	var look := Vector3(_seat_look.y, _seat_look.x, 0.0) + _maneuver_tilt + _kick
 	_camera.global_transform = seat_view.global_transform * Transform3D(Basis.from_euler(look), Vector3.ZERO)
 
 
-func _edge_response(value: float) -> float:
-	return signf(value) * smoothstep(SEAT_EDGE_START, 1.0, absf(value))
+## A câmera se move sem eventos de mouse (olhar, balanço): a cada frame a mira é
+## relançada como movimento no centro da tela, mantendo o hover em dia. O prompt
+## da HUD mostra a ação da tecla sob a mira.
+func _update_panel_hover() -> void:
+	var motion := InputEventMouseMotion.new()
+	motion.position = _screen_center()
+	motion.global_position = motion.position
+	_forward_to_panel(motion)
+	var prompt := ""
+	if _hovered_control and _hovered_control.has_method(&"get_prompt"):
+		prompt = _hovered_control.get_prompt()
+	if prompt != _current_prompt:
+		_current_prompt = prompt
+		EventBus.interaction_prompt_changed.emit(prompt)
 
 
-## Lança o cursor como raio na camada do painel e repassa o evento ao controle
+func _screen_center() -> Vector2:
+	return get_viewport().get_visible_rect().size * 0.5
+
+
+## Lança a mira como raio na camada do painel e repassa o evento ao controle
 ## atingido. Soltar o botão sempre vai para o controle onde ele foi pressionado
 ## (senão uma tecla ficaria "presa" ao arrastar o cursor para fora).
 func _forward_to_panel(event: InputEventMouse) -> void:
@@ -280,6 +317,15 @@ func _on_capsule_collided(_blocked_cell: Vector2i, _direction: Vector2i) -> void
 	_shake_strength = 0.06
 
 
+## Golpe forte no casco: tranco para trás com torção aleatória + tremor.
+func _on_cabin_impact(strength: float) -> void:
+	_shake_strength = maxf(_shake_strength, IMPACT_SHAKE * strength)
+	_kick = Vector3(
+		IMPACT_KICK.x * randf_range(0.7, 1.0),
+		IMPACT_KICK.y * randf_range(-1.0, 1.0),
+		IMPACT_KICK.z * randf_range(-1.0, 1.0)) * strength
+
+
 func _update_shake(delta: float) -> void:
 	_shake_strength = move_toward(_shake_strength, 0.0, delta * 0.15)
 	_camera.h_offset = randf_range(-1.0, 1.0) * _shake_strength
@@ -287,5 +333,9 @@ func _update_shake(delta: float) -> void:
 
 
 func _on_game_over(_won: bool) -> void:
+	if _pressed_control:
+		_pressed_control = null
+	_set_hovered_control(null)
 	mode = Mode.DISABLED
+	_camera_rest = _camera.transform
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
