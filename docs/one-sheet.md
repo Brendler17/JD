@@ -14,7 +14,7 @@ O jogador está preso dentro de uma cápsula submersa, sem qualquer visão do am
 
 ## Controles / Painel de movimentação
 
-O jogo é em **primeira pessoa, dentro da cápsula**. Em pé, o jogador anda pela cabine e examina objetos com a mira. Para navegar, ele **senta no posto de comando e opera o painel físico com o mouse**: não existe tela sobreposta, e oxigênio, sonar, rumo e alertas aparecem nos próprios instrumentos da cabine (mostradores, tela CRT, monitor). A cápsula **não** é pilotada por teclado, e sim pelos botões do painel:
+O jogo é em **primeira pessoa, dentro da cápsula**. Em pé, o jogador anda pela cabine e examina objetos com a mira. Para navegar, ele **senta no posto de comando e opera o painel físico com a mira**: não existe tela sobreposta, e oxigênio, sonar, rumo e alertas aparecem nos próprios instrumentos da cabine (mostradores, tela CRT, monitor). A cápsula **não** é pilotada por teclado, e sim pelos botões do painel:
 
 | Botão | Ação | Custo de oxigênio |
 |---|---|---|

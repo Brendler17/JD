@@ -31,8 +31,8 @@
 
 ## Regras de reprodução (para a implementação)
 
-- Cada fala toca **uma vez por partida** (reinício zera). A intro sempre toca.
-- Uma fala por vez: se outra for disparada enquanto uma toca, entra numa fila curta (até 3). A fala 7 entra na frente e **interrompe** uma fala comum em andamento (o comandante se corta). As de fim de partida (11–13) cortam tudo e tocam após uma pausa curta (1,2–3 s).
+- Cada fala toca **uma vez por partida** (reinício zera). A intro sempre toca, e nenhuma fala começa antes dela.
+- Uma fala por vez: se outra for disparada enquanto uma toca, entra numa fila curta (até 3). A fala 7 entra na frente e **interrompe** uma fala comum em andamento (o comandante se corta). As de fim de partida (11–13) cortam tudo e tocam após uma pausa (vitória 1,2 s, O₂ 2 s; contato 4 s, depois do ataque e do apagão da cabine).
 - Cada fala tem um tempo máximo de espera na fila (`max_wait`). Passado isso ela é descartada sem contar como tocada, e o mesmo evento pode dispará-la de novo. Uma fala interrompida também volta a valer.
 - A tela de vitória/derrota só aparece depois da fala final.
 - Durante a fala 7, a interferência do rádio sobe até "engolir" o fim da frase. Nos encontros seguintes com a criatura **não há voz**: só a interferência aumentando (GDD §6.2).

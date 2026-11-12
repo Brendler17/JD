@@ -22,7 +22,7 @@
 - **Mira:** no centro da tela há apenas um pequeno ponto (a "mira"); não há HUD flutuante tradicional. O mouse movimenta o olhar dentro da cabine e o ponto indica o que está sendo apontado.
 - **Painel físico (diegético) — implementado:** toda a operação da cápsula acontece **no próprio painel do posto de comando**, dentro da cabine (ver §7). Não existe mais tela 2D sobreposta ao sentar.
 - **Andando pela cabine (implementado):** em pé, o jogador anda com WASD/setas e olha com o mouse; a mira central indica o que pode ser acionado (clique esquerdo). Objetos examináveis (rádio, terminal, cilindros, escotilha, caderno) abrem um texto curto de lore/dica. O antigo "jogador parado (MVP)" foi superado por essa implementação.
-- **Sentado no posto:** clicar na cadeira ou no painel senta o jogador. O **cursor fica livre** e o jogador clica diretamente nos controles do painel. Encostar o cursor nas bordas da tela gira o olhar naquela direção (para cima, o monitor superior e o knob do alarme), e o olhar **fica onde parou** quando o cursor volta ao meio (*edge-pan*). Assim o que se vê não escorrega de baixo do cursor na hora de clicar. Clique direito levanta. *Decisão:* em pé usa-se a mira; sentado, o cursor — mais preciso para um painel com vários controles pequenos, sem perder a diegese.
+- **Sentado no posto:** clicar na cadeira ou no painel senta o jogador. A **mira continua no centro da tela** e o mouse move o olhar, dentro de um limite (±40° para os lados, 50° para cima e 20° para baixo), o bastante para alcançar com folga o knob do alarme, os mostradores e o monitor superior inteiro. O controle sob a mira acende e a mira muda de cor. O clique esquerdo aciona o controle sob a mira. Clique direito levanta. *Decisão (2026-11-12):* a mira vale também sentado, no lugar do cursor livre com olhar pelas bordas. O controle fica igual em pé e sentado, e operar o painel passa a ser olhar para a tecla, o que é mais imersivo.
 - **Indicadores diegéticos:** oxigênio e interferência são **mostradores analógicos** do painel, o mapa do sonar aparece na **tela CRT**, o registro de eventos no **monitor superior**, e o perigo pisca na luz vermelha da cabine — nada flutua sobre a tela.
 - **Estado atual:** a cabine usa o modelo importado da demo em Unreal (ver §2.2). Restam como UI 2D apenas a mira/prompt (em pé), o visualizador de textos e a tela de fim de partida.
 
@@ -91,7 +91,8 @@ Regras:
 
 - **Implementado:** cada pulso revela, nas **4 direções**, o primeiro obstáculo atingido, que fica registrado no mapa da tela CRT. O resto do corredor continua desconhecido.
 - **Custo:** 4 de oxigênio por pulso, sem limite de usos (o custo em O₂ e o risco já limitam o uso).
-- **Risco:** cada pulso atrai o inimigo para o ponto de onde saiu (§4.5). Um eco que passa pela criatura aparece como **ponto vermelho passageiro**.
+- **Risco:** cada pulso atrai o inimigo para o ponto de onde saiu (§4.5).
+- **Raio de detecção (implementado):** o pulso revela a criatura como **ponto vermelho passageiro** se ela estiver a até **4,5 células** em linha reta (atravessando paredes) ou no feixe reto de uma das 4 direções. Um anel se expande no CRT até o limite do raio, para o jogador entender o alcance. O sonar vira a ferramenta para planejar a fuga, e o dilema fica claro: ver onde ela está custa chamá-la.
 
 *(A detalhar: feedback sonoro do ping/eco.)*
 
@@ -135,6 +136,42 @@ Regras:
 - **Comportamento (implementado, valores para playtest):** age em turnos — cada ação do jogador (andar, girar, colidir, sonar) dá um turno à criatura. Normalmente vaga devagar (1 célula a cada 2 turnos). **Cada pulso de sonar a faz caçar o ponto de onde o pulso saiu**, 1 célula por turno; se o jogador já tiver saído dali, ela perde o rastro e volta a vagar. A 2 células ou menos, ela sente a cápsula e a persegue diretamente.
 - **Condição de derrota:** a criatura alcançar a célula da cápsula (ou a cápsula entrar na célula dela) — tela "CONTATO".
 - **Leitura pelo jogador:** nunca aparece no mapa de forma permanente. Um sinal de sonar que passa por ela devolve um **eco vermelho** passageiro; o **medidor de interferência** do painel sobe conforme ela se aproxima; a ≤ 4 células, **luz vermelha da cabine** + "ALERTA: CONTATO PRÓXIMO" no painel.
+- **Ouvir a criatura (implementado):** quando um pulso a coloca em caça e ela está a ≤ 10 casas, um chamado distante responde logo depois. É o retorno do risco do sonar.
+- **Derrota por contato (implementado):** a cápsula leva um golpe violento (tranco de câmera, impacto e rugido), as luzes e as telas falham por ~2,4 s com um segundo golpe no meio, e então tudo apaga. Uma luz ainda tenta voltar uma vez. O ambiente morre e o comandante chama no escuro ("perdemos sua telemetria... igual às outras") antes da tela de fim.
+
+### 4.6 Rebalanceamento da criatura (aprovado, a implementar)
+
+**Problema (relatado em playtest, 2026-11-12):** a vitória é praticamente impossível.
+- Em caça, a criatura anda 1 casa por turno, a mesma velocidade do jogador. Girar gasta um turno sem sair do lugar, então ela ganha terreno em toda curva.
+- A ≤ 2 casas ela persegue a cápsula para sempre.
+- O sonar é necessário para navegar e a chama na velocidade máxima.
+- O contato mata na hora. O caminho até a saída leva ~50 ações, e ela nasce a 10 casas.
+
+**Combinação aprovada pelo usuário (opções B + C + A dentro da C + D):**
+
+| Regra | Proposta (valores para playtest) |
+|---|---|
+| **C. Casco com integridade** | 3 pontos. Cada ataque tira 1; o 3º dispara a sequência de contato (`CaughtSequence`, já implementada). Ataque não letal: `cabin_impact(~0.7)`, luzes e telas piscam ~1 s, e o casco fica visível no painel |
+| **A. Dado quando adjacente** | Criatura a 1 casa: a cada turno, **60% hesita** (ronda, andando 1 casa a cada 2 turnos, o que abre uma janela de fuga pelo lado livre) e **40% ataca**. *(Chance a confirmar.)* |
+| **D. Sonar com ela perto** | Usar o sonar com ela dentro do raio (`SONAR_DETECT_RADIUS` = 4,5): ela avança direto e **o ataque é garantido, sem dado**. Lição: perto dela, silêncio |
+| **B. Mergulho** | Depois de **atacar**, ou de **investigar o ponto do sonar sem achar a cápsula**, ela some e reaparece longe (≥ 10 casas), vagando até ser atraída de novo. A interferência cai e o alarme apaga, dando um momento de alívio |
+
+**Exemplos de jogo:**
+1. *Fuga limpa:* o sonar mostra um ponto a 4 casas a leste e o chamado distante responde. O jogador recua de ré (sem girar, sem dar turno de graça). Ela chega ao cruzamento, não acha ninguém e mergulha. O alarme apaga.
+2. *Ela encosta:* sirene e interferência no máximo. Se o dado mandar hesitar, o jogador foge pelo lado livre e a distância aumenta. Se mandar atacar, vem o golpe, o casco cai de 3 para 2, ela mergulha e reaparece longe.
+3. *Pânico:* com ela a 3 casas, o jogador usa o sonar para vê-la. Ela vem direto e ataca sem dado; o casco cai de 2 para 1.
+
+**Pendências antes de implementar:**
+- Confirmar a chance de hesitar (60%).
+- Onde mostrar o casco. Proposta: um dos 3 knobs livres sob o monitor vira o mostrador "CASCO"; alternativa: uma linha no monitor superior.
+- Depois do primeiro playtest, se ainda estiver difícil, considerar também a opção E: na caça, 2 casas a cada 3 turnos, ou girar deixar de dar turno à criatura.
+- Falas do rádio: não há fala para ataque não letal. O rádio só reage pela interferência; avaliar se vale gravar 1–2 falas novas.
+
+**Implementação prevista:**
+- `Enemy`: estados novos (`STALKING`/adjacente com dado, `DIVING`/fora do labirinto por N turnos), regra do sonar perto e respawn longe (reusar `_pick_spawn_cell`).
+- `GameState`: `hull` + sinal `hull_changed(current, max)` + derrota por casco (`EndReason.CAUGHT` continua sendo o fim por contato).
+- Novo sinal `capsule_attacked(hull_left)`.
+- Apresentação: mini-sequência (reusar `cabin_impact` + falha curta de luzes) e mostrador do casco no `CommandPanel`.
 
 ## 5. Progressão
 
@@ -198,7 +235,7 @@ Status: ✅ = implementado (`AudioManager`, com SFX em `assets/audio/sfx/`).
 
 ### 7.1 Posto de comando (painel diegético) — implementado
 
-Tudo vive no painel físico em frente à cadeira, operado com o cursor quando o jogador está sentado (§2.1):
+Tudo vive no painel físico em frente à cadeira, operado com a mira quando o jogador está sentado (§2.1):
 
 | Instrumento do painel | O que mostra / faz |
 |---|---|
@@ -249,3 +286,5 @@ Tudo vive no painel físico em frente à cadeira, operado com o cursor quando o 
 - **2026-11-11 — Roteiro do rádio:** escritas as 12 falas do comandante, com gatilho e tom de cada uma, em `docs/roteiro-radio.md`. Seguem o tutorial contextual (§6.1) e a regra de voz só no primeiro encontro com a criatura (§6.2). As derrotas terminam com o comandante chamando sem resposta, em vez de uma tela explicativa. Áudios a gerar pela equipe; sistema de reprodução ainda não implementado.
 - **2026-11-11 — Lore definida (direção "resgate + mistério"):** a Cápsula Dez desce a 4.000 m numa "descida de rotina" até a Estação Tétis. O cabo rompe e é preciso chegar ao ponto de resgate. A Superfície esconde que a Tétis parou de responder, que dez cápsulas (Zero a Nove) desceram antes sem voltar e que existe uma criatura que reage ao som. O teaser passa a ser a **última transmissão da Cápsula Zero**. A verdade chega em camadas: deslizes do comandante no rádio, objetos examináveis da cabine (textos reescritos) e a fala final (vitória: "você foi a primeira a voltar"; derrota: "preparem a Onze"). Roteiro revisado para 13 falas. Ver §2.3 e §6.1.
 - **2026-11-12 — Rádio implementado e novas camadas de som:** o rádio do comandante entrou no jogo com as 13 falas gravadas, legendas na base da tela (o monitor superior fica fora da vista no posto) e interferência que cresce com a proximidade da criatura, inclusive sem fala. A primeira aparição da criatura **interrompe** o comandante. A tela de fim espera a fala final, que é o desfecho da história. Som: o ambiente ganhou uma camada grave de tensão ligada à proximidade e um **chamado distante da criatura logo depois de um sonar que ela ouviu**, dando ao jogador o retorno do risco central (o sonar atrai a criatura) sem texto. Corrigido o buraco de silêncio que o laço do ambiente deixava a cada 48 s. Ver §6.
+- **2026-11-12 — Sonar com raio e sequência de contato:** o sonar passa a revelar a criatura em qualquer posição dentro de 4,5 células (antes, só no feixe reto), com anel de alcance no CRT. A derrota por contato ganhou uma sequência de ataque e apagão antes do rádio e da tela de fim (§4.5). Motivo: o fim era abrupto e não comunicava que a criatura tinha pegado a cápsula. **Em discussão:** rebalancear a criatura (hoje a vitória é praticamente impossível): casco com integridade (2 ataques aguentados), dado quando ela fica adjacente (ataca ou hesita), ataque garantido se o jogador usar o sonar com ela perto, e ela some e reaparece longe depois de investigar ou atacar.
+- **2026-11-12 — Mira também sentado no posto:** substitui o cursor livre com *edge-pan*. Sentado, o mouse move o olhar dentro de limites (ampliados para ±40°/+50°/−20°, para o knob do alarme ficar ao alcance), e o clique aciona o controle sob a mira central. A tecla sob a mira acende e a mira muda de cor; o texto de ação fica oculto sentado, porque cobriria as teclas vizinhas. Motivo: pedido do usuário, controle único e mais imersivo.
