@@ -61,13 +61,14 @@ O jogo é **3D desde a base**: a cápsula e o labirinto existem no mundo 3D, sem
 ```
 scripts/
 ├── autoload/   → EventBus, GameState, AudioManager
-├── systems/    → SonarSystem, MazeGrid e outros sistemas de gameplay
+├── systems/    → MazeGrid, AlarmSystem, RadioSystem/RadioLine e outros sistemas
 ├── entities/   → Capsule, Enemy, Player, Interactable
 ├── cockpit/    → PanelScreen, CommandPanel e scripts das telas do painel
 └── ui/         → mapa do sonar, HUD, textos, fim de partida
 scenes/
 ├── main/       → cena principal
 ├── entities/   → cena da Cápsula, Enemy
+├── systems/    → radio_system.tscn (as 13 falas como dados)
 ├── levels/     → cenas de labirinto/nível
 ├── cockpit/    → command_panel.tscn + screens/ (conteúdo 2D de cada tela)
 └── ui/         → teclado, HUD, textos, fim de partida
@@ -232,13 +233,16 @@ Implementado em `scripts/entities/enemy.gd` + `scenes/entities/enemy.tscn` (fica
 
 ## 10. Áudio
 
-Implementado parcialmente (sem rádio ainda). Ver GDD §6.
+Implementado. Ver GDD §6 e `docs/roteiro-radio.md`.
 
 - **`AudioManager` (autoload, `scripts/autoload/audio_manager.gd`, registrado após o `GameState`):** escuta o `EventBus` e toca:
 
 | Sinal | Som (`assets/audio/sfx/`) | Bus |
 |---|---|---|
-| (sempre, em laço) | `ambience.mp3` | Ambience |
+| (sempre) | Cama `ambience.mp3` ↔ `ambience2.mp3` alternando com crossfade de 6 s (`CrossfadeLoop`). O `ambience.mp3` tem fade-out próprio nos ~10 s finais: em laço simples deixava um buraco de silêncio a cada 48 s | Ambience |
+| `enemy_proximity_changed` | Camada de tensão `ambience3.mp3` (ronco grave), em laço com crossfade; volume sobe com a proximidade (zero a ≥ 9 passos, cheio a 1) e cai no `game_over` | Ambience |
+| `enemy_heard_sonar(steps)` | `monster3.mp3`, chamado distante 1,2–2 s depois do pulso, se a criatura está a ≤ 10 passos (cooldown 20 s); mais baixo quanto mais longe | Distant |
+| `radio_line_started/finished` | Ducking: bus Ambience a −6 dB durante as falas (tween no volume do bus) | — |
 | `capsule_collided` | `crash.mp3` | SFX |
 | `maneuver_started(&"sonar")` | `sonar.mp3`: o ping sai no início, e o mapa revela no fim (eco voltando) | SFX |
 | `maneuver_started(&"forward"/&"backward")` | `capsule_move.mp3` (pitch 0,9 na ré). Em `maneuver_finished` some em fade de 0,35 s; em `capsule_collided` é cortado seco | SFX |
@@ -252,9 +256,18 @@ Implementado parcialmente (sem rádio ainda). Ver GDD §6.
 
 - Laços: reinício no `finished` (vale para MP3 e WAV sem mexer nas opções de importação). `stop()` não emite `finished`. `PROCESS_MODE_ALWAYS`. Como é autoload, o ambiente não corta ao reiniciar a partida.
 - Exceção à regra "só o AudioManager toca som": o clique das teclas (`PanelButton3D`) é feedback do próprio objeto e posicional (`AudioStreamPlayer3D`).
-- **Buses (`default_bus_layout.tres`):** `Master` › `Ambience`, `SFX`, `Alarm`. *Planejado:* bus `Radio` com `AudioEffectBandPassFilter` (~300–3400 Hz) + `AudioEffectDistortion` leve + estática, com intensidade controlada pela proximidade do inimigo.
+- **Buses (`default_bus_layout.tres`):** `Master` › `Ambience`, `SFX`, `Alarm`, `Radio` (HighPass 350 Hz + LowPass 3200 Hz + Distortion overdrive, `drive` 0,25 controlado em tempo real pelo `RadioSystem`) e `Distant` (LowPass 700 Hz + Reverb: sons "do lado de fora" do casco).
 - Origem/licença dos SFX: `assets/audio/CREDITS.md`.
-- **`RadioSystem` (planejado):** falas a partir de dados (Resource `RadioLine`: `stream`, `subtitle`, `trigger`, `once`). Gatilhos `intro`, `first_collision`, `first_sonar`, `low_oxygen`, `first_enemy_encounter`. Emite `radio_line_started/finished(subtitle)` para legendas no monitor superior.
+- **`RadioSystem` (`scripts/systems/radio_system.gd` + `scenes/systems/radio_system.tscn`, nó da `main.tscn`, consumidor de `maze`):** decide quando cada fala toca e é o próprio aparelho (voz, estática e squelch no bus `Radio`). Vive na cena, então o reinício zera as falas já tocadas.
+  - **Dados:** `RadioLine` (`scripts/systems/radio_line.gd`, Resource): `id`, `subtitle`, `priority` (`NORMAL`, `URGENT`, `FINAL`), `max_wait`, `delay`. As 13 falas ficam como sub-resources na `radio_system.tscn` (editáveis no inspetor). O áudio é achado por convenção: `res://assets/audio/radio/radio_<id>.wav` (ou `.ogg`/`.mp3`). Sem arquivo, a fala roda só com legenda e duração estimada (0,065 s por caractere, mínimo 2,5 s).
+  - **Gatilhos:** `intro` 3 s após carregar; `idle_seat` 30 s após o fim da intro sem `navigation_mode_changed(true)`; `first_seat` (sentar); `first_collision`; `first_sonar` (`sonar_pinged`); `first_enemy` (`enemy_detected` ou `alarm_started(&"enemy")`); `low_oxygen` (`alarm_started(&"low_oxygen")`, mesmo limiar de 25%); `first_alarm` (qualquer `alarm_started`, depois da fala da causa); `station` (20º `maneuver_finished`); `near_exit` (`capsule_moved` a ≤ 3 passos da saída, BFS a partir da saída); `win`/`lost_oxygen`/`lost_caught` (`game_over` + `GameState.end_reason`).
+  - **Fila:** uma fala por vez, até 3 na fila, 0,8 s entre falas. `URGENT` (`first_enemy`) entra na frente e **corta** uma fala `NORMAL` em andamento (squelch de fechamento, 0,35 s, e entra); a fala cortada volta a contar como não tocada. Fala que espera mais que `max_wait` (tempo de jogo) é descartada sem contar como tocada, e o mesmo evento pode dispará-la de novo. `FINAL` corta tudo, limpa a fila e toca após `delay` (vitória 1,2 s, O₂ 2 s, contato 3 s, para o rugido terminar).
+  - **Interferência (0..1):** máximo entre a proximidade do inimigo (mesma escala do mostrador INTERF.) e um *override* roteirizado. Controla o volume da estática (`radio_static.wav`, que soa mesmo sem fala quando a criatura está perto), quedas aleatórias de volume da voz e o `drive` da distorção do bus. Durante `first_enemy` o override sobe até 1 (ease-in, 90% da fala) e "engole" o fim da frase; depois volta em 2,5 s.
+  - **Sinais:** `radio_line_started(id, subtitle, duration)`, `radio_line_finished(id)` e `radio_busy_changed(busy)` (fala tocando, na fila ou final agendada). Ao sair da árvore (reinício) com fala no ar, emite `finished` para não deixar o ambiente abaixado.
+  - **SFX gerados (Python):** `radio_static.wav` (4 s em laço, ruído filtrado com flutter e estalos), `radio_squelch_open.wav` e `radio_squelch_close.wav`.
+- **Legendas (`RadioSubtitles`, `scripts/ui/radio_subtitles.gd` + `scenes/ui/radio_subtitles.tscn`, último filho de `UI`):** caixa na base da tela com "◂ SUPERFÍCIE" e o texto revelado no ritmo da fala (`visible_ratio` em 80% da duração). Fica acima da tela de fim. Não ficaram no monitor superior porque, sentado no posto, só a última linha dele aparece; o monitor registra ">> TRANSMISSÃO RECEBIDA — SUPERFÍCIE" no log.
+- **Tela de fim + rádio:** `GameOverScreen` espera `radio_busy_changed(false)` (+0,8 s de silêncio) antes de aparecer em fade, com limite de 20 s; um clique antecipa. A checagem é adiada (`call_deferred`) porque o `RadioSystem` agenda a fala final no mesmo `game_over`.
+- **`Enemy`:** emite `enemy_heard_sonar(steps)` quando um pulso o coloca em caça (distância dele até a origem do pulso).
 
 ## 11. Assets da Cabine & Iluminação
 
@@ -302,3 +315,4 @@ Implementado parcialmente (sem rádio ainda). Ver GDD §6.
 - **2026-11-11 — Diagnóstico: "andar e girar a câmera ao mesmo tempo não funciona":** não é bug de código (a física lê o teclado e `_unhandled_input` lê o mouse de forma independente). No notebook de desenvolvimento (touchpad ELAN, GNOME/Wayland), a opção do sistema *desativar touchpad enquanto digita* bloqueia o touchpad enquanto W/A/S/D está pressionado. Com mouse externo ou com a opção desligada, funciona.
 - **2026-11-11 — Teclas físicas (`PanelButton3D`), silenciar alarme, `AudioManager` e edge-pan:** criado `PanelButton3D` (tecla/knob 3D com curso, hover, clique posicional e cancelamento ao soltar fora). O `Keypad` do `CommandPanel` agora tem `HeadingScreen` + placa + 5 teclas, e `AlarmMuteKnob` fica sob o monitor. Removidos `MovementPanel` (`scenes/ui/movement_panel.tscn`, `scripts/ui/movement_panel.gd`) e `keypad_screen` (virou `heading_screen`). `Player` aceita qualquer controle com `forward_mouse/release_hover` e o olhar sentado virou edge-pan acumulado. Novos sinais: `request_toggle_alarm_mute` e `alarm_muted_changed(muted)`, com mudo implementado no `AlarmSystem`. Novo autoload `AudioManager` + `default_bus_layout.tres` (Ambience/SFX/Alarm). SFX gerados: `panel_click.wav` e `o2_beep.wav`. Documentado o pipeline de reexportação fiel da Unreal (§11). Ver §5.2, §9 e §10.
 - **2026-11-11 — Manobras com duração (game feel):** `Capsule` executa cada ação depois de um tempo (`_begin_maneuver` + `Timer`), ignorando pedidos durante a manobra. Novos sinais `maneuver_started(kind, duration)` e `maneuver_finished(kind)`. `PanelButton3D` trava as teclas e mantém afundada a tecla acionada. `HeadingScreen` mostra o estado. `AudioManager` toca motor (fade/corte na colisão), rangido no giro e o ping do sonar no início. `Player` inclina e vibra a câmera. Novos SFX CC0 `capsule_move.mp3` e `capsule_rotate_a/b.wav`, com créditos em `assets/audio/CREDITS.md`. Ver §5, §5.2 e §10.
+- **2026-11-12 — `RadioSystem`, legendas e camadas de ambiente:** implementado o rádio do comandante com as 13 falas gravadas (`assets/audio/radio/`), fila com prioridades (`URGENT` interrompe, `FINAL` corta tudo), validade na fila, interferência ligada à proximidade do inimigo (estática, quedas de sinal, distorção) e override roteirizado na fala `first_enemy`. Novo bus `Radio` (filtros + distorção) e `Distant` (abafado + reverb). Legendas na base da tela (`RadioSubtitles`); tela de fim espera a fala final. `AudioManager`: cama de ambiente com crossfade (`ambience` ↔ `ambience2`, corrige o buraco de silêncio do laço antigo), camada de tensão `ambience3` por proximidade, chamado distante `monster3` quando a criatura ouve o sonar (novo sinal `enemy_heard_sonar`) e ducking do ambiente durante as falas. Novos sinais: `radio_line_started`, `radio_line_finished`, `radio_busy_changed`, `enemy_heard_sonar`. Ver §10.

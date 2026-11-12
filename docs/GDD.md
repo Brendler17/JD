@@ -154,12 +154,14 @@ A atmosfera é construída quase inteiramente por áudio, já que o jogador não
 - **Conteúdo da introdução:** situar o jogador (quem é, o que faz ali, qual a missão) e ensinar o básico: como se mover pelo painel, como funciona o oxigênio, o custo das colisões e o sonar.
 - **Proposta (a validar) — tutorial contextual:** manter a introdução curta (só contexto + "ande até a saída") e entregar o resto em falas disparadas na **primeira vez** que algo acontece: primeira colisão ("Cuidado, cada impacto compromete o casco e o ar."), primeiro uso do sonar, oxigênio baixo pela primeira vez. Jogadores esquecem informação dada toda de uma vez, e uma fala que chega no momento do evento ensina melhor e mantém o rádio vivo durante a partida.
 - **Roteiro definido:** 13 falas (introdução, cobrança para sentar, primeiro uso do painel, primeira colisão, primeiro sonar, primeiro alarme, primeiro encontro com a criatura, O₂ baixo, aviso sobre a Estação Tétis, perto da saída, vitória e duas derrotas) em [`roteiro-radio.md`](roteiro-radio.md), escritas segundo a lore (§2.3): o comandante esconde a verdade e se revela em deslizes. Identificação no rádio: "Superfície" (comandante) e "Cápsula Dez" (jogador). Várias frases repetem o teaser (protocolo decorado). Vozes geradas pela equipe com a mesma voz do teaser, gravadas limpas; o efeito de rádio é aplicado pelo jogo.
-- **Proposta (a validar) — legendas:** exibir legendas das falas do rádio (acessibilidade e apresentação em sala com som ruim). Opcional: botão de "repetir última transmissão" no painel.
+- **Implementado — rádio no jogo:** as 13 falas tocam nos gatilhos do roteiro, no máximo uma vez por partida, uma por vez. O comandante se **interrompe** no meio de uma fala comum quando a criatura aparece pela primeira vez ("Espera... o que foi isso?"). Dicas que esperariam demais na fila são descartadas e voltam a valer se o evento se repetir, para nenhuma dica chegar fora de hora. A voz passa por filtro de rádio, com estática e chiado de abrir e fechar a transmissão.
+- **Implementado — legendas:** na base da tela, com o texto revelado no ritmo da fala (acessibilidade e apresentação em sala com som ruim). Ficaram fora do monitor superior porque, sentado no posto, ele quase não aparece no campo de visão; o monitor só registra "TRANSMISSÃO RECEBIDA". *Opcional (não feito):* botão de "repetir última transmissão" no painel.
+- **Implementado — o desfecho é do rádio:** no fim da partida, a tela de vitória/derrota só aparece depois da última fala do comandante (um clique antecipa). A fala final é o fecho da história e não compete com a tela.
 
 ### 6.2 Rádio e o inimigo
 
 - Ideia levantada: disparar a voz do comandante quando o inimigo se revela.
-- **Proposta (a validar):** usar a voz **uma única vez**, no **primeiro encontro** (fala roteirizada e assustada, que se perde em estática — "O que foi isso no sonar? ... repita... sinal... perdendo..."). Nos encontros seguintes, **sem fala**: só a **interferência do rádio aumentando** conforme o inimigo se aproxima. Motivo: no horror, explicar demais mata a tensão, e uma fala repetida vira rotina em poucos encontros. Já o rádio que "morre" perto da criatura vira um **sensor de proximidade diegético**, coerente com um jogo cego guiado por som.
+- **Implementado** (validar em playtest): usar a voz **uma única vez**, no **primeiro encontro** (fala roteirizada e assustada, que se perde em estática — "O que foi isso no sonar? ... repita... sinal... perdendo..."). Nos encontros seguintes, **sem fala**: só a **interferência do rádio aumentando** conforme o inimigo se aproxima. Motivo: no horror, explicar demais mata a tensão, e uma fala repetida vira rotina em poucos encontros. Já o rádio que "morre" perto da criatura vira um **sensor de proximidade diegético**, coerente com um jogo cego guiado por som.
 
 ### 6.3 Alarme: sirene + luz vermelha
 
@@ -185,7 +187,10 @@ Status: ✅ = implementado (`AudioManager`, com SFX em `assets/audio/sfx/`).
 | Metal rangendo / sendo espremido | Inimigo a ≤ 4 passos, mais alto quanto mais perto ✅ |
 | Sirene | Perigo (inimigo) ✅ |
 | Bipe de alarme | Oxigênio baixo ✅ |
-| Rádio do comandante (voz + estática) | Introdução, eventos e encontros (ver §6.1–6.2) |
+| Rádio do comandante (voz + estática) | Introdução, eventos e encontros (ver §6.1–6.2) ✅ |
+| Estática do rádio sem voz | Criatura perto: sobe com a proximidade (sensor diegético) ✅ |
+| Ronco grave de tensão (camada de ambiente) | Cresce conforme a criatura se aproxima ✅ |
+| Chamado distante da criatura | Logo após um pulso de sonar que ela ouviu, se estiver a ≤ 10 passos ✅ |
 | Clique mecânico | Teclas e knob do painel ✅ |
 | Criatura alcança a cápsula | Derrota por contato ✅ |
 
@@ -208,7 +213,7 @@ Tudo vive no painel físico em frente à cadeira, operado com o cursor quando o 
 - Layout do teclado em cruz: a disposição espacial espelha a ação (frente em cima, ré embaixo, giros nas laterais), reduzindo erro de clique sob tensão. Acionado apenas por mouse.
 - No fim da partida, o teclado é desabilitado e aparece a tela de fim (vitória/derrota) com "Tentar novamente" (ainda 2D).
 
-*(A detalhar: legendas do rádio no monitor superior; usar os outros 3 knobs (ex.: volume do rádio, brilho do sonar).)*
+*(A detalhar: usar os outros 3 knobs (ex.: volume do rádio, brilho do sonar). Legendas do rádio: implementadas na base da tela, ver §6.1.)*
 
 ## 8. Escopo & Fora do Escopo (MVP)
 
@@ -243,3 +248,4 @@ Tudo vive no painel físico em frente à cadeira, operado com o cursor quando o 
 - **2026-11-11 — Peso das ações (manobras com duração):** cada ação da cápsula leva tempo (andar/ré 1,0 s, girar 0,8 s, sonar 0,9 s) e o resultado (impacto, eco do sonar, turno do inimigo) só chega no fim. Durante a manobra o painel trava. Novos sons de motor e de rangido ao girar (Freesound, CC0, ver `assets/audio/CREDITS.md`), inclinação e vibração da cabine. *Motivo:* antes, clicar "Frente" só mudava um ponteiro e um ponto no mapa, então a ação central não tinha peso físico nem antecipação. Valores para playtest. Ver §4.1 e §6.4.
 - **2026-11-11 — Roteiro do rádio:** escritas as 12 falas do comandante, com gatilho e tom de cada uma, em `docs/roteiro-radio.md`. Seguem o tutorial contextual (§6.1) e a regra de voz só no primeiro encontro com a criatura (§6.2). As derrotas terminam com o comandante chamando sem resposta, em vez de uma tela explicativa. Áudios a gerar pela equipe; sistema de reprodução ainda não implementado.
 - **2026-11-11 — Lore definida (direção "resgate + mistério"):** a Cápsula Dez desce a 4.000 m numa "descida de rotina" até a Estação Tétis. O cabo rompe e é preciso chegar ao ponto de resgate. A Superfície esconde que a Tétis parou de responder, que dez cápsulas (Zero a Nove) desceram antes sem voltar e que existe uma criatura que reage ao som. O teaser passa a ser a **última transmissão da Cápsula Zero**. A verdade chega em camadas: deslizes do comandante no rádio, objetos examináveis da cabine (textos reescritos) e a fala final (vitória: "você foi a primeira a voltar"; derrota: "preparem a Onze"). Roteiro revisado para 13 falas. Ver §2.3 e §6.1.
+- **2026-11-12 — Rádio implementado e novas camadas de som:** o rádio do comandante entrou no jogo com as 13 falas gravadas, legendas na base da tela (o monitor superior fica fora da vista no posto) e interferência que cresce com a proximidade da criatura, inclusive sem fala. A primeira aparição da criatura **interrompe** o comandante. A tela de fim espera a fala final, que é o desfecho da história. Som: o ambiente ganhou uma camada grave de tensão ligada à proximidade e um **chamado distante da criatura logo depois de um sonar que ela ouviu**, dando ao jogador o retorno do risco central (o sonar atrai a criatura) sem texto. Corrigido o buraco de silêncio que o laço do ambiente deixava a cada 48 s. Ver §6.
