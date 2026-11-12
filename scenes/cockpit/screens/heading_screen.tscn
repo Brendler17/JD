@@ -32,21 +32,29 @@ alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.82, 0.3, 1)
-theme_override_font_sizes/font_size = 52
+theme_override_font_sizes/font_size = 46
 text = "RUMO  N"
+horizontal_alignment = 1
+
+[node name="ManeuverLabel" type="Label" parent="Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 1, 0.9, 1)
+theme_override_font_sizes/font_size = 28
+text = "PRONTO"
 horizontal_alignment = 1
 
 [node name="AlertLabel" type="Label" parent="Rows"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 40)
+custom_minimum_size = Vector2(0, 32)
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.3, 0.22, 1)
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 26
 horizontal_alignment = 1
 
 [node name="HintLabel" type="Label" parent="Rows"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.5, 0.6, 0.58, 1)
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 18
 text = "BOTÃO DIREITO: LEVANTAR"
 horizontal_alignment = 1

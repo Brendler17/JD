@@ -6,6 +6,9 @@ extends Node3D
 ## antigos, não conhece a Capsule nem o oxigênio.
 ## Mesma interface de entrada da PanelScreen (forward_mouse / release_hover):
 ## o Player lança o cursor como raio na PANEL_LAYER e repassa o evento.
+## Teclas de manobra (todas menos o knob do alarme) ficam travadas enquanto a
+## cápsula manobra (maneuver_started/finished): a tecla acionada permanece
+## afundada até o fim e as outras escurecem e ignoram cliques.
 ## Geometria no espaço local: a face fica em z = 0 e a tecla cresce para +Z
 ## (em direção ao jogador); pressionar empurra a tecla para -Z.
 
@@ -30,6 +33,8 @@ const LIT_COLOR := Color(1.0, 0.55, 0.1)
 @export var travel := 0.014
 
 var disabled := false
+## Travada por uma manobra em andamento (só teclas de manobra).
+var busy := false
 
 var _cap: Node3D
 var _material: StandardMaterial3D
@@ -38,6 +43,8 @@ var _hovered := false
 var _pressed := false
 ## Indicador aceso (ex.: knob do alarme quando o som está silenciado).
 var _lit := false
+## Esta tecla disparou a manobra atual: fica afundada até maneuver_finished.
+var _engaged := false
 var _tween: Tween
 
 
@@ -48,6 +55,25 @@ func _ready() -> void:
 		EventBus.alarm_muted_changed.connect(func(muted: bool) -> void:
 			_lit = muted
 			_refresh_look())
+	else:
+		EventBus.maneuver_started.connect(_on_maneuver_started)
+		EventBus.maneuver_finished.connect(_on_maneuver_finished)
+
+
+func _on_maneuver_started(_kind: StringName, _duration: float) -> void:
+	busy = true
+	_pressed = false
+	if not _engaged:
+		_animate_cap(0.0, RELEASE_TIME)
+	_refresh_look()
+
+
+func _on_maneuver_finished(_kind: StringName) -> void:
+	busy = false
+	if _engaged:
+		_engaged = false
+		_animate_cap(0.0, RELEASE_TIME)
+	_refresh_look()
 
 
 func _build() -> void:
@@ -112,7 +138,7 @@ func _build() -> void:
 
 
 func forward_mouse(event: InputEventMouse, _world_position: Vector3) -> void:
-	if disabled:
+	if disabled or busy:
 		return
 	var button := event as InputEventMouseButton
 	var is_left := button != null and button.button_index == MOUSE_BUTTON_LEFT
@@ -122,9 +148,16 @@ func forward_mouse(event: InputEventMouse, _world_position: Vector3) -> void:
 	if is_left and not button.pressed:
 		if _pressed:
 			_pressed = false
-			_animate_cap(0.0, RELEASE_TIME)
 			if _hovered:
+				_engaged = action != Action.TOGGLE_ALARM_MUTE
+				# Síncrono: se a Capsule aceitou, maneuver_started já chegou e busy é true.
 				_trigger()
+			if busy:
+				# Manobra em andamento: a tecla fica afundada até maneuver_finished.
+				_refresh_look()
+			else:
+				_engaged = false
+				_animate_cap(0.0, RELEASE_TIME)
 		return
 	if not _hovered:
 		_hovered = true
@@ -169,14 +202,19 @@ func _set_disabled(value: bool) -> void:
 	disabled = value
 	_pressed = false
 	_hovered = false
+	_engaged = false
 	_animate_cap(0.0, RELEASE_TIME)
 	_refresh_look()
 
 
 func _refresh_look() -> void:
-	if disabled:
+	if disabled or (busy and not _engaged):
 		_material.albedo_color = cap_color.darkened(0.5)
 		_material.emission = Color.BLACK
+	elif _engaged:
+		_material.albedo_color = cap_color
+		_material.emission = HOVER_COLOR
+		_material.emission_energy_multiplier = 0.6
 	elif _lit:
 		_material.albedo_color = cap_color
 		_material.emission = LIT_COLOR
