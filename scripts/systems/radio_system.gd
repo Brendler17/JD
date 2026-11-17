@@ -29,6 +29,10 @@ const INTRO_DELAY := 3.0
 ## Segundos depois da introdução sem sentar no posto até a cobrança.
 const IDLE_SEAT_DELAY := 30.0
 const STATION_MANEUVERS := 20
+## Manobra (concluída) depois da qual o comandante apresenta o monitor de suporte de vida.
+const O2_MONITOR_MANEUVERS := 3
+## Segundos entre um golpe não letal e a fala sobre o casco (deixa o tranco respirar).
+const HIT_LINE_DELAY := 1.5
 const NEAR_EXIT_STEPS := 3
 const MAX_QUEUE := 3
 ## Pausa entre uma fala e a próxima da fila.
@@ -113,6 +117,9 @@ func _ready() -> void:
 	EventBus.capsule_moved.connect(_on_capsule_moved)
 	EventBus.enemy_proximity_changed.connect(_on_enemy_proximity_changed)
 	EventBus.game_over.connect(_on_game_over)
+	EventBus.capsule_attacked.connect(_on_capsule_attacked)
+	EventBus.enemy_charging.connect(_on_enemy_charging)
+	EventBus.enemy_hesitated.connect(func(_c: Vector2i) -> void: trigger(&"stalk"))
 
 	get_tree().create_timer(INTRO_DELAY).timeout.connect(trigger.bind(&"intro"))
 
@@ -176,6 +183,8 @@ func _on_alarm_started(reason: StringName) -> void:
 
 func _on_maneuver_finished(_kind: StringName) -> void:
 	_maneuvers += 1
+	if _maneuvers == O2_MONITOR_MANEUVERS:
+		trigger(&"o2_monitor")
 	if _maneuvers == STATION_MANEUVERS:
 		trigger(&"station")
 
@@ -188,6 +197,22 @@ func _on_capsule_moved(new_position: Vector2i, _direction: Vector2i) -> void:
 
 func _on_enemy_proximity_changed(steps: int) -> void:
 	_proximity = 0.0 if steps < 0 else clampf(1.0 - float(steps - 1) / INTERFERENCE_RANGE, 0.0, 1.0)
+	# Primeira vez que o mostrador INTERF. sai do zero.
+	if _proximity > 0.0:
+		trigger(&"interference")
+
+
+## Golpe não letal: casco 2 → "primeiro golpe"; casco 1 → "casco crítico".
+func _on_capsule_attacked(hull_left: int) -> void:
+	var id := &"hull_critical" if hull_left <= 1 else &"first_hit"
+	get_tree().create_timer(HIT_LINE_DELAY).timeout.connect(trigger.bind(id))
+
+
+## Sonar com ela perto. Só depois de a primeira aparição (first_enemy) ter
+## terminado: na primeira vez, o susto do comandante já é a reação.
+func _on_enemy_charging(_cell: Vector2i) -> void:
+	if _played.has(&"first_enemy") and not (_current and _current.id == &"first_enemy"):
+		trigger(&"sonar_charge")
 
 
 ## O inimigo para de emitir proximidade no fim; a fala final define o nível.
