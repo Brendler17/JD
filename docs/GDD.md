@@ -309,9 +309,20 @@ Tudo vive no painel físico em frente à cadeira, operado com a mira quando o jo
 | Monitor lateral esquerdo ("Suporte de vida", âmbar) | **O₂** em número grande + barra, **casco** em 3 blocos (cheio = intacto) e **custo de O₂** por ação. Vermelho com O₂ ≤ 25% ou casco 1. Ao alcance do olhar sentado (canto esquerdo, ~45° de lado) |
 
 - Layout do teclado em cruz: a disposição espacial espelha a ação (frente em cima, ré embaixo, giros nas laterais), reduzindo erro de clique sob tensão. Acionado apenas por mouse.
-- No fim da partida, o teclado é desabilitado e aparece a tela de fim (vitória/derrota) com "Tentar novamente" (ainda 2D).
+- No fim da partida, o teclado é desabilitado e aparece a tela de fim (vitória/derrota) com "Tentar novamente" e "Menu principal" (ainda 2D).
 
 *(A detalhar: usar os outros 3 knobs (ex.: volume do rádio, brilho do sonar). Legendas do rádio: implementadas na base da tela, ver §6.1.)*
+
+### 7.2 Menus (implementado em 2026-11-16)
+
+Os menus ficam **fora** da ficção (2D sobre a tela), com o mesmo visual dos monitores da cabine: fundo escuro, âmbar e ferrugem. Toda troca de tela passa por um fade para preto.
+
+- **Menu principal** (cena inicial): título, a frase "Quatro mil metros. Sem janelas. Só o painel e o som." e os botões **Novo jogo**, **Opções**, **Controles**, **Créditos** e **Sair**. Ao fundo, uma tela de sonar com um pulso a cada ~5 s, o som do sonar baixinho e três ecos vermelhos que acendem quando o pulso passa. A cama de ambiente do jogo já toca no menu. O rodapé recomenda fones de ouvido, porque o jogo é guiado por som.
+- **Pausa (Esc):** congela a partida (rádio e efeitos param; o ambiente continua) e libera o cursor. Botões: **Continuar**, **Opções**, **Controles**, **Reiniciar partida**, **Menu principal** e **Sair do jogo**. Esc dentro de um submenu volta à lista; na lista, continua o jogo. Sair da partida pela pausa conta como **abandono** na telemetria.
+- **Opções** (iguais no menu e na pausa, salvas entre sessões): volume geral, voz do rádio, efeitos, ambiente, sensibilidade do mouse (0,25× a 2,5×), legendas do rádio (liga/desliga) e tela cheia, além de "Restaurar padrão".
+- **Controles:** resumo de andar pela cabine e operar o posto, terminando com "o resto, a Superfície explica pelo rádio". O tutorial continua sendo o rádio (§6.1).
+- **Créditos:** Gustavo Brendler e Rafael Nunes Siqueira; Godot; voz do comandante gerada por IA no sintetizador próprio da equipe (feito com o Google AI Studio); ambiente e efeitos do Pixabay; sons CC0 do Freesound (motor e rangido); clique, bipe e estática sintetizados pela equipe. Registro completo em `assets/audio/CREDITS.md`.
+- *Decisão:* o Esc, que antes só liberava o cursor, agora abre a pausa. Com uma anotação aberta, o Esc continua fechando a anotação.
 
 ## 8. Escopo & Fora do Escopo (MVP)
 
@@ -355,3 +366,5 @@ Tudo vive no painel físico em frente à cadeira, operado com a mira quando o jo
 - **2026-11-16 — Mostradores com o perigo do mesmo lado:** o vermelho do O₂ ficava no início da escala e o da interferência no fim. Agora os dois têm a faixa vermelha à direita, e a escala do O₂ foi invertida: o ponteiro começa à esquerda com o tanque cheio e avança para o vermelho conforme o ar acaba. Motivo: pedido do usuário. Uma regra única de leitura ("ponteiro à direita = perigo") vale para os dois relógios num relance.
 - **2026-11-16 — Falas 14–19 no jogo e legendas mais limpas:** as 6 falas novas (monitor de O₂, interferência, primeiro golpe, casco crítico, sonar perto dela e ela encostada) foram gravadas e ligadas aos gatilhos do roteiro. Nas legendas, reticências duplicadas viraram uma só. Motivo: pedido do usuário, porque "... ..." poluía a leitura.
 - **2026-11-16 — Telemetria de playtest:** cada partida jogada pelo editor grava um resumo (`telemetry/runs.csv`) e o passo a passo (`run_<data>.csv`: cada ação, a reação da criatura, O₂, casco e distâncias). `python3 tools/telemetry_report.py` mostra a taxa de vitória, as causas de derrota, as médias de vitória x derrota e qual alavanca mexer. Motivo: o usuário venceu com a rodada 2, e a partir daqui o balanceamento precisa de números, não de impressão. Alvo: 40–60% de vitória da 3ª–4ª partida em diante (§4.6.1).
+- **2026-11-16 — Menu principal, pausa e opções:** o jogo agora abre num menu principal com fundo de sonar e tem pausa no Esc e opções salvas (volumes por categoria, sensibilidade, legendas, tela cheia). A tela de fim ganhou "Menu principal". Motivo: pedido do usuário, como passo para o build exportável e os playtests com outras pessoas. Ver §7.2.
+- **2026-11-16 — Créditos definidos:** equipe Gustavo Brendler e Rafael Nunes Siqueira. Só as falas do comandante vêm do sintetizador de IA da equipe (feito com o Google AI Studio). Ambiente, criatura, impactos, sirene e sonar são do Pixabay (Pixabay Content License); motor e rangido, do Freesound (CC0); clique, bipe e estática, síntese procedural. Os do Pixabay ficaram registrados pela busca de origem, sem autor (`assets/audio/CREDITS.md`).

@@ -13,12 +13,16 @@
 Baseada em **Autoloads (Singletons)** para estado/serviços globais + **cenas instanciadas** para o gameplay em si, comunicando-se por **sinais** (Observer / Event-Driven Architecture), evitando acoplamento direto entre nós.
 
 ```
-Autoloads (Singletons) — persistem entre cenas
+Autoloads (Singletons) — persistem entre cenas (nesta ordem)
 ├── EventBus       → sinais globais do jogo (Observer / Event Bus)
+├── Settings       → opções do jogador (user://settings.cfg)
 ├── GameState      → estado do jogo (State Pattern)
-└── AudioManager   → toca áudio conforme sinais do EventBus
+├── AudioManager   → toca áudio conforme sinais do EventBus; aplica os volumes
+└── SceneFlow      → troca de cena com fade (menu ↔ partida, reinício, sair)
 
-Cena: Main (cabine) — recarregada a cada partida
+Cena inicial: MainMenu (scenes/menu/main_menu.tscn)
+
+Cena: Main (cabine) — carregada a cada partida pelo SceneFlow
 ├── LevelSetup (script da Main) → gera a MazeGrid e a injeta nos consumidores
 ├── CapsuleInterior → malha importada da Unreal (atlas único, ver §11)
 ├── CabinLights / AlarmLight / AlarmSystem
@@ -29,7 +33,8 @@ Cena: Main (cabine) — recarregada a cada partida
 │   ├── Capsule     → executa as intenções, sonar e colisão na grade
 │   ├── MazeBuilder → labirinto 3D a partir da MazeGrid (só visual/debug)
 │   └── Enemy       → turnos, caça a origem do sonar, ronda/dado, mergulho
-└── UI (CanvasLayer) → só mira/prompt, visualizador de texto e tela de fim
+├── RunTelemetry    → CSVs de playtest (§12.1)
+└── UI (CanvasLayer) → mira/prompt, visualizador de texto, legendas, tela de fim e PauseMenu
 ```
 
 *(Diagrama de origem: `classes.svg`. Manter este documento sincronizado se o diagrama mudar.)*
@@ -60,21 +65,23 @@ O jogo é **3D desde a base**: a cápsula e o labirinto existem no mundo 3D, sem
 
 ```
 scripts/
-├── autoload/   → EventBus, GameState, AudioManager
+├── autoload/   → EventBus, Settings, GameState, AudioManager, SceneFlow
 ├── systems/    → MazeGrid, AlarmSystem, RadioSystem/RadioLine e outros sistemas
 ├── entities/   → Capsule, Enemy, Player, Interactable
 ├── cockpit/    → PanelScreen, CommandPanel e scripts das telas do painel
-└── ui/         → mapa do sonar, HUD, textos, fim de partida
+└── ui/         → mapa do sonar, HUD, textos, fim de partida, menus (principal, pausa, opções, info)
 scenes/
-├── main/       → cena principal
+├── menu/       → main_menu.tscn (cena inicial)
+├── main/       → cena da partida (cabine)
 ├── entities/   → cena da Cápsula, Enemy
 ├── systems/    → radio_system.tscn (as 19 falas como dados)
 ├── levels/     → cenas de labirinto/nível
 ├── cockpit/    → command_panel.tscn + screens/ (conteúdo 2D de cada tela)
-└── ui/         → teclado, HUD, textos, fim de partida
+└── ui/         → HUD, textos, fim de partida, pause_menu, options_panel, info_panel
 resources/
 ├── maze_configs/ → labirintos escritos à mão
-└── ui/           → cockpit_theme.tres (tema das telas do painel)
+└── ui/           → cockpit_theme.tres (telas do painel) e menu_theme.tres (menus)
+tools/            → telemetry_report.py
 ```
 
 ## 5. Sistema de Movimentação (Painel de Botões)
@@ -111,7 +118,7 @@ Notas técnicas:
 **Em pé (WALKING):** `Player` (`CharacterBody3D`) com WASD + mouse-look e mouse capturado. Um `RayCast3D` (camada 2) a partir da câmera aciona o `Interactable` sob a mira com o clique esquerdo. A HUD 2D (`FirstPersonHud`) mostra só a mira e o prompt.
 
 **Sentado (NAVIGATING):** `Interactable.ENTER_NAVIGATION` (cadeira/painel) → `EventBus.request_enter_navigation` → o `Player` anima a câmera até o `SeatView` (tween de 0,6 s). Ao fim da animação, `_seated = true` e emite `navigation_mode_changed(true)`.
-- **Mira + mouse-look sentado (2026-11-12, substitui o cursor livre com edge-pan):** o mouse continua capturado. Em `_input`, o movimento acumula em `_seat_look` (radianos, yaw ±`SEAT_YAW_RANGE` = 40°, pitch de −`SEAT_PITCH_DOWN` = −20° a +`SEAT_PITCH_UP` = 50°; medidos a partir do `SeatView`: knob do alarme a 29,5° de lado/26° acima, mostradores a ~30° de lado, centro do monitor a 42° acima) e a câmera é `seat_view * Basis(pitch, yaw) + balanço da manobra + tranco`. A cada frame, `_update_panel_hover()` relança a mira (centro da tela) como `InputEventMouseMotion` sintético por `_forward_to_panel`, mantendo o hover certo mesmo quando a câmera se move sem mouse (balanço). O clique esquerdo é duplicado com `position` no centro e repassado. Esc libera o cursor, e o próximo clique só recaptura. O prompt vem de `PanelButton3D.get_prompt()` (`PROMPTS` por ação, vazio se travada); a `FirstPersonHud` fica visível sentada, mas só tinge a mira (o texto cobriria as teclas vizinhas).
+- **Mira + mouse-look sentado (2026-11-12, substitui o cursor livre com edge-pan; desde 2026-11-16 o Esc abre a pausa em vez de só liberar o cursor, §7.5):** o mouse continua capturado. Em `_input`, o movimento acumula em `_seat_look` (radianos, yaw ±`SEAT_YAW_RANGE` = 40°, pitch de −`SEAT_PITCH_DOWN` = −20° a +`SEAT_PITCH_UP` = 50°; medidos a partir do `SeatView`: knob do alarme a 29,5° de lado/26° acima, mostradores a ~30° de lado, centro do monitor a 42° acima) e a câmera é `seat_view * Basis(pitch, yaw) + balanço da manobra + tranco`. A cada frame, `_update_panel_hover()` relança a mira (centro da tela) como `InputEventMouseMotion` sintético por `_forward_to_panel`, mantendo o hover certo mesmo quando a câmera se move sem mouse (balanço). O clique esquerdo é duplicado com `position` no centro e repassado. Esc libera o cursor, e o próximo clique só recaptura. O prompt vem de `PanelButton3D.get_prompt()` (`PROMPTS` por ação, vazio se travada); a `FirstPersonHud` fica visível sentada, mas só tinge a mira (o texto cobriria as teclas vizinhas).
 - **Entrada no painel:** em `_input`, todo `InputEventMouseMotion`/`InputEventMouseButton` vira um raio da câmera (`project_ray_origin/normal`) na camada `PanelScreen.PANEL_LAYER` (layer 4, só áreas). O nó pai da área atingida recebe o evento via `forward_mouse(event, world_position)`. Pode ser uma `PanelScreen` ou uma `PanelButton3D`, e o `Player` só exige esse método (*duck typing*). Trocar de controle chama `release_hover()` no anterior. Soltar o botão sempre vai para o controle onde ele foi pressionado (interseção com o plano dele), senão uma tecla ficaria presa ao arrastar para fora. Clique direito (`exit_navigation`) levanta.
 - Raycast próprio em vez de `physics_object_picking`: o picking da Godot atinge qualquer `CollisionObject3D` pickable (colisões da cabine, outros `Interactable`), e a máscara dedicada evita esse conflito.
 
@@ -186,7 +193,17 @@ WON/LOST ──request_restart──────▶ PLAYING (recarrega a cena)
 ### 7.4 UI de estado
 
 - `scenes/ui/oxygen_gauge.tscn` (`OxygenGauge`): `Label` "O₂ atual / máximo" + `ProgressBar`. Muda para a cor de alerta (vermelho) em ≤ 25% do máximo. **Sem uso desde 2026-11-16** (o `SystemsMonitor` desenha a própria barra); candidato a remoção. O mostrador analógico de O₂ (`gauge_dial.gd`) lê os mesmos sinais.
-- `scenes/ui/game_over_screen.tscn` (`GameOverScreen`, tela cheia, oculta por padrão): escurece a tela e mostra título/subtítulo de vitória ou derrota e o botão "Tentar novamente", que emite `request_restart`.
+- `scenes/ui/game_over_screen.tscn` (`GameOverScreen`, tela cheia, oculta por padrão): escurece a tela e mostra título/subtítulo de vitória ou derrota e os botões "Tentar novamente" (`request_restart`) e "Menu principal" (`request_main_menu`).
+
+### 7.5 Fluxo de cenas, pausa e opções (2026-11-16)
+
+- **`SceneFlow`** (autoload, `PROCESS_MODE_ALWAYS`): escuta `request_new_game`/`request_restart` (→ `main.tscn`), `request_main_menu` (→ `main_menu.tscn`) e `request_quit`. Sequência: pausa a árvore → cortina preta (`CanvasLayer` 100) em 0,45 s → `session_ended` → `change_scene_to_file` → 2 frames → despausa → clareia em 0,9 s. A cortina bloqueia cliques durante a troca.
+- **`GameState`** não troca mais de cena: zera o estado em `session_ended` (com a tela já preta). Não zera no pedido, para que a `RunTelemetry` ainda leia O₂/casco ao registrar um abandono (ela escuta os `request_*`).
+- **`session_ended`** também faz o `AudioManager` parar todos os seus players de jogo (sirene e bipe ficariam tocando, porque o `AlarmSystem` some sem emitir `alarm_stopped`), zerar a tensão, desmutar o bus `Alarm` e restaurar a cama de ambiente.
+- **Pausa** (`PauseMenu`, `scenes/ui/pause_menu.tscn`, último filho de `UI`, `PROCESS_MODE_ALWAYS`): ação de input `pause` (Esc) em `_unhandled_input` → `get_tree().paused = true`, cursor visível, `game_paused(true)`. O `AudioManager` roda sempre, então ele mesmo congela os efeitos (`stream_paused`) e mantém o ambiente. `RadioSystem` (voz e estática) pausa com a árvore. Os timers de jogo (`RadioSystem`, `GameOverScreen` e o chamado distante do `AudioManager`) usam `create_timer(t, false)`, que não corre durante a pausa. Ao continuar, recaptura o mouse se a partida segue. O `Player` não trata mais `ui_cancel`. O `NoteViewer` consome o Esc antes (`_input`).
+- **`Settings`** (autoload): `master/voice/effects/ambience_volume` (0..1), `mouse_sensitivity` (multiplicador), `subtitles`, `fullscreen`, em `user://settings.cfg` (`ConfigFile`). `set_value(key, value)` salva e emite `settings_changed`. Quem aplica: `AudioManager` (único que mexe no `AudioServer`: Master, Radio, SFX+Alarm+Distant, Ambience; no Ambience o volume é `volume do jogador + _duck_db`, o abafamento durante as falas, que antes escrevia direto no volume do bus), `Player._sensitivity()`, `RadioSubtitles` (`visible`) e o próprio `Settings` (modo da janela).
+- **UI:** `OptionsPanel` e `InfoPanel` (`class_name`, montados em código, tema `menu_theme.tres`) são reutilizados pelo menu principal e pela pausa. `MainMenu` desenha o fundo de sonar em `_draw()` do nó `Backdrop`.
+- **Sinais novos:** `request_new_game`, `request_main_menu`, `request_quit`, `game_paused(paused)`, `session_ended`, `settings_changed`.
 - As teclas `PanelButton3D` se desabilitam ao receber `game_over`.
 
 ## 8. Labirinto (MazeGrid)
@@ -319,7 +336,7 @@ Implementado. Ver GDD §6 e `docs/roteiro-radio.md`.
 ### 12.1 Telemetria de playtest (`RunTelemetry`)
 
 - `scripts/systems/run_telemetry.gd`, nó `RunTelemetry` na `Main` (consumidor do `LevelSetup`, `enemy` → `MazeDebug/Enemy`). Só **observa**: escuta o `EventBus` e lê `enemy.state`/`is_calm()` para registrar.
-- **Saída:** pelo editor, em `res://telemetry/` (com `.gdignore` criado automaticamente, para o Godot não importar os CSVs como traduções; pasta no `.gitignore`); num build exportado, em `user://telemetry/`. Desligada em `--headless`, para os testes automáticos não sujarem a estatística. O caminho sai no console: `[Telemetria] gravando em ...`.
+- **Saída:** pelo editor, em `res://telemetry/` (com `.gdignore` criado automaticamente, para o Godot não importar os CSVs como traduções; pasta no `.gitignore`); num build exportado, em `user://telemetry/`. Desligada em `--headless` e em scripts `--script`, para os testes automáticos não sujarem a estatística nem tocarem nos CSVs do playtest. O tempo registrado é tempo de jogo (`_process`, não conta a pausa). O abandono pelo menu de pausa é registrado no `request_*`, antes de o `GameState` zerar. O caminho sai no console: `[Telemetria] gravando em ...`.
 - `runs.csv`: uma linha por partida (data, seed, resultado `VITORIA`/`CRIATURA`/`OXIGENIO`/`ABANDONO`, duração, contagem de ações por tipo, O₂ e casco finais, golpes, detecções, cargas, hesitações, menor distância da criatura, ações com ela a ≤ 4, caminho ótimo, distância da saída no fim, casas visitadas, ação em que a calma acabou, falas do rádio tocadas). Fechar no meio vira `ABANDONO` (`_exit_tree`).
 - `run_<data>_<hora>.csv`: uma linha por evento (ação, eco, carga, hesitação, golpe, mudança de estado da criatura, alarme, rádio, fim), com posição, distância da saída, O₂, casco, distância e estado da criatura. Como a criatura se conecta antes no `EventBus`, a linha de uma ação já mostra o estado **depois** do turno dela.
 - Formato: separador `;` e vírgula decimal (abre direto em planilha pt-BR).
@@ -353,3 +370,4 @@ Implementado. Ver GDD §6 e `docs/roteiro-radio.md`.
 - **2026-11-16 — Rodada 2 de balanceamento (R1–R5):** `Enemy`: `CALM_TURNS` (15) + `is_calm()`, `INITIAL_SPAWN_DISTANCE` (14), `_pick_far_cell(from, min_distance)`, `CHARGE_RADIUS` (3,0) separado do raio de detecção, `_has_hesitated` (a primeira encostada sempre hesita), `ATTACK_CHANCE` 0,4 → 0,3, e a conexão com `capsule_rotated` removida (girar não dá turno). `GameState.MAX_OXYGEN` 200 → 240. Teste headless atualizado (o turno de teste agora é `capsule_collided`) e com casos para R1–R4: tudo passou (ataque encostada 29% em 2000 turnos). Ver §9.
 - **2026-11-16 — Mostradores padronizados:** `gauge_dial.gd` desenha a faixa vermelha em 0,75–1,0 do arco para os dois tipos, e o O₂ usa a posição `1 − nível`. Os valores e sinais não mudaram.
 - **2026-11-16 — Falas 14–19 e telemetria:** `RadioSystem` ganhou 6 `RadioLine` (`o2_monitor`, `interference`, `first_hit`, `hull_critical`, `sonar_charge`, `stalk`) e os gatilhos: 3ª manobra concluída, primeira proximidade > 0, `capsule_attacked` (+1,5 s; casco 1 → `hull_critical`), `enemy_charging` (só depois de `first_enemy` terminar) e `enemy_hesitated`. Áudios em `assets/audio/radio/`. Legendas com reticências duplicadas reduzidas a uma. Novos sinais `enemy_charging`/`enemy_hesitated`. Novo `RunTelemetry` + `tools/telemetry_report.py` (§12.1) e `LevelSetup.seed_used`. Testado: 40 ações simuladas em janela geraram os dois CSVs, e as falas `intro`/`o2_monitor` tocaram na ordem certa. O teste headless da criatura continua passando e não gera telemetria.
+- **2026-11-16 — Menus, pausa, opções e fluxo de cenas:** novos autoloads `Settings` e `SceneFlow`. Cena inicial passou a ser `scenes/menu/main_menu.tscn`. Novos `PauseMenu`, `OptionsPanel`, `InfoPanel` e tema `menu_theme.tres`; `GameOverScreen` ganhou "Menu principal"; ação de input `pause` (Esc). `GameState` deixou de recarregar a cena (zera em `session_ended`). `AudioManager` aplica volumes, congela na pausa e limpa no fim de sessão; o abafamento do ambiente virou um deslocamento sobre o volume do jogador. Timers de jogo agora são pausáveis. A `RunTelemetry` ignora `--script`, usa tempo de jogo e registra o abandono pelo menu. Testado em janela (menu → novo jogo → pausa → opções → menu, com screenshots) e com o teste headless da criatura. Ver §7.5.
