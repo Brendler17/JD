@@ -18,6 +18,7 @@
 [ext_resource type="PackedScene" path="res://scenes/systems/radio_system.tscn" id="16_radio"]
 [ext_resource type="PackedScene" path="res://scenes/ui/radio_subtitles.tscn" id="17_subs"]
 [ext_resource type="Script" path="res://scripts/systems/caught_sequence.gd" id="18_caught"]
+[ext_resource type="Script" path="res://scripts/systems/run_telemetry.gd" id="19_telemetry"]
 
 [sub_resource type="Environment" id="Env_cabin"]
 background_mode = 1
@@ -79,7 +80,7 @@ size = Vector2(60, 60)
 
 [node name="Main" type="Node3D" unique_id=351303188]
 script = ExtResource("1_setup")
-maze_consumers = Array[NodePath]([NodePath("MazeDebug/MazeBuilder"), NodePath("MazeDebug/Capsule"), NodePath("MazeDebug/Enemy"), NodePath("CommandPanel"), NodePath("RadioSystem")])
+maze_consumers = Array[NodePath]([NodePath("MazeDebug/MazeBuilder"), NodePath("MazeDebug/Capsule"), NodePath("MazeDebug/Enemy"), NodePath("CommandPanel"), NodePath("RadioSystem"), NodePath("RunTelemetry")])
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2091719769]
 environment = SubResource("Env_cabin")
@@ -312,6 +313,10 @@ cabin_lights = NodePath("../CabinLights")
 alarm_light = NodePath("../CabinLights/AlarmLight")
 command_panel = NodePath("../CommandPanel")
 world_environment = NodePath("../WorldEnvironment")
+
+[node name="RunTelemetry" type="Node" parent="." node_paths=PackedStringArray("enemy")]
+script = ExtResource("19_telemetry")
+enemy = NodePath("../MazeDebug/Enemy")
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=357913331]
 

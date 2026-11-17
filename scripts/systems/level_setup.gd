@@ -17,6 +17,9 @@ extends Node3D
 @export var maze_consumers: Array[NodePath] = []
 
 var maze: MazeGrid
+## Semente usada nesta partida (0 = labirinto fixo). Lida pela telemetria, para
+## dar para repetir um labirinto problemático colocando-a em `fixed_seed`.
+var seed_used := 0
 
 
 func _enter_tree() -> void:
@@ -24,6 +27,7 @@ func _enter_tree() -> void:
 		maze = fixed_maze
 	else:
 		var rng_seed := fixed_seed if fixed_seed != 0 else randi()
+		seed_used = rng_seed
 		maze = MazeGenerator.generate(maze_size, rng_seed, loop_chance)
 	for path in maze_consumers:
 		get_node(path).maze = maze
