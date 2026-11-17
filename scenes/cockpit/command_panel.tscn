@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" path="res://scenes/cockpit/screens/oxygen_dial.tscn" id="5_o2"]
 [ext_resource type="PackedScene" path="res://scenes/cockpit/screens/interference_dial.tscn" id="6_interf"]
 [ext_resource type="PackedScene" path="res://scenes/cockpit/screens/status_monitor.tscn" id="7_monitor"]
+[ext_resource type="PackedScene" path="res://scenes/cockpit/screens/systems_monitor.tscn" id="9_systems"]
 
 [sub_resource type="StandardMaterial3D" id="Mat_plate"]
 albedo_color = Color(0.09, 0.1, 0.1, 1)
@@ -103,6 +104,13 @@ content = ExtResource("7_monitor")
 size = Vector2(1.3, 0.76)
 resolution = Vector2i(1024, 600)
 brightness = 1.2
+
+[node name="SystemsMonitor" type="Node3D" parent="."]
+transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 1.6, 0.38, -0.596)
+script = ExtResource("2_screen")
+content = ExtResource("9_systems")
+size = Vector2(0.944, 0.59)
+resolution = Vector2i(1024, 640)
 
 [node name="AlarmMuteKnob" type="Node3D" parent="."]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0.858, 0.687, -0.575)

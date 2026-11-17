@@ -1,7 +1,11 @@
 extends Control
 ## Mostrador analógico redondo, desenhado em _draw() para cobrir os relógios
 ## brancos do painel amarelo. Um ponteiro varre um arco de 270º.
-##   OXYGEN       → nível de O₂ (oxygen_changed); faixa vermelha nos 25% finais.
+## Padrão dos dois mostradores: **perigo sempre à direita** (faixa vermelha no fim
+## do arco), para o jogador ler os dois do mesmo jeito: ponteiro no vermelho = risco.
+##   OXYGEN       → nível de O₂ (oxygen_changed), com a escala invertida: tanque
+##                  cheio à esquerda, ponteiro sobe para o vermelho (últimos 25%)
+##                  conforme o ar acaba.
 ##   INTERFERENCE → proximidade do inimigo (enemy_proximity_changed); o ponteiro
 ##                  treme mais quanto mais perto, como um sensor sob interferência.
 ## "Dumb UI": só reflete sinais do EventBus.
@@ -58,10 +62,8 @@ func _draw() -> void:
 	draw_circle(center, radius, FACE_COLOR)
 	draw_arc(center, radius - 1.0, 0.0, TAU, 64, INK_COLOR, 3.0)
 
-	# Faixa de perigo: fim da escala para O₂ (pouco ar), início alto para interferência.
-	var danger_from := 0.0 if kind == Kind.OXYGEN else 0.75
-	var danger_to := LOW_OXYGEN_RATIO if kind == Kind.OXYGEN else 1.0
-	draw_arc(center, radius * 0.78, _angle(danger_from), _angle(danger_to), 24, DANGER_COLOR, radius * 0.1)
+	# Faixa de perigo no fim do arco nos dois mostradores (O₂ ≤ 25% ↔ posição ≥ 0,75).
+	draw_arc(center, radius * 0.78, _angle(1.0 - LOW_OXYGEN_RATIO), _angle(1.0), 24, DANGER_COLOR, radius * 0.1)
 
 	for i in 11:
 		var t := i / 10.0
@@ -73,7 +75,8 @@ func _draw() -> void:
 	var font_size := int(radius * 0.22)
 	draw_string(font, center + Vector2(-radius, radius * 0.45), caption, HORIZONTAL_ALIGNMENT_CENTER, radius * 2.0, font_size, INK_COLOR)
 
-	var value := _shown
+	# O₂ invertido: cheio (1) fica à esquerda (posição 0).
+	var value := 1.0 - _shown if kind == Kind.OXYGEN else _shown
 	if kind == Kind.INTERFERENCE and _shown > 0.02:
 		value += sin(_time * 37.0) * 0.04 * _shown + sin(_time * 13.0) * 0.02 * _shown
 	var needle_dir := Vector2.from_angle(_angle(clampf(value, 0.0, 1.02)))

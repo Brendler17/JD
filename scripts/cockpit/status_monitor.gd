@@ -1,26 +1,23 @@
 extends Control
-## Monitor superior do posto de comando (tela vermelha da demo): registro de
-## eventos da navegação (log rolando), oxigênio numérico e tabela de custos.
+## Monitor superior do posto de comando (tela vermelha da demo): só o registro
+## de eventos da navegação (log rolando), em fonte grande para ler do assento.
+## O₂, casco e custos ficam no monitor lateral (SystemsMonitor).
 ## Substitui o texto de status do antigo NavigationConsole 2D. "Dumb UI".
 
 ## Quantas linhas do registro ficam visíveis.
 const MAX_LOG_LINES := 10
 
 @onready var _log_label: Label = %LogLabel
-@onready var _costs_label: Label = %CostsLabel
 
 var _lines: Array[String] = []
 var _step := 0
 
 
 func _ready() -> void:
-	_costs_label.text = "CUSTO DE O₂\nMOVER ..... %d\nGIRAR ..... %d\nSONAR ..... %d\nCOLISÃO ... %d" % [
-		GameState.OXYGEN_COST_MOVE, GameState.OXYGEN_COST_ROTATE,
-		GameState.OXYGEN_COST_SONAR, GameState.OXYGEN_COST_COLLISION,
-	]
 	_log("SISTEMAS PRONTOS.")
 	_log("SAÍDA MARCADA EM VERDE NO SONAR.")
 
+	EventBus.capsule_attacked.connect(_on_capsule_attacked)
 	EventBus.capsule_moved.connect(_on_capsule_moved)
 	EventBus.capsule_rotated.connect(_on_capsule_rotated)
 	EventBus.capsule_collided.connect(_on_capsule_collided)
@@ -32,6 +29,10 @@ func _ready() -> void:
 		_log("ALARME SILENCIADO (LUZ MANTIDA)." if muted else "ALARME REARMADO."))
 	EventBus.radio_line_started.connect(func(_id: StringName, _text: String, _duration: float) -> void:
 		_log(">> TRANSMISSÃO RECEBIDA — SUPERFÍCIE"))
+
+
+func _on_capsule_attacked(hull_left: int) -> void:
+	_log("!! GOLPE NO CASCO — INTEGRIDADE %d/%d" % [hull_left, GameState.MAX_HULL])
 
 
 func _on_capsule_moved(new_position: Vector2i, _direction: Vector2i) -> void:
@@ -69,7 +70,7 @@ func _on_game_over(won: bool) -> void:
 	if won:
 		_log("SAÍDA ALCANÇADA.")
 	elif GameState.end_reason == GameState.EndReason.CAUGHT:
-		_log("!! CONTATO COM O CASCO")
+		_log("!! CASCO ROMPIDO")
 	else:
 		_log("!! OXIGÊNIO ESGOTADO")
 
