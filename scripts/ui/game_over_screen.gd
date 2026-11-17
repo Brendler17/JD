@@ -1,7 +1,7 @@
 extends Control
 ## Tela de fim de partida (vitória/derrota). Fica oculta até EventBus.game_over;
-## o botão "Tentar novamente" apenas emite a intenção request_restart,
-## e quem reinicia de fato é o GameState.
+## os botões só emitem intenções ("Tentar novamente" → request_restart,
+## "Menu principal" → request_main_menu); quem troca a cena é o SceneFlow.
 ## Se o rádio está ocupado no fim (a fala final do comandante é o desfecho da
 ## história), a tela espera ele terminar (radio_busy_changed) antes de aparecer,
 ## com um limite de segurança. Um clique antecipa a tela.
@@ -15,6 +15,7 @@ const FADE_TIME := 0.6
 @onready var _title_label: Label = %TitleLabel
 @onready var _subtitle_label: Label = %SubtitleLabel
 @onready var _retry_button: Button = %RetryButton
+@onready var _menu_button: Button = %MenuButton
 
 var _radio_busy := false
 ## game_over já aconteceu e a tela ainda não apareceu.
@@ -26,6 +27,7 @@ func _ready() -> void:
 	EventBus.game_over.connect(_on_game_over)
 	EventBus.radio_busy_changed.connect(_on_radio_busy_changed)
 	_retry_button.pressed.connect(EventBus.request_restart.emit)
+	_menu_button.pressed.connect(EventBus.request_main_menu.emit)
 
 
 func _on_game_over(won: bool) -> void:
@@ -47,14 +49,14 @@ func _reveal_when_radio_free() -> void:
 	if not _radio_busy:
 		_reveal()
 		return
-	get_tree().create_timer(MAX_RADIO_WAIT).timeout.connect(_reveal)
+	get_tree().create_timer(MAX_RADIO_WAIT, false).timeout.connect(_reveal)
 
 
 func _on_radio_busy_changed(busy: bool) -> void:
 	_radio_busy = busy
 	# O RadioSystem avisa "livre" ao sair da árvore no reinício: aí não há o que mostrar.
 	if not busy and _pending and is_inside_tree():
-		get_tree().create_timer(AFTER_RADIO_DELAY).timeout.connect(_reveal)
+		get_tree().create_timer(AFTER_RADIO_DELAY, false).timeout.connect(_reveal)
 
 
 func _unhandled_input(event: InputEvent) -> void:

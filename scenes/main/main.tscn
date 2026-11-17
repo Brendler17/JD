@@ -19,6 +19,7 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/radio_subtitles.tscn" id="17_subs"]
 [ext_resource type="Script" path="res://scripts/systems/caught_sequence.gd" id="18_caught"]
 [ext_resource type="Script" path="res://scripts/systems/run_telemetry.gd" id="19_telemetry"]
+[ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="20_pause"]
 
 [sub_resource type="Environment" id="Env_cabin"]
 background_mode = 1
@@ -327,3 +328,5 @@ enemy = NodePath("../MazeDebug/Enemy")
 [node name="GameOverScreen" parent="UI" unique_id=886079004 instance=ExtResource("12_gameover")]
 
 [node name="RadioSubtitles" parent="UI" instance=ExtResource("17_subs")]
+
+[node name="PauseMenu" parent="UI" instance=ExtResource("20_pause")]
