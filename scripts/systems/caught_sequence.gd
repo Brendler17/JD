@@ -1,5 +1,6 @@
 extends Node
 ## Sequência de "CONTATO" (derrota pela criatura): o ataque, depois o apagão.
+## (Vitória e falta de oxigênio têm as próprias cenas, em EndingSequence.)
 ## Só apresentação; dispara em game_over quando GameState.end_reason == CAUGHT.
 ##   0,0 s  golpe forte (cabin_impact 1.0): tranco de câmera, impacto, rugido.
 ##   0–2,4 s luzes da cabine falham, telas e rótulos do painel piscam, luz de alarme estroboscópica.
@@ -33,14 +34,10 @@ const HIT_FAILING := 0.45
 var _time := -1.0
 ## Golpe não letal em andamento (senão, é a sequência de contato).
 var _hit := false
-var _collected := false
 var _flicker_timer := 0.0
 var _second_impact_done := false
-var _lights: Array[Light3D] = []
-var _base_energy := {}
-var _screens: Array[PanelScreen] = []
-## Rótulos 3D das teclas e do knob (sem sombreamento: brilhariam no escuro).
-var _labels: Array[Label3D] = []
+## Luzes, telas e rótulos da cabine (coletados no primeiro uso).
+var _fx: CabinFx
 
 
 func _ready() -> void:
@@ -72,18 +69,8 @@ func _on_game_over(won: bool) -> void:
 
 
 func _collect() -> void:
-	if _collected:
-		return
-	_collected = true
-	for node in cabin_lights.get_children():
-		if node is Light3D and node != alarm_light:
-			_lights.append(node)
-			_base_energy[node] = (node as Light3D).light_energy
-	for node in command_panel.find_children("*", "", true, false):
-		if node is PanelScreen:
-			_screens.append(node)
-		elif node is Label3D:
-			_labels.append(node)
+	if _fx == null:
+		_fx = CabinFx.collect(cabin_lights, alarm_light, command_panel)
 
 
 func _process(delta: float) -> void:
@@ -107,17 +94,12 @@ func _process(delta: float) -> void:
 	_flicker_timer = randf_range(FLICKER_INTERVAL.x, FLICKER_INTERVAL.y)
 	# A falha piora ao longo do ataque: no fim, quase tudo fica apagado.
 	var failing := 0.3 + 0.6 * (_time / ATTACK_TIME)
-	for light in _lights:
-		light.light_energy = 0.0 if randf() < failing else _base_energy[light] * randf_range(0.4, 1.7)
-	for screen in _screens:
-		screen.power = 0.05 if randf() < failing else randf_range(0.6, 1.5)
-	for label in _labels:
-		label.visible = randf() >= failing
+	_fx.flicker(failing, Vector2(0.4, 1.7), Vector2(0.6, 1.5))
 
 
 func _process_hit(delta: float) -> void:
 	if _time >= HIT_TIME:
-		_restore()
+		_fx.restore()
 		set_process(false)
 		return
 	_flicker_timer -= delta
@@ -126,30 +108,11 @@ func _process_hit(delta: float) -> void:
 	_flicker_timer = randf_range(FLICKER_INTERVAL.x, FLICKER_INTERVAL.y)
 	# A falha diminui conforme os sistemas se recuperam.
 	var failing := HIT_FAILING * (1.0 - _time / HIT_TIME)
-	for light in _lights:
-		light.light_energy = 0.0 if randf() < failing else _base_energy[light] * randf_range(0.6, 1.4)
-	for screen in _screens:
-		screen.power = 0.1 if randf() < failing else randf_range(0.7, 1.3)
-	for label in _labels:
-		label.visible = randf() >= failing
-
-
-func _restore() -> void:
-	for light in _lights:
-		light.light_energy = _base_energy[light]
-	for screen in _screens:
-		screen.power = 1.0
-	for label in _labels:
-		label.visible = true
+	_fx.flicker(failing, Vector2(0.6, 1.4), Vector2(0.7, 1.3), 0.1)
 
 
 func _blackout() -> void:
-	for light in _lights:
-		light.light_energy = 0.0
-	for screen in _screens:
-		screen.power = 0.0
-	for label in _labels:
-		label.visible = false
+	_fx.blackout()
 	if alarm_light:
 		alarm_light.light_energy = 0.0
 	if world_environment and world_environment.environment:
@@ -158,13 +121,14 @@ func _blackout() -> void:
 		world_environment.environment = world_environment.environment.duplicate()
 		create_tween().tween_property(world_environment.environment, "ambient_light_energy", DARK_AMBIENT, 0.5)
 	# Um último suspiro: a luz de teto tenta voltar, fraca, e morre.
-	if not _lights.is_empty():
-		var light := _lights[0]
+	if not _fx.lights.is_empty():
+		var light := _fx.lights[0]
+		var base: float = _fx.base_energy[light]
 		var tween := create_tween()
 		tween.tween_interval(LAST_FLICKER_DELAY)
-		tween.tween_property(light, "light_energy", _base_energy[light] * 0.35, 0.05)
+		tween.tween_property(light, "light_energy", base * 0.35, 0.05)
 		tween.tween_interval(0.08)
 		tween.tween_property(light, "light_energy", 0.0, 0.04)
 		tween.tween_interval(0.12)
-		tween.tween_property(light, "light_energy", _base_energy[light] * 0.2, 0.04)
+		tween.tween_property(light, "light_energy", base * 0.2, 0.04)
 		tween.tween_property(light, "light_energy", 0.0, 0.3)

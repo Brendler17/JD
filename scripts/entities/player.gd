@@ -50,6 +50,12 @@ var mode: Mode = Mode.WALKING
 var _gravity: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var _current_prompt := ""
 var _shake_strength := 0.0
+## Cenas de fim (camera_drift / cabin_rumble): inclinação persistente da câmera
+## e vibração contínua, além do tranco (_kick) que decai sozinho.
+var _drift := Vector3.ZERO
+var _drift_tween: Tween
+var _rumble := 0.0
+var _rumble_tween: Tween
 var _seat_tween: Tween
 ## Sentado e com a câmera já no posto (fim da animação de sentar).
 var _seated := false
@@ -84,6 +90,8 @@ func _ready() -> void:
 	EventBus.maneuver_started.connect(_on_maneuver_started)
 	EventBus.game_over.connect(_on_game_over)
 	EventBus.cabin_impact.connect(_on_cabin_impact)
+	EventBus.camera_drift.connect(_on_camera_drift)
+	EventBus.cabin_rumble.connect(_on_cabin_rumble)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -137,7 +145,7 @@ func _process(delta: float) -> void:
 		_update_seat_look()
 		_update_panel_hover()
 	elif not (_seat_tween and _seat_tween.is_running()):
-		_camera.transform = _camera_rest * Transform3D(Basis.from_euler(_kick), Vector3.ZERO)
+		_camera.transform = _camera_rest * Transform3D(Basis.from_euler(_kick + _drift), Vector3.ZERO)
 
 
 func _on_maneuver_started(kind: StringName, duration: float) -> void:
@@ -227,7 +235,7 @@ func _exit_navigation() -> void:
 
 ## Olhar sentado: ângulos do mouse-look + balanço da manobra + tranco de golpe.
 func _update_seat_look() -> void:
-	var look := Vector3(_seat_look.y, _seat_look.x, 0.0) + _maneuver_tilt + _kick
+	var look := Vector3(_seat_look.y, _seat_look.x, 0.0) + _maneuver_tilt + _kick + _drift
 	_camera.global_transform = seat_view.global_transform * Transform3D(Basis.from_euler(look), Vector3.ZERO)
 
 
@@ -324,9 +332,23 @@ func _on_cabin_impact(strength: float) -> void:
 
 
 func _update_shake(delta: float) -> void:
-	_shake_strength = move_toward(_shake_strength, 0.0, delta * 0.15)
+	_shake_strength = maxf(move_toward(_shake_strength, 0.0, delta * 0.15), _rumble)
 	_camera.h_offset = randf_range(-1.0, 1.0) * _shake_strength
 	_camera.v_offset = randf_range(-1.0, 1.0) * _shake_strength
+
+
+func _on_camera_drift(offset: Vector3, duration: float) -> void:
+	if _drift_tween:
+		_drift_tween.kill()
+	_drift_tween = create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	_drift_tween.tween_property(self, "_drift", offset, maxf(duration, 0.01))
+
+
+func _on_cabin_rumble(strength: float, duration: float) -> void:
+	if _rumble_tween:
+		_rumble_tween.kill()
+	_rumble_tween = create_tween()
+	_rumble_tween.tween_property(self, "_rumble", strength, maxf(duration, 0.01))
 
 
 ## Sensibilidade base × multiplicador das opções.

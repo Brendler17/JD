@@ -25,6 +25,9 @@ func _ready() -> void:
 	EventBus.enemy_detected.connect(_on_enemy_detected)
 	EventBus.alarm_started.connect(_on_alarm_started)
 	EventBus.game_over.connect(_on_game_over)
+	EventBus.ascent_started.connect(func() -> void: _log("CABO DE RESGATE TRAVADO — SUBIDA INICIADA"))
+	EventBus.ascent_depth_changed.connect(func(depth_m: int) -> void:
+		_log("SUBINDO — PROFUNDIDADE %s m" % _thousands(depth_m)))
 	EventBus.alarm_muted_changed.connect(func(muted: bool) -> void:
 		_log("ALARME SILENCIADO (LUZ MANTIDA)." if muted else "ALARME REARMADO."))
 	EventBus.radio_line_started.connect(func(_id: StringName, _text: String, _duration: float) -> void:
@@ -73,6 +76,7 @@ func _on_game_over(won: bool) -> void:
 		_log("!! CASCO ROMPIDO")
 	else:
 		_log("!! OXIGÊNIO ESGOTADO")
+		_log("!! SUPORTE DE VIDA DESLIGADO")
 
 
 ## Depois do fim, a ação que encerrou a partida pode chegar depois de game_over.
@@ -86,3 +90,9 @@ func _log(text: String) -> void:
 	while _lines.size() > MAX_LOG_LINES:
 		_lines.pop_front()
 	_log_label.text = "\n".join(_lines)
+
+
+## 4000 → "4.000" (separador de milhar em pt-BR).
+func _thousands(value: int) -> String:
+	var text := str(value)
+	return text if text.length() <= 3 else "%s.%s" % [text.substr(0, text.length() - 3), text.substr(text.length() - 3)]

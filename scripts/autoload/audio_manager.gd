@@ -36,6 +36,13 @@ const RADIO_DUCK_DB := -6.0
 ## Derrota por contato: o ambiente morre junto com a cápsula (e volta no reinício).
 const CAUGHT_SILENCE_DELAY := 2.0
 const CAUGHT_SILENCE_FADE := 2.0
+## Falta de oxigênio: o som some devagar, junto com a consciência (cena de fim).
+const OXYGEN_SILENCE_DELAY := 2.5
+const OXYGEN_SILENCE_FADE := 9.0
+## Vitória: ronco grave da subida (o motor, mais lento e em laço).
+const ASCENT_PITCH := 0.55
+const ASCENT_VOLUME_DB := -6.0
+const ASCENT_FADE_IN := 2.5
 const CRASH := preload("res://assets/audio/sfx/crash.mp3")
 const SONAR := preload("res://assets/audio/sfx/sonar.mp3")
 const METAL := preload("res://assets/audio/sfx/metal.mp3")
@@ -70,6 +77,7 @@ var _caught: AudioStreamPlayer
 var _move: AudioStreamPlayer
 var _rotate: AudioStreamPlayer
 var _move_fade: Tween
+var _ascent: AudioStreamPlayer
 ## Laços do alarme por causa: &"enemy" → sirene, &"low_oxygen" → bipe.
 var _alarm_loops := {}
 ## Abafamento atual do ambiente (dB), somado ao volume do jogador.
@@ -93,6 +101,8 @@ func _ready() -> void:
 	_echo = _make_player(ENEMY_ECHO, &"SFX", -6.0)
 	_caught = _make_player(CAUGHT, &"SFX", 0.0)
 	_move = _make_player(MOVE, &"SFX", MOVE_VOLUME_DB)
+	_ascent = _make_player(MOVE, &"SFX", -40.0, true)
+	_ascent.pitch_scale = ASCENT_PITCH
 	_rotate = _make_player(ROTATE[0], &"SFX", -3.0)
 	_alarm_loops[&"enemy"] = _make_player(SIREN, &"Alarm", -12.0, true)
 	_alarm_loops[&"low_oxygen"] = _make_player(O2_BEEP, &"Alarm", -10.0, true)
@@ -110,6 +120,7 @@ func _ready() -> void:
 	EventBus.alarm_muted_changed.connect(_on_alarm_muted_changed)
 	EventBus.enemy_heard_sonar.connect(_on_enemy_heard_sonar)
 	EventBus.game_over.connect(_on_game_over)
+	EventBus.ascent_started.connect(_on_ascent_started)
 	EventBus.request_restart.connect(_on_request_restart)
 	EventBus.cabin_impact.connect(_on_cabin_impact)
 	EventBus.radio_line_started.connect(func(_id: StringName, _text: String, _duration: float) -> void:
@@ -184,8 +195,18 @@ func _on_enemy_heard_sonar(steps: int) -> void:
 
 func _on_game_over(_won: bool) -> void:
 	_tension_target = 0.0
-	if GameState.end_reason == GameState.EndReason.CAUGHT:
-		_fade_bed(-60.0, CAUGHT_SILENCE_FADE, CAUGHT_SILENCE_DELAY)
+	match GameState.end_reason:
+		GameState.EndReason.CAUGHT:
+			_fade_bed(-60.0, CAUGHT_SILENCE_FADE, CAUGHT_SILENCE_DELAY)
+		GameState.EndReason.OUT_OF_OXYGEN:
+			_fade_bed(-60.0, OXYGEN_SILENCE_FADE, OXYGEN_SILENCE_DELAY)
+
+
+## Vitória: a cápsula começa a ser puxada; o ronco entra devagar e fica até o fim.
+func _on_ascent_started() -> void:
+	_ascent.volume_db = -40.0
+	_ascent.play()
+	create_tween().tween_property(_ascent, "volume_db", ASCENT_VOLUME_DB, ASCENT_FADE_IN)
 
 
 func _on_request_restart() -> void:

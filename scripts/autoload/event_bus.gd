@@ -89,8 +89,20 @@ signal enemy_hesitated(cell: Vector2i)
 
 # --- Apresentação: golpes no casco ---
 ## Algo atingiu a cápsula com força (0..1): câmera dá um tranco, casco estala.
-## Emitido pela sequência de contato (CaughtSequence).
+## Emitido pelas sequências de apresentação (CaughtSequence, EndingSequence).
 signal cabin_impact(strength: float)
+
+# --- Apresentação: cenas de fim de partida (EndingSequence) ---
+## A câmera vai, em `duration` s, para uma inclinação persistente (euler em rad:
+## x = cabeça para cima/baixo, y = lado, z = rolar). Volta com Vector3.ZERO.
+signal camera_drift(offset: Vector3, duration: float)
+## Vibração contínua da cabine (mesma escala do tremor de impacto), atingida em
+## `duration` s e mantida até outro pedido. 0 desliga.
+signal cabin_rumble(strength: float, duration: float)
+## Vitória: o cabo de resgate travou e a cápsula começou a ser puxada para cima.
+signal ascent_started
+## Vitória: profundidade atual da subida, em metros (para o registro do monitor).
+signal ascent_depth_changed(depth_m: int)
 
 # --- Fatos emitidos pelo RadioSystem (rádio do comandante) ---
 ## Uma fala começou. `duration` em segundos (do áudio, ou estimada pelo texto

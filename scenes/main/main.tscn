@@ -20,6 +20,7 @@
 [ext_resource type="Script" path="res://scripts/systems/caught_sequence.gd" id="18_caught"]
 [ext_resource type="Script" path="res://scripts/systems/run_telemetry.gd" id="19_telemetry"]
 [ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="20_pause"]
+[ext_resource type="Script" path="res://scripts/systems/ending_sequence.gd" id="21_ending"]
 
 [sub_resource type="Environment" id="Env_cabin"]
 background_mode = 1
@@ -310,6 +311,13 @@ script = ExtResource("14_alarm")
 
 [node name="CaughtSequence" type="Node" parent="." node_paths=PackedStringArray("cabin_lights", "alarm_light", "command_panel", "world_environment")]
 script = ExtResource("18_caught")
+cabin_lights = NodePath("../CabinLights")
+alarm_light = NodePath("../CabinLights/AlarmLight")
+command_panel = NodePath("../CommandPanel")
+world_environment = NodePath("../WorldEnvironment")
+
+[node name="EndingSequence" type="Node" parent="." node_paths=PackedStringArray("cabin_lights", "alarm_light", "command_panel", "world_environment")]
+script = ExtResource("21_ending")
 cabin_lights = NodePath("../CabinLights")
 alarm_light = NodePath("../CabinLights/AlarmLight")
 command_panel = NodePath("../CommandPanel")
