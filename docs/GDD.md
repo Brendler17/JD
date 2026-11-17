@@ -313,6 +313,15 @@ Tudo vive no painel físico em frente à cadeira, operado com a mira quando o jo
 
 *(A detalhar: usar os outros 3 knobs (ex.: volume do rádio, brilho do sonar). Legendas do rádio: implementadas na base da tela, ver §6.1.)*
 
+### 7.1.1 Cenas de fim de partida (implementado em 2026-11-16)
+
+Cada fim tem uma pequena cena na própria cabine, no mesmo vocabulário do golpe no casco (tranco de câmera, luzes e telas falhando), sincronizada com a fala final do comandante. A tela de fim só aparece depois dela.
+
+- **Contato (criatura):** já existia (§4.5): dois golpes, luzes e telas enlouquecendo, apagão, e o rádio fala no escuro.
+- **Vitória:** o cabo de resgate engata com um tranco leve e as luzes oscilam com a energia nova. No "cabo travado" vem um segundo tranco e a cabine inclina, puxada para cima. Começa a subida: vibração contínua, ronco grave do motor, luzes esquentando e o monitor registrando "SUBINDO — PROFUNDIDADE 3.990 m…", cada vez mais rápido. Termina num clarão quente.
+- **Oxigênio:** o suporte de vida desliga. Luzes e telas entram em queda de energia, a visão escurece pelas bordas e perde a cor, pulsando como um batimento cada vez mais lento, e a cabeça vai pendendo. As telas morrem uma a uma e o som some junto. O "sinal perdido. Preparem a Onze" é dito no escuro total.
+- *Motivo:* pedido do usuário. Antes, vitória e oxigênio mostravam só o painel parado durante a fala final; agora o desfecho é sentido, não só ouvido.
+
 ### 7.2 Menus (implementado em 2026-11-16)
 
 Os menus ficam **fora** da ficção (2D sobre a tela), com o mesmo visual dos monitores da cabine: fundo escuro, âmbar e ferrugem. Toda troca de tela passa por um fade para preto.
@@ -368,3 +377,4 @@ Os menus ficam **fora** da ficção (2D sobre a tela), com o mesmo visual dos mo
 - **2026-11-16 — Telemetria de playtest:** cada partida jogada pelo editor grava um resumo (`telemetry/runs.csv`) e o passo a passo (`run_<data>.csv`: cada ação, a reação da criatura, O₂, casco e distâncias). `python3 tools/telemetry_report.py` mostra a taxa de vitória, as causas de derrota, as médias de vitória x derrota e qual alavanca mexer. Motivo: o usuário venceu com a rodada 2, e a partir daqui o balanceamento precisa de números, não de impressão. Alvo: 40–60% de vitória da 3ª–4ª partida em diante (§4.6.1).
 - **2026-11-16 — Menu principal, pausa e opções:** o jogo agora abre num menu principal com fundo de sonar e tem pausa no Esc e opções salvas (volumes por categoria, sensibilidade, legendas, tela cheia). A tela de fim ganhou "Menu principal". Motivo: pedido do usuário, como passo para o build exportável e os playtests com outras pessoas. Ver §7.2.
 - **2026-11-16 — Créditos definidos:** equipe Gustavo Brendler e Rafael Nunes Siqueira. Só as falas do comandante vêm do sintetizador de IA da equipe (feito com o Google AI Studio). Ambiente, criatura, impactos, sirene e sonar são do Pixabay (Pixabay Content License); motor e rangido, do Freesound (CC0); clique, bipe e estática, síntese procedural. Os do Pixabay ficaram registrados pela busca de origem, sem autor (`assets/audio/CREDITS.md`).
+- **2026-11-16 — Cenas de fim de partida:** vitória (cabo engata, cabine puxada, subida com luzes esquentando e profundidade no monitor, clarão) e falta de oxigênio (queda de energia, visão escurecendo com batimento, cabeça pendendo, telas morrendo, som sumindo), no mesmo estilo do golpe no casco e sincronizadas com a fala final. Ver §7.1.1.
