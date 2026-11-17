@@ -29,6 +29,31 @@
 | 12 | `radio_lost_oxygen` | Derrota por oxigênio | Chamando sem resposta; no fim, frio, falando com alguém na sala | Soturno / Abissal | Cápsula Dez? ... Cápsula Dez, responda. ... Registre. Cápsula Dez, sinal perdido. Preparem a Onze. |
 | 13 | `radio_lost_caught` | Derrota por contato com a criatura | Alarmado, depois em choque, quase sussurrando | Soturno / Abissal | Cápsula Dez, perdemos sua telemetria! Dez? ... Responda... ... Igual às outras. |
 
+## Falas novas — instrumentos e rebalanceamento (2026-11-16, gravadas e implementadas)
+
+> Ensinam as regras novas (casco, sonar perto da criatura, recuo dela) e os instrumentos (monitor de suporte de vida, O₂, interferência) **no momento em que importam**. Seguem as mesmas diretrizes de gravação acima. **Critério:** o rádio explica os **instrumentos** e as **consequências** que o jogador sofreu. Ele **não** narra a IA da criatura durante o encontro (GDD §6.2: explicar demais mata a tensão). A hesitação e o mergulho dela continuam comunicados por som e interferência, não por voz.
+>
+> **Implementado (2026-11-16):** áudios em `assets/audio/radio/` e gatilhos no `RadioSystem`. Prioridade e espera: 14 e 15 são `NORMAL` (esperam até 40 s e 15 s); 16 e 17 são `URGENT` (15 s, tocam 1,5 s depois do tranco); 18 e 19 são `URGENT` com espera curta (4 s), porque só fazem sentido no momento. A 18 só dispara depois de a fala 7 ter terminado.
+>
+> **Legendas:** onde o roteiro tem reticências duplicadas (`... ...`, pausa longa na gravação), a legenda usa **um** `...` só (pedido do usuário, 2026-11-16). O roteiro mantém as duplas porque elas orientam o ritmo da voz.
+
+| # | Arquivo | Quando toca | Tom | Voz no app | Fala |
+|---|---|---|---|---|---|
+| 14 | `radio_o2_monitor` | Após a 3ª manobra concluída (uma vez), depois da fala 3 | Didático, calmo, protocolo | Comando Firme | Cápsula Dez, à sua esquerda fica o monitor de suporte de vida. Ali está o seu oxigênio exato... e quanto cada comando custa. Andar e girar gastam pouco. O sonar gasta quatro vezes mais. Uma batida, oito. O relógio de cima, no painel, mostra o mesmo ar... Quando o ponteiro entrar no vermelho, você está no fim. |
+| 15 | `radio_interference` | Primeira vez que o mostrador INTERF. sai do zero (criatura a ≤ 8 passos) | Tenso; **deslize**: inventa uma explicação e não acredita nela | Tenso / Desconfiado | Cápsula Dez, o relógio de baixo é o de interferência... e ele está subindo. Isso é... só uma corrente forte passando pelo casco. Provavelmente. ... Se o ponteiro continuar subindo, não use o sonar. Afaste-se devagar, até ele voltar a cair. |
+| 16 | `radio_first_hit` | Primeiro golpe **não letal** (casco 3 → 2), ~1,5 s depois do tranco | Alarmado, tenta voltar ao protocolo; **deslize** ("elas sempre recuam") | Urgência / Alerta | Cápsula Dez! Registramos um impacto no casco... e não foi parede. Olhe o monitor da esquerda. O casco aguenta mais dois desses... no máximo. ... Ela recuou. Elas sempre recuam depois do primeiro... ... Saia daí. Agora. |
+| 17 | `radio_hull_critical` | Casco chega a 1 (segundo golpe), ~1,5 s depois do tranco | Grave, baixo, quase sussurrado | Soturno / Abissal | Dez... o seu casco não aguenta outro golpe. Nada de sonar. Nada de pressa. ... Só ande. E torça para ela não ouvir você. |
+| 18 | `radio_sonar_charge` | Primeira vez que a criatura vem em carga por causa do sonar (pulso com ela no raio). Só depois da fala 7 ter tocado | Desesperado, rápido | Urgência / Alerta | Não, não, não! Com ela tão perto, o pulso mostra pra ela onde você está! ... Perto dela... silêncio. Lembre disso. |
+| 19 *(opcional)* | `radio_stalk` | Primeira vez que ela encosta e **hesita** (desde a rodada 2, a primeira encostada sempre hesita, então a fala sempre cabe) | Sussurro; a interferência vai engolir boa parte da fala (a legenda carrega a informação) | Soturno / Abissal | Ela está do seu lado... Não pare. Quando ela ronda, ela é lenta... você é mais rápido. Saia daí. |
+
+**Notas de gravação:**
+- **16 e 17** chegam logo depois de um golpe: gravar com a respiração um pouco acelerada, como quem viu a telemetria cair.
+- **15** tem o deslize no "Provavelmente": pausa curta antes, dito mais baixo, como quem não acredita no que acabou de dizer.
+- **18** pode ser cortada pelo golpe que vem logo em seguida, e isso é intencional.
+- **19** é opcional e quebra a regra "sem voz nos encontros" (GDD §6.2). Gravar, testar e decidir no playtest.
+
+**Fora do rádio, de propósito:** a hesitação da criatura (fora a fala 19) e o mergulho dela. Proposta sonora: **raspar de casco** enquanto ela hesita encostada e um **chamado que se afasta** quando ela mergulha (GDD §6.4).
+
 ## Regras de reprodução (para a implementação)
 
 - Cada fala toca **uma vez por partida** (reinício zera). A intro sempre toca, e nenhuma fala começa antes dela.

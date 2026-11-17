@@ -28,7 +28,7 @@ Cena: Main (cabine) — recarregada a cada partida
 ├── MazeDebug (y = −200, invisível da cabine)
 │   ├── Capsule     → executa as intenções, sonar e colisão na grade
 │   ├── MazeBuilder → labirinto 3D a partir da MazeGrid (só visual/debug)
-│   └── Enemy       → turnos, caça a origem do sonar
+│   └── Enemy       → turnos, caça a origem do sonar, ronda/dado, mergulho
 └── UI (CanvasLayer) → só mira/prompt, visualizador de texto e tela de fim
 ```
 
@@ -68,7 +68,7 @@ scripts/
 scenes/
 ├── main/       → cena principal
 ├── entities/   → cena da Cápsula, Enemy
-├── systems/    → radio_system.tscn (as 13 falas como dados)
+├── systems/    → radio_system.tscn (as 19 falas como dados)
 ├── levels/     → cenas de labirinto/nível
 ├── cockpit/    → command_panel.tscn + screens/ (conteúdo 2D de cada tela)
 └── ui/         → teclado, HUD, textos, fim de partida
@@ -134,8 +134,9 @@ Notas técnicas:
 |---|---|---|---|
 | `Keypad/HeadingScreen` (faixa superior da área cinza) | `heading_screen.tscn`: rumo, alerta, dica de levantar | 0,46 × 0,20 m | Não |
 | `SonarScreen` (CRT) | `sonar_screen.tscn`: `navigation_map.gd` em tela cheia | 0,47 × 0,56 m | Não |
-| `OxygenDial` / `InterferenceDial` (relógios) | `gauge_dial.gd` (`Kind.OXYGEN` / `Kind.INTERFERENCE`), desenhado em `_draw()` | Ø 0,25 m | Não |
-| `StatusMonitor` (monitor superior) | `status_monitor.tscn`: log rolante (10 linhas), `OxygenGauge` e custos | 1,30 × 0,76 m | Não |
+| `OxygenDial` / `InterferenceDial` (relógios) | `gauge_dial.gd` (`Kind.OXYGEN` / `Kind.INTERFERENCE`), desenhado em `_draw()`. Faixa de perigo sempre em 0,75–1,0 do arco; no O₂ a posição do ponteiro é `1 − nível` (escala invertida) | Ø 0,25 m | Não |
+| `StatusMonitor` (monitor superior) | `status_monitor.tscn`: só o log rolante (10 linhas, fonte 32) | 1,30 × 0,76 m | Não |
+| `SystemsMonitor` (monitor lateral esquerdo, `(1,6; 0,38; −0,596)`, virado para −Z) | `systems_monitor.tscn` + `systems_monitor.gd`: O₂ (número + barra), casco (blocos) e custos. Barra e blocos em `_draw()` via sinal `draw` de `Control`s filhos, sem glifos | 0,944 × 0,59 m (1024 × 640 px) | Não |
 
 - **`Keypad`** (`Node3D` com a base do painel amarelo, origem no centro da área cinza + 3,5 cm na normal, para cobrir os botões modelados): `HeadingScreen`, `Plate` (`BoxMesh` 0,46 × 0,46 m escuro) e 5 `PanelButton3D` de 0,10 × 0,10 × 0,03 m em cruz (passo de 0,125 m).
 - **`AlarmMuteKnob`** (`PanelButton3D`, `round`, Ø 0,075 m, vermelho) sobre o primeiro knob modelado sob o monitor superior (`(0,858; 0,687; −0,575)`, base do monitor), com legenda `Label3D` "SILENCIAR ALARME".
@@ -156,7 +157,7 @@ Implementado no autoload **`GameState`** (`scripts/autoload/game_state.gd`), que
 
 | Constante | Valor |
 |---|---|
-| `MAX_OXYGEN` | 200 |
+| `MAX_OXYGEN` | 240 (era 200 até 2026-11-16) |
 | `OXYGEN_COST_MOVE` | 1 por Frente/Ré bem-sucedido |
 | `OXYGEN_COST_ROTATE` | 1 por giro |
 | `OXYGEN_COST_SONAR` | 4 por pulso |
@@ -165,25 +166,26 @@ Implementado no autoload **`GameState`** (`scripts/autoload/game_state.gd`), que
 
 ### 7.2 Estados da partida (State Pattern via enum)
 
-`enum State { PLAYING, WON, LOST }`. Só em `PLAYING` o oxigênio é consumido; qualquer evento após o fim é ignorado.
+`enum State { PLAYING, WON, LOST }`. Só em `PLAYING` o oxigênio e o casco são consumidos; qualquer evento após o fim é ignorado.
 
 ```
 PLAYING ──capsule_reached_exit──▶ WON
 PLAYING ──oxygen chega a 0──────▶ LOST
+PLAYING ──casco chega a 0───────▶ LOST (capsule_caught, EndReason.CAUGHT)
 WON/LOST ──request_restart──────▶ PLAYING (recarrega a cena)
 ```
 
 ### 7.3 Fluxo de sinais
 
-- **Escuta:** `capsule_moved` (−1), `capsule_collided` (−5), `capsule_reached_exit` (→ `WON`), `request_restart`.
-- **Emite:** `oxygen_changed(current, maximum)` a cada alteração e `game_over(won)` ao encerrar.
+- **Escuta:** `capsule_moved`, `capsule_rotated`, `capsule_collided`, `sonar_pinged` (custos de O₂, §7.1), `enemy_attacked` (−1 casco), `capsule_caught` (→ `LOST`), `capsule_reached_exit` (→ `WON`), `request_restart`.
+- **Emite:** `oxygen_changed(current, maximum)` e `hull_changed(current, maximum)` a cada alteração, `capsule_attacked(hull_left)` / `capsule_caught(cell)` após um golpe, e `game_over(won)` ao encerrar.
 - **Prioridade da saída:** a `Capsule` emite `capsule_reached_exit` **antes** de `capsule_moved` no passo que entra na saída. Assim o `GameState` já está em `WON` quando o custo do passo chega, e chegar à saída com o último ponto de oxigênio conta como vitória.
-- **Reinício:** `request_restart` → `_start_run()` (zera estado e oxigênio, emite `oxygen_changed`) + `get_tree().reload_current_scene()`. Os nós da cena antiga são liberados e suas conexões com o `EventBus` são desfeitas automaticamente pelo Godot.
+- **Reinício:** `request_restart` → `_start_run()` (zera estado, oxigênio e casco, emite `oxygen_changed` e `hull_changed`) + `get_tree().reload_current_scene()`. Os nós da cena antiga são liberados e suas conexões com o `EventBus` são desfeitas automaticamente pelo Godot.
 - O `GameState` não conhece Capsule, UI nem labirinto. As UIs podem **ler** `GameState.oxygen`/`MAX_OXYGEN` para inicializar (o primeiro `oxygen_changed` pode ocorrer antes de a UI existir), mas nunca escrevem nele.
 
 ### 7.4 UI de estado
 
-- `scenes/ui/oxygen_gauge.tscn` (`OxygenGauge`): `Label` "O₂ atual / máximo" + `ProgressBar`. Muda para a cor de alerta (vermelho) em ≤ 25% do máximo. Hoje fica dentro do monitor superior do painel (§5.2). O mostrador analógico de O₂ (`gauge_dial.gd`) lê os mesmos sinais.
+- `scenes/ui/oxygen_gauge.tscn` (`OxygenGauge`): `Label` "O₂ atual / máximo" + `ProgressBar`. Muda para a cor de alerta (vermelho) em ≤ 25% do máximo. **Sem uso desde 2026-11-16** (o `SystemsMonitor` desenha a própria barra); candidato a remoção. O mostrador analógico de O₂ (`gauge_dial.gd`) lê os mesmos sinais.
 - `scenes/ui/game_over_screen.tscn` (`GameOverScreen`, tela cheia, oculta por padrão): escurece a tela e mostra título/subtítulo de vitória ou derrota e o botão "Tentar novamente", que emite `request_restart`.
 - As teclas `PanelButton3D` se desabilitam ao receber `game_over`.
 
@@ -222,11 +224,22 @@ Dividido em **dados** (`MazeGrid`) e **representação** (`MazeBuilder`), seguin
 
 Implementado em `scripts/entities/enemy.gd` + `scenes/entities/enemy.tscn` (fica em `MazeDebug`; a esfera vermelha só aparece na câmera de debug, F3).
 
-- **Turnos:** age uma vez após cada ação da cápsula (`capsule_moved`, `capsule_rotated`, `capsule_collided`, `sonar_pinged`). Não age fora de `GameState.State.PLAYING`.
-- **Nascimento:** célula livre aleatória a ≥ 10 passos do início (nunca na saída); sem candidata, a célula mais distante.
-- **Estados:** `WANDERING` (1 passo aleatório a cada 2 turnos, evitando voltar) e `HUNTING` (1 passo por turno pelo menor caminho até o alvo). Cada `sonar_pinged` coloca o inimigo em `HUNTING` com alvo = célula de onde o pulso saiu; ao chegar e não achar a cápsula, volta a vagar. A ≤ 2 passos da cápsula, ele a "sente" e o alvo passa a ser a própria cápsula.
-- **Contato:** mesma célula que a cápsula (por movimento de qualquer um dos dois) → `capsule_caught` → `GameState` encerra com `LOST` / `EndReason.CAUGHT`.
-- **Proximidade:** após cada turno emite `enemy_proximity_changed(steps)` (distância pelo labirinto, via `MazeGrid.get_distances_from()`).
+- **Turnos:** age uma vez após cada ação da cápsula que a desloca ou faz barulho (`capsule_moved`, `capsule_collided`, `sonar_pinged`). `capsule_rotated` **não** dá turno (R2, 2026-11-16). Não age fora de `GameState.State.PLAYING`.
+- **Período de calma (R1):** `is_calm()` = `_turn <= CALM_TURNS` (15). Em `_take_turn` ela só emite a proximidade e retorna. Em `_on_sonar_pinged` emite `enemy_detected` se for o caso, mas não muda de estado nem emite `enemy_heard_sonar`. A trombada continua valendo (`_on_capsule_moved` não checa a calma).
+- **Nascimento:** `_pick_far_cell(from, min_distance)` — célula livre aleatória a ≥ `min_distance` passos de `from` (nunca na saída); sem candidata, a célula mais distante. No início usa `INITIAL_SPAWN_DISTANCE` (14) a partir da célula inicial; ao reaparecer depois do mergulho, `MIN_SPAWN_DISTANCE` (10) a partir da cápsula.
+- **Estados (rebalanceamento de 2026-11-12, GDD §4.6):**
+
+| Estado | Comportamento | Sai para |
+|---|---|---|
+| `WANDERING` | 1 passo aleatório a cada `WANDER_INTERVAL` (2) turnos, evitando voltar | `HUNTING` (pulso fora do raio), `CHARGING` (pulso no raio), `STALKING` (≤ `SENSE_RANGE` = 2 passos) |
+| `HUNTING` | 1 passo/turno até a origem do pulso | `STALKING` (sentiu a cápsula), `DIVING` (chegou e não achou nada) |
+| `STALKING` | 1 passo a cada `STALK_INTERVAL` (2) turnos rumo à cápsula. A 1 passo, joga o dado a cada turno: `ATTACK_CHANCE` (0,3) → ataque; senão hesita parada. A primeira encostada da partida sempre hesita (`_has_hesitated`, R4) | `WANDERING` (cápsula a > `STALK_LOSE_RANGE` = 4), `DIVING` (após atacar) |
+| `CHARGING` | Pulso de sonar com ela a ≤ `CHARGE_RADIUS` (3,0, euclidiana) da origem (R3; entre 3 e `SONAR_DETECT_RADIUS` ela é revelada mas só caça o ponto): 1 passo/turno rumo à cápsula; ao ficar a 1 passo, ataca **sem dado** no mesmo turno | `DIVING` (após atacar) |
+| `DIVING` | Fora do labirinto por `DIVE_TURNS` (4) turnos; ignora o sonar; proximidade = −1. Depois reaparece via `_pick_far_cell(cápsula)` em `WANDERING` | `WANDERING` |
+
+- **Ataque:** `_attack()` emite `enemy_attacked(cell)`; se a partida continuar (golpe não letal), entra em `DIVING`. A cápsula entrar na célula da criatura também é ataque (sem dado, no lugar do turno dela). `_step_towards`/`_wander` nunca entram na célula da cápsula: contato só existe via `_attack()`.
+- **Casco (`GameState`):** `MAX_HULL` = 3, `hull`. `enemy_attacked` → `hull -= 1` → `hull_changed(current, max)`; com `hull > 0` emite `capsule_attacked(hull_left)`, com `hull == 0` emite `capsule_caught(cell)`, que encerra com `LOST` / `EndReason.CAUGHT` (o fluxo de derrota por contato não mudou). `_start_run()` restaura o casco.
+- **Proximidade:** após cada turno emite `enemy_proximity_changed(steps)` (distância pelo labirinto, via `MazeGrid.get_distances_from()`); −1 enquanto mergulhada, o que desliga alarme, interferência e camada de tensão sem código extra nos ouvintes.
 - **Sonar:** emite `enemy_detected(cell)` (uma vez por pulso) se o inimigo está a até `GameState.SONAR_DETECT_RADIUS` (4,5 células, distância euclidiana a partir da origem, atravessando paredes) **ou** no trecho reto entre a cápsula e o obstáculo atingido por um dos 4 sinais. O mapa mostra um eco vermelho que some em 2,5 s (nunca fica registrado) e desenha o raio como um anel que se expande. O sinal não para no inimigo: a parede atrás dele também é revelada.
 - **Apresentação:** `AlarmSystem` (`scripts/systems/alarm_system.gd`) emite `alarm_started/stopped(&"enemy")` com o inimigo a ≤ 4 passos e `(&"low_oxygen")` com O₂ ≤ 25%. `AlarmLight` (`OmniLight3D` vermelha na cabine) pisca enquanto houver alarme (mais rápido para o inimigo). No painel: alerta piscando na tela do teclado, linha no log do monitor superior e mostrador de **interferência** (cheio a 1 passo, zerado a partir de 9, com ponteiro tremendo proporcional à proximidade).
 - Áudio: sirene, bipe e metal rangendo tocam pelo `AudioManager` (§10). O mudo do alarme fica no `AlarmSystem`: `request_toggle_alarm_mute` (só com alarme ativo) → `muted` + `alarm_muted_changed(muted)`. Qualquer `alarm_started` novo, ou o fim de todos os alarmes, rearma (`muted = false`). A luz não é afetada.
@@ -249,7 +262,8 @@ Implementado. Ver GDD §6 e `docs/roteiro-radio.md`.
 | `maneuver_started(&"rotate_*")` | `capsule_rotate_a/b.wav`, sorteado, pitch 0,9–1,1 | SFX |
 | `enemy_detected` | `monster.mp3` | SFX |
 | `enemy_proximity_changed` (≤ 4 passos) | `metal.mp3`, −18 dB + 4 dB por passo mais perto; não reinicia se já está tocando | SFX |
-| `capsule_caught` | `monster2.mp3` | SFX |
+| `capsule_caught` | `monster2.mp3` (0 dB) | SFX |
+| `capsule_attacked` | `monster2.mp3` (−4 dB, pitch 0,92–1,05); o impacto vem do `cabin_impact` da `CaughtSequence` | SFX |
 | `alarm_started/stopped(&"enemy")` | `siren.mp3` em laço | Alarm |
 | `alarm_started/stopped(&"low_oxygen")` | `o2_beep.wav` em laço (bipe duplo gerado em Python) | Alarm |
 | `alarm_muted_changed` | `AudioServer.set_bus_mute("Alarm")` | — |
@@ -266,7 +280,7 @@ Implementado. Ver GDD §6 e `docs/roteiro-radio.md`.
   - **Sinais:** `radio_line_started(id, subtitle, duration)`, `radio_line_finished(id)` e `radio_busy_changed(busy)` (fala tocando, na fila ou final agendada). Ao sair da árvore (reinício) com fala no ar, emite `finished` para não deixar o ambiente abaixado.
   - **SFX gerados (Python):** `radio_static.wav` (4 s em laço, ruído filtrado com flutter e estalos), `radio_squelch_open.wav` e `radio_squelch_close.wav`.
 - **Legendas (`RadioSubtitles`, `scripts/ui/radio_subtitles.gd` + `scenes/ui/radio_subtitles.tscn`, último filho de `UI`):** caixa na base da tela com "◂ SUPERFÍCIE" e o texto revelado no ritmo da fala (`visible_ratio` em 80% da duração). Fica acima da tela de fim. Não ficaram no monitor superior porque, sentado no posto, só a última linha dele aparece; o monitor registra ">> TRANSMISSÃO RECEBIDA — SUPERFÍCIE" no log.
-- **`CaughtSequence` (`scripts/systems/caught_sequence.gd`, nó da `main.tscn`):** apresentação da derrota por contato (`game_over` com `EndReason.CAUGHT`). 0 s: `cabin_impact(1.0)`; até 2,4 s: luzes de `CabinLights` falham aleatoriamente (cada vez mais), `PanelScreen.power` e os `Label3D` do painel piscam, `AlarmLight` estroboscópica (o script dela é pausado); 1,1 s: `cabin_impact(0.6)`; 2,4 s: apagão (luzes, telas e rótulos a 0, luz ambiente do `Environment` a 0,015, com uma última piscada fraca da luz de teto). O `Environment` é duplicado antes de escurecer, porque é sub-resource da cena em cache e o reinício o reaproveitaria. `RadioSystem`: `lost_caught` com `delay` 4 s, falando no escuro.
+- **`CaughtSequence` (`scripts/systems/caught_sequence.gd`, nó da `main.tscn`):** apresentação da derrota por contato (`game_over` com `EndReason.CAUGHT`). 0 s: `cabin_impact(1.0)`; até 2,4 s: luzes de `CabinLights` falham aleatoriamente (cada vez mais), `PanelScreen.power` e os `Label3D` do painel piscam, `AlarmLight` estroboscópica (o script dela é pausado); 1,1 s: `cabin_impact(0.6)`; 2,4 s: apagão (luzes, telas e rótulos a 0, luz ambiente do `Environment` a 0,015, com uma última piscada fraca da luz de teto). O `Environment` é duplicado antes de escurecer, porque é sub-resource da cena em cache e o reinício o reaproveitaria. `RadioSystem`: `lost_caught` com `delay` 4 s, falando no escuro. **Golpe não letal** (`capsule_attacked`): `cabin_impact(0.7)` e 1 s de falha leve (até 45% das luzes/telas/rótulos apagados por vez, diminuindo), depois tudo volta aos valores originais (`_restore`); a `AlarmLight` não é tocada. Os nós são coletados uma vez (`_collect`), na primeira sequência.
 - **`cabin_impact(strength)` (EventBus):** golpe no casco. `Player`: tranco de câmera (`IMPACT_KICK`, decai) somado ao olhar do posto, ou aplicado sobre a pose congelada no fim da partida, + tremor. `AudioManager`: `crash.mp3` e `metal.mp3` graves (pitch 0,6–0,85), mais altos quanto mais forte. Pensado também para futuros ataques não letais.
 - **`PanelScreen.power`:** multiplica o brilho do quad (0 = apagada), usado para falhas e apagões.
 - **`AudioManager` na derrota por contato:** a cama de ambiente some (−60 dB em 2 s, após 2 s) e volta em `request_restart`.
@@ -302,6 +316,17 @@ Implementado. Ver GDD §6 e `docs/roteiro-radio.md`.
 
 - **Captura visual para debug:** o Godot (snap) grava frames com `--write-movie <arquivo>.png --fixed-fps 30 --quit-after N`. O snap não enxerga `/tmp`, então é preciso gravar em `~/snap/godot-4/common/`. Scripts `--script` (estendendo `SceneTree`) servem para posicionar a câmera, tirar screenshots, fazer raycast de pixels para coordenadas 3D e simular cliques (`Input.parse_input_event`). Nesses scripts, autoloads devem ser acessados por `root.get_node("EventBus")`. Depois de criar um `class_name` novo fora do editor, rodar `godot --headless --import` para atualizar o cache de classes.
 
+### 12.1 Telemetria de playtest (`RunTelemetry`)
+
+- `scripts/systems/run_telemetry.gd`, nó `RunTelemetry` na `Main` (consumidor do `LevelSetup`, `enemy` → `MazeDebug/Enemy`). Só **observa**: escuta o `EventBus` e lê `enemy.state`/`is_calm()` para registrar.
+- **Saída:** pelo editor, em `res://telemetry/` (com `.gdignore` criado automaticamente, para o Godot não importar os CSVs como traduções; pasta no `.gitignore`); num build exportado, em `user://telemetry/`. Desligada em `--headless`, para os testes automáticos não sujarem a estatística. O caminho sai no console: `[Telemetria] gravando em ...`.
+- `runs.csv`: uma linha por partida (data, seed, resultado `VITORIA`/`CRIATURA`/`OXIGENIO`/`ABANDONO`, duração, contagem de ações por tipo, O₂ e casco finais, golpes, detecções, cargas, hesitações, menor distância da criatura, ações com ela a ≤ 4, caminho ótimo, distância da saída no fim, casas visitadas, ação em que a calma acabou, falas do rádio tocadas). Fechar no meio vira `ABANDONO` (`_exit_tree`).
+- `run_<data>_<hora>.csv`: uma linha por evento (ação, eco, carga, hesitação, golpe, mudança de estado da criatura, alarme, rádio, fim), com posição, distância da saída, O₂, casco, distância e estado da criatura. Como a criatura se conecta antes no `EventBus`, a linha de uma ação já mostra o estado **depois** do turno dela.
+- Formato: separador `;` e vírgula decimal (abre direto em planilha pt-BR).
+- `LevelSetup.seed_used` guarda a semente gerada; com ela em `fixed_seed`, dá para repetir o labirinto de uma partida problemática.
+- `tools/telemetry_report.py [arquivo] [--ultimas N]`: agrega o `runs.csv` (taxa de vitória, causas, médias de vitória x derrota) e sugere alavancas pelas faixas da §4.6.1 do GDD.
+- Sinais novos usados por ela e pelo rádio: `enemy_charging(cell)` (o sonar a colocou em `CHARGING`) e `enemy_hesitated(cell)` (o dado mandou hesitar), ambos emitidos pelo `Enemy`.
+
 ## 13. Registro de Implementações
 
 > Cada implementação deve ser registrada aqui, com data e um resumo curto do que foi construído/alterado.
@@ -321,5 +346,10 @@ Implementado. Ver GDD §6 e `docs/roteiro-radio.md`.
 - **2026-11-11 — Teclas físicas (`PanelButton3D`), silenciar alarme, `AudioManager` e edge-pan:** criado `PanelButton3D` (tecla/knob 3D com curso, hover, clique posicional e cancelamento ao soltar fora). O `Keypad` do `CommandPanel` agora tem `HeadingScreen` + placa + 5 teclas, e `AlarmMuteKnob` fica sob o monitor. Removidos `MovementPanel` (`scenes/ui/movement_panel.tscn`, `scripts/ui/movement_panel.gd`) e `keypad_screen` (virou `heading_screen`). `Player` aceita qualquer controle com `forward_mouse/release_hover` e o olhar sentado virou edge-pan acumulado. Novos sinais: `request_toggle_alarm_mute` e `alarm_muted_changed(muted)`, com mudo implementado no `AlarmSystem`. Novo autoload `AudioManager` + `default_bus_layout.tres` (Ambience/SFX/Alarm). SFX gerados: `panel_click.wav` e `o2_beep.wav`. Documentado o pipeline de reexportação fiel da Unreal (§11). Ver §5.2, §9 e §10.
 - **2026-11-11 — Manobras com duração (game feel):** `Capsule` executa cada ação depois de um tempo (`_begin_maneuver` + `Timer`), ignorando pedidos durante a manobra. Novos sinais `maneuver_started(kind, duration)` e `maneuver_finished(kind)`. `PanelButton3D` trava as teclas e mantém afundada a tecla acionada. `HeadingScreen` mostra o estado. `AudioManager` toca motor (fade/corte na colisão), rangido no giro e o ping do sonar no início. `Player` inclina e vibra a câmera. Novos SFX CC0 `capsule_move.mp3` e `capsule_rotate_a/b.wav`, com créditos em `assets/audio/CREDITS.md`. Ver §5, §5.2 e §10.
 - **2026-11-12 — `RadioSystem`, legendas e camadas de ambiente:** implementado o rádio do comandante com as 13 falas gravadas (`assets/audio/radio/`), fila com prioridades (`URGENT` interrompe, `FINAL` corta tudo), validade na fila, interferência ligada à proximidade do inimigo (estática, quedas de sinal, distorção) e override roteirizado na fala `first_enemy`. Novo bus `Radio` (filtros + distorção) e `Distant` (abafado + reverb). Legendas na base da tela (`RadioSubtitles`); tela de fim espera a fala final. `AudioManager`: cama de ambiente com crossfade (`ambience` ↔ `ambience2`, corrige o buraco de silêncio do laço antigo), camada de tensão `ambience3` por proximidade, chamado distante `monster3` quando a criatura ouve o sonar (novo sinal `enemy_heard_sonar`) e ducking do ambiente durante as falas. Novos sinais: `radio_line_started`, `radio_line_finished`, `radio_busy_changed`, `enemy_heard_sonar`. Ver §10.
+- **2026-11-12 — Rebalanceamento da criatura (casco, dado, mergulho):** `Enemy` ganhou `STALKING` (ronda lenta + dado de 40% de ataque encostada), `CHARGING` (sonar com ela no raio → ataque garantido) e `DIVING` (some 4 turnos e reaparece a ≥ 10 passos da cápsula após atacar ou investigar um pulso à toa); trombar nela também é ataque. `GameState`: `MAX_HULL`/`hull`, derrota no 3º golpe. Sinais: `enemy_attacked` (Enemy → GameState), `hull_changed`, `capsule_attacked`; `capsule_caught` passou a ser emitido pelo `GameState` quando o casco cede. `CaughtSequence`: modo curto para golpe não letal. `StatusMonitor`: linha "CASCO [■][■][■] 3/3" (`HullLabel`) e registro do golpe. `AudioManager`: rugido no golpe não letal. Testado headless (dado ≈ 39% em 2000 turnos, sonar perto 200/200, mergulho/reaparição, 3 golpes → `CAUGHT`, trombada). Ver §9.
 - **2026-11-12 — Sonar com raio, `CaughtSequence` e `cabin_impact`:** `Enemy` detecta por raio (`GameState.SONAR_DETECT_RADIUS` = 4,5) além do feixe; `NavigationMap` desenha o anel do raio. Nova sequência de derrota por contato (falha de luzes/telas, dois golpes, apagão) e sinal `cabin_impact` (tranco de câmera no `Player`, impacto + esmagamento no `AudioManager`). `PanelScreen.power`. Correções: nenhuma fala do rádio antes da intro; `GameOverScreen`/`RadioSubtitles` não criam timer/tween fora da árvore no reinício. Ver §9 e §10.
 - **2026-11-12 — Mira sentado no posto:** `Player` em `NAVIGATING` mantém o mouse capturado, faz mouse-look limitado e lança a mira central no painel (hover a cada frame + clique); removido o edge-pan (`SEAT_EDGE_*`). `PanelButton3D.get_prompt()`; `FirstPersonHud` permanece visível sentada e só tinge a mira. Ver §5.2.
+- **2026-11-16 — `SystemsMonitor` (monitor lateral):** nova `PanelScreen` no `CommandPanel` sobre o monitor apagado à esquerda do painel. A posição foi achada por raycast na malha (plano do monitor em z ≈ −0,586; o quad fica 1 cm à frente). Mostra O₂, casco e custos, ouvindo `oxygen_changed`/`hull_changed`. `StatusMonitor` perdeu `LeftColumn`/`HullLabel`/`CostsLabel` e virou só log (fonte 24 → 32). A `CaughtSequence` já pega a nova tela, porque varre as `PanelScreen` do painel. Sem sinais novos. Ver §5.2.
+- **2026-11-16 — Rodada 2 de balanceamento (R1–R5):** `Enemy`: `CALM_TURNS` (15) + `is_calm()`, `INITIAL_SPAWN_DISTANCE` (14), `_pick_far_cell(from, min_distance)`, `CHARGE_RADIUS` (3,0) separado do raio de detecção, `_has_hesitated` (a primeira encostada sempre hesita), `ATTACK_CHANCE` 0,4 → 0,3, e a conexão com `capsule_rotated` removida (girar não dá turno). `GameState.MAX_OXYGEN` 200 → 240. Teste headless atualizado (o turno de teste agora é `capsule_collided`) e com casos para R1–R4: tudo passou (ataque encostada 29% em 2000 turnos). Ver §9.
+- **2026-11-16 — Mostradores padronizados:** `gauge_dial.gd` desenha a faixa vermelha em 0,75–1,0 do arco para os dois tipos, e o O₂ usa a posição `1 − nível`. Os valores e sinais não mudaram.
+- **2026-11-16 — Falas 14–19 e telemetria:** `RadioSystem` ganhou 6 `RadioLine` (`o2_monitor`, `interference`, `first_hit`, `hull_critical`, `sonar_charge`, `stalk`) e os gatilhos: 3ª manobra concluída, primeira proximidade > 0, `capsule_attacked` (+1,5 s; casco 1 → `hull_critical`), `enemy_charging` (só depois de `first_enemy` terminar) e `enemy_hesitated`. Áudios em `assets/audio/radio/`. Legendas com reticências duplicadas reduzidas a uma. Novos sinais `enemy_charging`/`enemy_hesitated`. Novo `RunTelemetry` + `tools/telemetry_report.py` (§12.1) e `LevelSetup.seed_used`. Testado: 40 ações simuladas em janela geraram os dois CSVs, e as falas `intro`/`o2_monitor` tocaram na ordem certa. O teste headless da criatura continua passando e não gera telemetria.
