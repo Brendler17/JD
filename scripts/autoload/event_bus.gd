@@ -57,11 +57,17 @@ signal sonar_pinged(origin: Vector2i, hits: Array[Vector2i])
 signal enemy_proximity_changed(steps: int)
 ## Um pulso de sonar passou pelo inimigo antes de atingir uma parede: eco não identificado.
 signal enemy_detected(cell: Vector2i)
-## O inimigo alcançou a cápsula (derrota).
-signal capsule_caught(cell: Vector2i)
+## A criatura golpeou o casco (encostada ou trombada). O GameState desconta o
+## casco e responde com capsule_attacked (não letal) ou capsule_caught (letal).
+signal enemy_attacked(cell: Vector2i)
 ## Um pulso de sonar chamou a atenção do inimigo (ele passa a caçar a origem).
 ## `steps`: distância dele até a cápsula pelo labirinto (-1 = sem caminho).
 signal enemy_heard_sonar(steps: int)
+## O sonar foi usado com a criatura perto (≤ CHARGE_RADIUS): ela vem direto, e o
+## ataque é garantido. Ouvido pelo rádio (fala sonar_charge) e pela telemetria.
+signal enemy_charging(cell: Vector2i)
+## Encostada na cápsula, a criatura jogou o dado e hesitou (não atacou neste turno).
+signal enemy_hesitated(cell: Vector2i)
 
 # --- Apresentação: golpes no casco ---
 ## Algo atingiu a cápsula com força (0..1): câmera dá um tranco, casco estala.
@@ -87,5 +93,13 @@ signal alarm_muted_changed(muted: bool)
 
 # --- Fatos emitidos por sistemas de estado/recursos ---
 signal oxygen_changed(current: float, maximum: float)
+## Integridade do casco mudou (pontos atuais / máximo).
+signal hull_changed(current: int, maximum: int)
+## Golpe da criatura que o casco aguentou. `hull_left` ≥ 1. Apresentação: tranco,
+## falha curta de luzes, registro no monitor.
+signal capsule_attacked(hull_left: int)
+## O casco cedeu ao último golpe (derrota por contato). Emitido pelo GameState
+## logo antes do game_over.
+signal capsule_caught(cell: Vector2i)
 ## Fim da partida: vitória (chegou à saída) ou derrota (oxigênio esgotado).
 signal game_over(won: bool)

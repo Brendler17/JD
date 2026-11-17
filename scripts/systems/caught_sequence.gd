@@ -8,6 +8,9 @@ extends Node
 ##          Uma luz ainda tenta voltar uma vez, fraca, e apaga.
 ## Depois disso o rádio fala no escuro (RadioSystem: `lost_caught` com delay) e a
 ## tela de fim espera o rádio terminar. O reinício recarrega a cena (tudo volta).
+## Golpe NÃO letal (capsule_attacked, casco ainda de pé): versão curta —
+## cabin_impact(HIT_IMPACT_STRENGTH) e ~HIT_TIME s de falha leve, depois tudo
+## volta ao normal (a luz de alarme não é tocada).
 
 const ATTACK_TIME := 2.4
 const SECOND_IMPACT_TIME := 1.1
@@ -17,6 +20,10 @@ const FLICKER_INTERVAL := Vector2(0.04, 0.13)
 const ALARM_STROBE_ENERGY := 5.0
 const DARK_AMBIENT := 0.015
 const LAST_FLICKER_DELAY := 0.9
+const HIT_TIME := 1.0
+const HIT_IMPACT_STRENGTH := 0.7
+## Fração de luzes/telas apagadas em cada falha do golpe não letal.
+const HIT_FAILING := 0.45
 
 @export var cabin_lights: Node3D
 @export var alarm_light: Light3D
@@ -24,6 +31,9 @@ const LAST_FLICKER_DELAY := 0.9
 @export var world_environment: WorldEnvironment
 
 var _time := -1.0
+## Golpe não letal em andamento (senão, é a sequência de contato).
+var _hit := false
+var _collected := false
 var _flicker_timer := 0.0
 var _second_impact_done := false
 var _lights: Array[Light3D] = []
@@ -36,11 +46,35 @@ var _labels: Array[Label3D] = []
 func _ready() -> void:
 	set_process(false)
 	EventBus.game_over.connect(_on_game_over)
+	EventBus.capsule_attacked.connect(_on_capsule_attacked)
+
+
+func _on_capsule_attacked(_hull_left: int) -> void:
+	_collect()
+	EventBus.cabin_impact.emit(HIT_IMPACT_STRENGTH)
+	_hit = true
+	_time = 0.0
+	_flicker_timer = 0.0
+	set_process(true)
 
 
 func _on_game_over(won: bool) -> void:
 	if won or GameState.end_reason != GameState.EndReason.CAUGHT:
 		return
+	_collect()
+	_hit = false
+	if alarm_light:
+		alarm_light.set_process(false)
+	EventBus.cabin_impact.emit(1.0)
+	_time = 0.0
+	_flicker_timer = 0.0
+	set_process(true)
+
+
+func _collect() -> void:
+	if _collected:
+		return
+	_collected = true
 	for node in cabin_lights.get_children():
 		if node is Light3D and node != alarm_light:
 			_lights.append(node)
@@ -50,15 +84,13 @@ func _on_game_over(won: bool) -> void:
 			_screens.append(node)
 		elif node is Label3D:
 			_labels.append(node)
-	if alarm_light:
-		alarm_light.set_process(false)
-	EventBus.cabin_impact.emit(1.0)
-	_time = 0.0
-	set_process(true)
 
 
 func _process(delta: float) -> void:
 	_time += delta
+	if _hit:
+		_process_hit(delta)
+		return
 	if not _second_impact_done and _time >= SECOND_IMPACT_TIME:
 		_second_impact_done = true
 		EventBus.cabin_impact.emit(SECOND_IMPACT_STRENGTH)
@@ -81,6 +113,34 @@ func _process(delta: float) -> void:
 		screen.power = 0.05 if randf() < failing else randf_range(0.6, 1.5)
 	for label in _labels:
 		label.visible = randf() >= failing
+
+
+func _process_hit(delta: float) -> void:
+	if _time >= HIT_TIME:
+		_restore()
+		set_process(false)
+		return
+	_flicker_timer -= delta
+	if _flicker_timer > 0.0:
+		return
+	_flicker_timer = randf_range(FLICKER_INTERVAL.x, FLICKER_INTERVAL.y)
+	# A falha diminui conforme os sistemas se recuperam.
+	var failing := HIT_FAILING * (1.0 - _time / HIT_TIME)
+	for light in _lights:
+		light.light_energy = 0.0 if randf() < failing else _base_energy[light] * randf_range(0.6, 1.4)
+	for screen in _screens:
+		screen.power = 0.1 if randf() < failing else randf_range(0.7, 1.3)
+	for label in _labels:
+		label.visible = randf() >= failing
+
+
+func _restore() -> void:
+	for light in _lights:
+		light.light_energy = _base_energy[light]
+	for screen in _screens:
+		screen.power = 1.0
+	for label in _labels:
+		label.visible = true
 
 
 func _blackout() -> void:

@@ -91,7 +91,9 @@ func _ready() -> void:
 	EventBus.maneuver_started.connect(_on_maneuver_started)
 	EventBus.maneuver_finished.connect(_on_maneuver_finished)
 	EventBus.enemy_detected.connect(func(_cell: Vector2i) -> void: _echo.play())
-	EventBus.capsule_caught.connect(func(_cell: Vector2i) -> void: _caught.play())
+	EventBus.capsule_caught.connect(func(_cell: Vector2i) -> void: _play_roar(0.0))
+	# Golpe que o casco aguentou: o mesmo rugido, um pouco mais baixo.
+	EventBus.capsule_attacked.connect(func(_hull_left: int) -> void: _play_roar(-4.0))
 	EventBus.enemy_proximity_changed.connect(_on_enemy_proximity_changed)
 	EventBus.alarm_started.connect(_on_alarm_started)
 	EventBus.alarm_stopped.connect(_on_alarm_stopped)
@@ -183,6 +185,12 @@ func _on_cabin_impact(strength: float) -> void:
 	_crush.volume_db = -1.0 + (strength - 1.0) * 6.0
 	_crush.pitch_scale = randf_range(0.6, 0.75)
 	_crush.play()
+
+
+func _play_roar(volume_db: float) -> void:
+	_caught.volume_db = volume_db
+	_caught.pitch_scale = randf_range(0.92, 1.05)
+	_caught.play()
 
 
 func _fade_bed(gain_db: float, time: float, delay := 0.0) -> void:
