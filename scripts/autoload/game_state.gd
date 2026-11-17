@@ -34,7 +34,7 @@ func _ready() -> void:
 	EventBus.capsule_reached_exit.connect(_on_capsule_reached_exit)
 	EventBus.enemy_attacked.connect(_on_enemy_attacked)
 	EventBus.capsule_caught.connect(_on_capsule_caught)
-	EventBus.request_restart.connect(_on_request_restart)
+	EventBus.session_ended.connect(_on_session_ended)
 	_start_run()
 
 
@@ -103,8 +103,9 @@ func _end_run(final_state: State, reason: EndReason) -> void:
 	EventBus.game_over.emit(final_state == State.WON)
 
 
-## Reinicia a partida: zera o estado e recarrega a cena atual
-## (Capsule, labirinto e UI voltam ao estado inicial).
-func _on_request_restart() -> void:
+## A cena da partida vai ser trocada (reinício, novo jogo ou menu), com a tela
+## já preta: zera o estado para a próxima. Quem troca a cena é o SceneFlow.
+## Não zera no pedido (request_restart etc.) para quem registra a partida
+## (telemetria) ainda ler os valores finais.
+func _on_session_ended() -> void:
 	_start_run()
-	get_tree().reload_current_scene()

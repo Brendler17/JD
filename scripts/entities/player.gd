@@ -90,15 +90,14 @@ func _unhandled_input(event: InputEvent) -> void:
 	if mode != Mode.WALKING:
 		return
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-		rotate_y(-event.relative.x * mouse_sensitivity)
-		_head.rotation.x = clampf(_head.rotation.x - event.relative.y * mouse_sensitivity, -PITCH_LIMIT, PITCH_LIMIT)
+		var sensitivity := _sensitivity()
+		rotate_y(-event.relative.x * sensitivity)
+		_head.rotation.x = clampf(_head.rotation.x - event.relative.y * sensitivity, -PITCH_LIMIT, PITCH_LIMIT)
 	elif event.is_action_pressed("interact"):
 		if Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 		else:
 			_interact()
-	elif event.is_action_pressed("ui_cancel"):
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 
 
 ## Sentado, o mouse é lido em _input (antes de qualquer Control): movimento gira o
@@ -112,18 +111,16 @@ func _input(event: InputEvent) -> void:
 		return
 	if not _seated:
 		return
-	if event.is_action_pressed("ui_cancel"):
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-		return
 	if Input.mouse_mode != Input.MOUSE_MODE_CAPTURED:
-		# Cursor liberado (Esc): o primeiro clique só recaptura.
+		# Cursor liberado (ex.: janela perdeu o foco): o primeiro clique só recaptura.
 		if event is InputEventMouseButton and event.pressed:
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 			get_viewport().set_input_as_handled()
 		return
 	if event is InputEventMouseMotion:
-		_seat_look.x = clampf(_seat_look.x - event.relative.x * mouse_sensitivity, -SEAT_YAW_RANGE, SEAT_YAW_RANGE)
-		_seat_look.y = clampf(_seat_look.y - event.relative.y * mouse_sensitivity, -SEAT_PITCH_DOWN, SEAT_PITCH_UP)
+		var sensitivity := _sensitivity()
+		_seat_look.x = clampf(_seat_look.x - event.relative.x * sensitivity, -SEAT_YAW_RANGE, SEAT_YAW_RANGE)
+		_seat_look.y = clampf(_seat_look.y - event.relative.y * sensitivity, -SEAT_PITCH_DOWN, SEAT_PITCH_UP)
 		get_viewport().set_input_as_handled()
 	elif event is InputEventMouseButton and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT:
 		var click := event.duplicate() as InputEventMouseButton
@@ -330,6 +327,11 @@ func _update_shake(delta: float) -> void:
 	_shake_strength = move_toward(_shake_strength, 0.0, delta * 0.15)
 	_camera.h_offset = randf_range(-1.0, 1.0) * _shake_strength
 	_camera.v_offset = randf_range(-1.0, 1.0) * _shake_strength
+
+
+## Sensibilidade base × multiplicador das opções.
+func _sensitivity() -> float:
+	return mouse_sensitivity * Settings.mouse_sensitivity
 
 
 func _on_game_over(_won: bool) -> void:

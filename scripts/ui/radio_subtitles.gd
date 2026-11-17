@@ -3,6 +3,7 @@ extends Control
 ## som ruim, GDD §6.1). Fica fora da HUD de 1ª pessoa para aparecer em qualquer
 ## modo: andando, sentado no posto e sobre a tela de fim. "Dumb UI": só escuta
 ## radio_line_started/finished. O texto é revelado aos poucos, no ritmo da fala.
+## Respeita a opção "Legendas" (Settings.subtitles), inclusive se mudar no meio da fala.
 
 const SPEAKER := "SUPERFÍCIE"
 ## Fração da duração da fala usada para revelar o texto (o resto fica completo).
@@ -22,6 +23,8 @@ func _ready() -> void:
 	_speaker_label.text = "◂ %s" % SPEAKER
 	EventBus.radio_line_started.connect(_on_radio_line_started)
 	EventBus.radio_line_finished.connect(_on_radio_line_finished)
+	EventBus.settings_changed.connect(func() -> void: visible = Settings.subtitles)
+	visible = Settings.subtitles
 
 
 func _on_radio_line_started(_id: StringName, subtitle: String, duration: float) -> void:

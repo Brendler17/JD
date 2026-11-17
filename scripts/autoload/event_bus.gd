@@ -24,8 +24,26 @@ signal note_closed
 ## true = controlando a cápsula pelo painel; false = andando em 1ª pessoa.
 signal navigation_mode_changed(active: bool)
 
-# --- Intenções vindas da UI (fluxo de partida) ---
+# --- Intenções vindas da UI (fluxo de partida e menus) ---
+## Recomeça a partida atual (labirinto novo). Tratado pelo GameState (zera o
+## estado) e pelo SceneFlow (recarrega a cena com fade).
 signal request_restart
+## Menu principal → partida nova.
+signal request_new_game
+## Volta ao menu principal (pausa ou tela de fim). Partida em andamento vira abandono.
+signal request_main_menu
+## Fecha o jogo.
+signal request_quit
+
+# --- Fatos de fluxo / menus ---
+## O menu de pausa abriu (true) ou fechou (false). A árvore fica pausada; o
+## AudioManager (que roda sempre) congela os efeitos de jogo.
+signal game_paused(paused: bool)
+## A cena da partida vai ser descarregada (reinício ou volta ao menu), com a tela
+## já preta. Autoloads desligam o que tocava da partida (sirene, rangido...).
+signal session_ended
+## Alguma opção do Settings mudou (volumes, sensibilidade, legendas, tela cheia).
+signal settings_changed
 
 # --- Intenções vindas do painel físico (botões 3D do posto de comando) ---
 ## Knob "silenciar alarme": alterna o mudo da sirene/bipe (a luz continua piscando).

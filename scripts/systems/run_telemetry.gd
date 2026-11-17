@@ -15,7 +15,7 @@ extends Node
 ## Só observa: escuta o EventBus e LÊ o estado da criatura (nó `enemy`), nunca
 ## escreve em nada. Recebe a MazeGrid do LevelSetup, como os outros consumidores.
 ## Partida encerrada sem fim de jogo (fechar a janela) entra como ABANDONO.
-## Desligada em --headless (testes automáticos).
+## Desligada em testes automáticos (--headless ou --script).
 
 const EDITOR_DIR := "res://telemetry"
 const BUILD_DIR := "user://telemetry"
@@ -43,7 +43,8 @@ var maze: MazeGrid
 var _dir := ""
 var _event_file: FileAccess
 var _written := false
-var _start_msec := 0
+## Tempo de jogo (não conta a pausa: o nó para com a árvore).
+var _clock := 0.0
 var _exit_distances := {}
 var _capsule_cell := Vector2i.ZERO
 var _enemy_steps := -1
@@ -59,11 +60,11 @@ var _stats := {
 
 
 func _ready() -> void:
-	# Testes automáticos (--headless) mexem no estado à força: não entram na estatística.
-	if maze == null or DisplayServer.get_name() == "headless":
+	# Testes automáticos (--headless ou scripts --script) mexem no estado à força:
+	# não entram na estatística nem tocam nos CSVs do playtest.
+	if maze == null or _is_automated_run():
 		maze = null
 		return
-	_start_msec = Time.get_ticks_msec()
 	_capsule_cell = maze.start_cell
 	_visited[_capsule_cell] = true
 	_exit_distances = maze.get_distances_from(maze.exit_cell)
@@ -86,18 +87,27 @@ func _ready() -> void:
 		_radio_lines.append(id)
 		_log("radio", id))
 	EventBus.game_over.connect(_on_game_over)
+	# Saída pelo menu de pausa: registra antes de o GameState zerar o estado.
+	EventBus.request_restart.connect(_abandon)
+	EventBus.request_main_menu.connect(_abandon)
+	EventBus.request_quit.connect(_abandon)
 	_log("inicio", "seed %d, caminho ótimo %d" % [_seed(), _optimal_path()])
 	print("[Telemetria] gravando em ", ProjectSettings.globalize_path(_dir))
 
 
-## Fechar o jogo (ou recarregar a cena) no meio da partida.
+## Fechar a janela no meio da partida (sem passar pelo menu).
 func _exit_tree() -> void:
-	if maze != null and not _written:
-		_log("abandono")
-		_write_summary("ABANDONO")
+	_abandon()
 	if _event_file:
 		_event_file.close()
 		_event_file = null
+
+
+## Partida encerrada sem fim de jogo. Depois de um game_over não faz nada.
+func _abandon() -> void:
+	if maze != null and not _written:
+		_log("abandono")
+		_write_summary("ABANDONO")
 
 
 # --- Eventos ---------------------------------------------------------------------
@@ -229,6 +239,11 @@ func _ensure_dir() -> bool:
 
 # --- Utilitários -----------------------------------------------------------------
 
+func _is_automated_run() -> bool:
+	var args := OS.get_cmdline_args()
+	return DisplayServer.get_name() == "headless" or args.has("--script") or args.has("-s")
+
+
 func _enemy_state() -> String:
 	if enemy == null:
 		return ""
@@ -246,8 +261,12 @@ func _optimal_path() -> int:
 	return _exit_distances.get(maze.start_cell, -1) if maze else -1
 
 
+func _process(delta: float) -> void:
+	_clock += delta
+
+
 func _elapsed() -> float:
-	return (Time.get_ticks_msec() - _start_msec) / 1000.0
+	return _clock
 
 
 func _cell_text(cell: Vector2i) -> String:

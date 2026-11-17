@@ -6,7 +6,13 @@ extends Node
 ## do alarme (knob do painel → AlarmSystem → alarm_muted_changed) muta só o bus Alarm.
 ## O rádio (voz/estática) é tocado pelo RadioSystem; aqui só a mixagem reage a ele
 ## (o ambiente abaixa durante as falas).
-## Persiste entre reinícios (é autoload): o ambiente não corta ao recarregar a cena.
+## Persiste entre reinícios (é autoload): o ambiente não corta ao recarregar a cena
+## nem ao ir para o menu (a cama de ambiente é também o som do menu).
+## Volumes do jogador (Settings) são aplicados aqui, por bus: Master, Radio (voz),
+## SFX+Alarm+Distant (efeitos) e Ambience. No Ambience o volume do jogador soma
+## com o abafamento durante as falas (_duck_db).
+## Pausa (game_paused): os efeitos de jogo congelam; o ambiente continua.
+## Fim de sessão (session_ended): para tudo que era da partida.
 
 ## Cama de ambiente: as faixas se revezam com crossfade, começando a próxima em
 ## `loop_at` segundos. `ambience.mp3` tem fade-out próprio nos últimos ~10 s, então
@@ -66,6 +72,10 @@ var _rotate: AudioStreamPlayer
 var _move_fade: Tween
 ## Laços do alarme por causa: &"enemy" → sirene, &"low_oxygen" → bipe.
 var _alarm_loops := {}
+## Abafamento atual do ambiente (dB), somado ao volume do jogador.
+var _duck_db := 0.0
+## Todos os players de efeitos de jogo (congelam na pausa, param no fim de sessão).
+var _game_players: Array[AudioStreamPlayer] = []
 
 
 func _ready() -> void:
@@ -105,6 +115,10 @@ func _ready() -> void:
 	EventBus.radio_line_started.connect(func(_id: StringName, _text: String, _duration: float) -> void:
 		_duck_ambience(RADIO_DUCK_DB, 0.3))
 	EventBus.radio_line_finished.connect(func(_id: StringName) -> void: _duck_ambience(0.0, 1.0))
+	EventBus.settings_changed.connect(_apply_settings)
+	EventBus.game_paused.connect(_on_game_paused)
+	EventBus.session_ended.connect(_on_session_ended)
+	_apply_settings()
 
 
 func _process(delta: float) -> void:
@@ -164,7 +178,8 @@ func _on_enemy_heard_sonar(steps: int) -> void:
 	_last_distant_call = now
 	_distant_call.volume_db = -2.0 - float(steps) * 1.2
 	_distant_call.pitch_scale = randf_range(0.8, 0.92)
-	get_tree().create_timer(randf_range(1.2, 2.0)).timeout.connect(_distant_call.play)
+	# Timer pausável: não responde durante o menu de pausa.
+	get_tree().create_timer(randf_range(1.2, 2.0), false).timeout.connect(_distant_call.play)
 
 
 func _on_game_over(_won: bool) -> void:
@@ -204,10 +219,55 @@ func _fade_bed(gain_db: float, time: float, delay := 0.0) -> void:
 func _duck_ambience(volume_db: float, time: float) -> void:
 	if _duck_tween:
 		_duck_tween.kill()
-	var bus := AudioServer.get_bus_index(&"Ambience")
 	_duck_tween = create_tween()
-	_duck_tween.tween_method(func(db: float) -> void: AudioServer.set_bus_volume_db(bus, db),
-		AudioServer.get_bus_volume_db(bus), volume_db, time)
+	_duck_tween.tween_method(func(db: float) -> void:
+		_duck_db = db
+		_apply_ambience_volume(), _duck_db, volume_db, time)
+
+
+# --- Opções, pausa e fim de sessão ------------------------------------------
+
+func _apply_settings() -> void:
+	_set_bus_linear(&"Master", Settings.master_volume)
+	_set_bus_linear(&"Radio", Settings.voice_volume)
+	for bus: StringName in [&"SFX", &"Alarm", &"Distant"]:
+		_set_bus_linear(bus, Settings.effects_volume)
+	_apply_ambience_volume()
+
+
+func _apply_ambience_volume() -> void:
+	var index := AudioServer.get_bus_index(&"Ambience")
+	AudioServer.set_bus_volume_db(index, _linear_db(Settings.ambience_volume) + _duck_db)
+
+
+func _set_bus_linear(bus: StringName, value: float) -> void:
+	var index := AudioServer.get_bus_index(bus)
+	if index >= 0:
+		AudioServer.set_bus_volume_db(index, _linear_db(value))
+
+
+func _linear_db(value: float) -> float:
+	return linear_to_db(maxf(value, 0.0001))
+
+
+func _on_game_paused(paused: bool) -> void:
+	for player in _game_players:
+		player.stream_paused = paused
+
+
+## A partida vai sumir (reinício ou menu): nada dela pode continuar tocando.
+func _on_session_ended() -> void:
+	for player in _game_players:
+		player.stream_paused = false
+		player.stop()
+	if _move_fade:
+		_move_fade.kill()
+	_tension_target = 0.0
+	_tension_level = 0.0
+	_last_distant_call = -INF
+	AudioServer.set_bus_mute(AudioServer.get_bus_index(&"Alarm"), false)
+	_duck_ambience(0.0, 0.5)
+	_fade_bed(0.0, 3.0)
 
 
 func _on_alarm_started(reason: StringName) -> void:
@@ -235,6 +295,7 @@ func _make_player(stream: AudioStream, bus: StringName, volume_db: float, loop :
 	player.bus = bus
 	player.volume_db = volume_db
 	add_child(player)
+	_game_players.append(player)
 	if loop:
 		player.finished.connect(player.play)
 	return player

@@ -121,7 +121,7 @@ func _ready() -> void:
 	EventBus.enemy_charging.connect(_on_enemy_charging)
 	EventBus.enemy_hesitated.connect(func(_c: Vector2i) -> void: trigger(&"stalk"))
 
-	get_tree().create_timer(INTRO_DELAY).timeout.connect(trigger.bind(&"intro"))
+	get_tree().create_timer(INTRO_DELAY, false).timeout.connect(trigger.bind(&"intro"))
 
 
 ## Recarga da cena com fala no ar: avisa o fim para quem escuta (ducking, legenda).
@@ -205,7 +205,7 @@ func _on_enemy_proximity_changed(steps: int) -> void:
 ## Golpe não letal: casco 2 → "primeiro golpe"; casco 1 → "casco crítico".
 func _on_capsule_attacked(hull_left: int) -> void:
 	var id := &"hull_critical" if hull_left <= 1 else &"first_hit"
-	get_tree().create_timer(HIT_LINE_DELAY).timeout.connect(trigger.bind(id))
+	get_tree().create_timer(HIT_LINE_DELAY, false).timeout.connect(trigger.bind(id))
 
 
 ## Sonar com ela perto. Só depois de a primeira aparição (first_enemy) ter
@@ -257,7 +257,7 @@ func _play_final(line: RadioLine) -> void:
 		_end_current()
 	_final_pending = true
 	_update_busy()
-	get_tree().create_timer(line.delay).timeout.connect(func() -> void:
+	get_tree().create_timer(line.delay, false).timeout.connect(func() -> void:
 		_final_pending = false
 		_start(line))
 
@@ -295,7 +295,7 @@ func _finish_current() -> void:
 	var finished_id := _current.id
 	_end_current()
 	if finished_id == &"intro":
-		get_tree().create_timer(IDLE_SEAT_DELAY).timeout.connect(_on_idle_seat_timeout)
+		get_tree().create_timer(IDLE_SEAT_DELAY, false).timeout.connect(_on_idle_seat_timeout)
 	_gap = GAP_BETWEEN_LINES
 	_update_busy()
 
