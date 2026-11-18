@@ -36,3 +36,6 @@ sfx-links.md
 
 # Telemetria de playtest (CSVs gerados ao jogar pelo editor)
 telemetry/
+
+# Gerado por docs/entrega/gdd/build.py
+docs/entrega/gdd/gdd.html

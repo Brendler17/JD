@@ -6,7 +6,7 @@
 
 - **Engine:** Godot 4.7 (GL Compatibility renderer).
 - **Linguagem:** GDScript.
-- **Plataformas alvo:** PC (Windows/Linux); web (itch.io) como meta secundária.
+- **Plataformas alvo:** PC (Windows/Linux).
 
 ## 2. Arquitetura Geral
 
@@ -59,7 +59,13 @@ O jogo é **3D desde a base**: a cápsula e o labirinto existem no mundo 3D, sem
 | Component | `PanelScreen` | Qualquer cena 2D vira uma tela 3D clicável sobre a malha, sem código específico por tela |
 | Dependency Injection (manual) | `LevelSetup.maze_consumers` | O labirinto gerado é entregue a quem precisa (`maze`) antes do `_ready()` |
 
-*(A detalhar conforme mais sistemas forem implementados: Component Pattern, Object Pooling, etc., se/quando forem adotados.)*
+| State Pattern (enum) | `Enemy.State` | Comportamento da criatura por estado (vagar, caçar, rondar, carga, mergulho), com transições disparadas por turno e por sonar |
+| Service Locator (autoloads) | `EventBus`, `GameState`, `AudioManager`, `SceneFlow`, `Settings` | Serviços globais únicos, acessados por nome, sem referências cruzadas entre cenas |
+| Passive View ("dumb UI") | Telas do painel, mostradores, `GaugeNeedle` | A UI só reflete sinais do `EventBus`; nenhuma tela decide regra de jogo |
+| Data-driven (Resource) | `RadioLine` (falas do rádio), materiais do painel | Conteúdo editável no Inspector sem mexer em código (texto, prioridade, espera de cada fala) |
+| Batching (MultiMesh) | `MazeBuilder.Walls` | Todas as paredes do labirinto de debug em 1 draw call |
+
+**Avaliado e não adotado:** Object Pooling. O jogo não cria nem destrói objetos com frequência (a criatura é uma só e o labirinto é gerado uma vez por partida), então o pool não traria ganho.
 
 ## 4. Estrutura de Pastas
 
@@ -195,7 +201,6 @@ WON/LOST ──request_restart──────▶ PLAYING (recarrega a cena)
 
 ### 7.4 UI de estado
 
-- `scenes/ui/oxygen_gauge.tscn` (`OxygenGauge`): `Label` "O₂ atual / máximo" + `ProgressBar`. Muda para a cor de alerta (vermelho) em ≤ 25% do máximo. **Sem uso desde 2026-11-16** (o `SystemsMonitor` desenha a própria barra); candidato a remoção. O ponteiro do relógio de O₂ (`gauge_needle.gd`) lê os mesmos sinais.
 - `scenes/ui/game_over_screen.tscn` (`GameOverScreen`, tela cheia, oculta por padrão): escurece a tela e mostra título/subtítulo de vitória ou derrota e os botões "Tentar novamente" (`request_restart`) e "Menu principal" (`request_main_menu`).
 
 ### 7.5 Fluxo de cenas, pausa e opções (2026-11-16)
@@ -346,7 +351,7 @@ Implementado. Ver GDD §6 e `docs/roteiro-radio.md`.
 ## 12. Build & Ferramentas
 
 - Repositório Git, branch `main`.
-- Export para PC (Windows/Linux) obrigatório; export web (itch.io) como meta secundária.
+- Export para PC (Windows/Linux). O build web foi descartado em 2026-11-18 (GDD §8).
 
 - **Captura visual para debug:** o Godot (snap) grava frames com `--write-movie <arquivo>.png --fixed-fps 30 --quit-after N`. O snap não enxerga `/tmp`, então é preciso gravar em `~/snap/godot-4/common/`. Scripts `--script` (estendendo `SceneTree`) servem para posicionar a câmera, tirar screenshots, fazer raycast de pixels para coordenadas 3D e simular cliques (`Input.parse_input_event`). Nesses scripts, autoloads devem ser acessados por `root.get_node("EventBus")`. Depois de criar um `class_name` novo fora do editor, rodar `godot --headless --import` para atualizar o cache de classes.
 
@@ -399,3 +404,5 @@ Implementado. Ver GDD §6 e `docs/roteiro-radio.md`.
 - **2026-11-17 — Relógios e knob originais do SM_Devices01, monitor lateral com mipmaps:** novo `PanelMeshParts` (separa peças da malha do painel em tempo de carregamento) e `GaugeNeedle` (gira o ponteiro modelado). `gauge_dial.gd` virou só a impressão da faixa de perigo e da legenda. `PanelButton3D` aceita a peça do painel como tampa (`panel_part_radius`), e o `AlarmMuteKnob` passou a ser o knob "BCN" original pintado de vermelho, com a etiqueta `AlarmMuteTape` no lugar da legenda `AlarmMuteCaption` (removida). `PanelScreen` ganhou `shaded` e `mipmapped`, e o `SystemsMonitor` usa o segundo (sinal novo `content_changed` em `systems_monitor.gd`). Grupo `panel_mesh` no `PanelMesh` da `Main`. Sem sinais novos no `EventBus`. Ver §7.1.
 - **2026-11-17 — Faixa do caminho até a saída:** `MazeGenerator.generate` ganhou `path_range` (filtro de mínimo e máximo nas candidatas a saída) e o `LevelSetup` ganhou `exit_path_range = (28, 32)`. Antes, só havia o mínimo (1/4 das células livres) e a cauda de mapas longos decidia partidas por sorte. Ver §8.1.
 - **2026-11-17 — Rótulos da placa e falas 7/16:** `tools/relabel_panel.py` (Pillow) gera `T_Devices01_BC_1004_rotulos.png` a partir da textura original (intacta): apaga "BCN", "PULSE", "CAMERA" e "L/R VT" com remendos da própria placa (tom corrigido pela moldura, borda suave) e compõe "MUTE" com as letras originais (M de CAMERA, U/E de PULSE, T de L/R VT). Os rótulos ficam só na cor (normal/ORM lisos), no bloco 1004, faixa girada 90º (`(0, 880)–(410, 3140)`). `M_Devices01_1004.tres` aponta para a nova textura (mesmos parâmetros de importação). Removido `AlarmMuteTape`. Rádio: `radio_first_enemy.wav` cortado em 5,85 s (após "De novo não"), legenda nova e `FIRST_ENEMY_INTERFERENCE`; legenda e áudio da `first_hit` com "não foi colisão" (regravado, 21 s). Rodar o script de novo se o painel for reexportado.
+- **2026-11-18 — Limpeza para a entrega:** removida a cena sem uso `scenes/ui/oxygen_gauge.tscn` e o script `scripts/ui/oxygen_gauge.gd` (substituídos pelo `SystemsMonitor` desde 2026-11-16). Tabela de padrões de projeto completada com os padrões de fato usados (§3). Build web descartado (só desktop). Ver GDD §8 e §9.
+- **2026-11-18 — Versão de entrega do GDD em PDF:** `docs/entrega/gdd/build.py` gera `docs/entrega/GDD_Profundidade_Zero_v1.0.pdf` a partir de `gdd.src.html` (HTML com CSS de impressão, A4) usando o Chromium em modo headless. O script insere o histograma do percurso (SVG gerado com os dados da simulação de 3.000 labirintos), monta o Apêndice A a partir de `docs/roteiro-radio.md` e faz duas passadas para preencher o sumário com as páginas reais (`pdftotext`). Imagens em `docs/entrega/gdd/img/`, capturadas do jogo por um `SubViewport` de 1920 × 1080 com MSAA 4×. O `GDD.md` continua sendo o documento de trabalho; o PDF é a versão para leitura.
