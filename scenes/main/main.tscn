@@ -113,7 +113,7 @@ environment = SubResource("Env_cabin")
 
 [node name="CapsuleInterior" parent="." unique_id=814285902 instance=ExtResource("2_interior")]
 
-[node name="PanelMesh" parent="." instance=ExtResource("22_devices01")]
+[node name="PanelMesh" parent="." groups=["panel_mesh"] instance=ExtResource("22_devices01")]
 transform = Transform3D(0, 0, -1.875, 0, 1.875, 0, 1, 0, 0, 1.05, -1.6, -0.3)
 
 [node name="CabinFog" parent="." instance=ExtResource("25_fog")]
