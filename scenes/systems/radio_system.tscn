@@ -43,7 +43,7 @@ max_wait = 15.0
 [sub_resource type="Resource" id="Line_first_enemy"]
 script = ExtResource("2_line")
 id = &"first_enemy"
-subtitle = "Espera... o que foi isso no seu sonar? ... Não. De novo não... Cápsula, repita. Cápsula Dez, repita... sinal... perdendo..."
+subtitle = "Espera... o que foi isso no seu sonar? ... Não... De novo não."
 priority = 1
 max_wait = 6.0
 
@@ -104,7 +104,7 @@ max_wait = 15.0
 [sub_resource type="Resource" id="Line_first_hit"]
 script = ExtResource("2_line")
 id = &"first_hit"
-subtitle = "Cápsula Dez! Registramos um impacto no casco... e não foi parede. Olhe o monitor da esquerda. O casco aguenta mais dois desses... no máximo. ... Ela recuou. Elas sempre recuam depois do primeiro... Saia daí. Agora."
+subtitle = "Cápsula Dez! Registramos um impacto no casco... e não foi colisão. Olhe o monitor da esquerda. O casco aguenta mais dois desses... no máximo. ... Ela recuou. Elas sempre recuam depois do primeiro... Saia daí. Agora."
 priority = 1
 max_wait = 15.0
 

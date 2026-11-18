@@ -14,7 +14,8 @@ extends Node
 ## - Interferência: estática, quedas de sinal e distorção sobem com a proximidade
 ##   do inimigo (mesma escala do mostrador INTERF.). Com o inimigo perto, a estática
 ##   soa mesmo sem fala: o rádio vira um sensor de proximidade (GDD §6.2).
-##   Durante a fala `first_enemy` a interferência sobe até engolir o fim da frase.
+##   Durante a fala `first_enemy` a interferência sobe até FIRST_ENEMY_INTERFERENCE:
+##   a voz suja e falha, mas o "De novo não..." final continua inteligível.
 ## Publica radio_line_started/finished (legendas, ducking do ambiente) e
 ## radio_busy_changed (a tela de fim espera o rádio terminar).
 
@@ -77,6 +78,9 @@ var _exit_distances := {}
 
 ## Interferência 0..1: proximidade do inimigo e "override" roteirizado (first_enemy).
 var _proximity := 0.0
+## Pico da interferência roteirizada da fala first_enemy (1 = engole a voz).
+const FIRST_ENEMY_INTERFERENCE := 0.55
+
 var _override := 0.0
 var _override_tween: Tween
 var _interference := 0.0
@@ -284,7 +288,7 @@ func _start(line: RadioLine) -> void:
 	if stream:
 		_voice.play()
 	if line.id == &"first_enemy":
-		_ramp_override(1.0, duration * 0.9, Tween.EASE_IN)
+		_ramp_override(FIRST_ENEMY_INTERFERENCE, duration * 0.9, Tween.EASE_IN)
 	_update_busy()
 	EventBus.radio_line_started.emit(line.id, line.subtitle, duration)
 
