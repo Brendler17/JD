@@ -1,0 +1,13 @@
+[gd_resource type="ORMMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Radiostations_R168_BC.png" id="1_01ro6"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Radiostations_R168_N.png" id="2_r2v81"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Radiostations_R168_AORM.png" id="3_xcw83"]
+
+[resource]
+resource_name = "MI_Radiostation_R168"
+albedo_texture = ExtResource("1_01ro6")
+orm_texture = ExtResource("3_xcw83")
+normal_enabled = true
+normal_texture = ExtResource("2_r2v81")
+texture_filter = 5

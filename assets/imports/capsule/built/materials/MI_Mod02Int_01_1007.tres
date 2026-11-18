@@ -1,0 +1,13 @@
+[gd_resource type="ORMMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Mod02_Int_BC_1007.png" id="1_e3uro"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Mod02_Int_N_1007.png" id="2_xmx8g"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Mod02_Int_ORM_1007.png" id="3_uqqot"]
+
+[resource]
+resource_name = "MI_Mod02Int_01_1007"
+albedo_texture = ExtResource("1_e3uro")
+orm_texture = ExtResource("3_uqqot")
+normal_enabled = true
+normal_texture = ExtResource("2_xmx8g")
+texture_filter = 5

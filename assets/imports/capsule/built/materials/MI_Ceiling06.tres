@@ -1,0 +1,18 @@
+[gd_resource type="ORMMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Ceiling06_BC.png" id="1_tyon0"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Ceiling06_E.png" id="2_51ypq"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Ceiling06_N.png" id="3_bw3dv"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Ceiling06_ORM.png" id="4_l7h4n"]
+
+[resource]
+resource_name = "MI_Ceiling06"
+albedo_texture = ExtResource("1_tyon0")
+orm_texture = ExtResource("4_l7h4n")
+emission_enabled = true
+emission = Color(1, 0.86, 0.55, 1)
+emission_operator = 1
+emission_texture = ExtResource("2_51ypq")
+normal_enabled = true
+normal_texture = ExtResource("3_bw3dv")
+texture_filter = 5

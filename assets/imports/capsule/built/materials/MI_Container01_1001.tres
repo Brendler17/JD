@@ -1,0 +1,19 @@
+[gd_resource type="ORMMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Container_BC_1001.png" id="1_5v5fx"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Container_E_1001.png" id="2_gd8g4"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Container_N_1001.png" id="3_85rx3"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Container_ORM_1001.png" id="4_r37tj"]
+
+[resource]
+resource_name = "MI_Container01_1001"
+albedo_texture = ExtResource("1_5v5fx")
+orm_texture = ExtResource("4_r37tj")
+emission_enabled = true
+emission = Color(1, 0.868613, 0.643695, 1)
+emission_energy_multiplier = 0.2
+emission_operator = 1
+emission_texture = ExtResource("2_gd8g4")
+normal_enabled = true
+normal_texture = ExtResource("3_85rx3")
+texture_filter = 5

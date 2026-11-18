@@ -1,0 +1,19 @@
+[gd_resource type="ORMMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Wires01_BC.png" id="1_0ic1u"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Wires01_E.png" id="2_2c3dw"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Wires01_N.png" id="3_vbcor"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Wires01_ORM.png" id="4_nl87y"]
+
+[resource]
+resource_name = "MI_Wires01"
+albedo_texture = ExtResource("1_0ic1u")
+orm_texture = ExtResource("4_nl87y")
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 2.0
+emission_operator = 1
+emission_texture = ExtResource("2_2c3dw")
+normal_enabled = true
+normal_texture = ExtResource("3_vbcor")
+texture_filter = 5

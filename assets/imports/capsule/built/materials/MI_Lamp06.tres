@@ -1,0 +1,19 @@
+[gd_resource type="ORMMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Lamp_BC.png" id="1_geaeu"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Lamp_E.png" id="2_h6g6o"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Lamp_N.png" id="3_ieihx"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Lamp_ORM.png" id="4_grf35"]
+
+[resource]
+resource_name = "MI_Lamp06"
+albedo_texture = ExtResource("1_geaeu")
+orm_texture = ExtResource("4_grf35")
+emission_enabled = true
+emission = Color(0.817708, 0.441056, 0.154851, 1)
+emission_energy_multiplier = 1.2
+emission_operator = 1
+emission_texture = ExtResource("2_h6g6o")
+normal_enabled = true
+normal_texture = ExtResource("3_ieihx")
+texture_filter = 5

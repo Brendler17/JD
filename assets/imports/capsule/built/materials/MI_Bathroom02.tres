@@ -1,0 +1,18 @@
+[gd_resource type="ORMMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Bathroom01_BC.png" id="1_7rjph"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Bathroom01_E.png" id="2_wx5iy"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Bathroom01_N.png" id="3_7ekcy"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Bathroom01_ORM.png" id="4_6bqfm"]
+
+[resource]
+resource_name = "MI_Bathroom02"
+albedo_texture = ExtResource("1_7rjph")
+orm_texture = ExtResource("4_6bqfm")
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+emission_operator = 1
+emission_texture = ExtResource("2_wx5iy")
+normal_enabled = true
+normal_texture = ExtResource("3_7ekcy")
+texture_filter = 5

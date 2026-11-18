@@ -1,0 +1,562 @@
+[gd_scene format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/imports/capsule/built/meshes/SM_Mod07WallA01.res" id="1_exadw"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Mod07Wall01_1001.tres" id="2_q3mtd"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Mod07Wall01_1002.tres" id="3_kq1vp"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Mod07Wall01_1003.tres" id="4_4v37w"]
+[ext_resource type="ArrayMesh" path="res://assets/imports/capsule/built/meshes/SM_Ceiling06.res" id="5_mdwm5"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Ceiling06.tres" id="6_k116b"]
+[ext_resource type="ArrayMesh" path="res://assets/imports/capsule/built/meshes/SM_DecompChairA01.res" id="7_7s0l3"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_DecompChair01_1001.tres" id="8_rdgrc"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_DecompChair01_1002.tres" id="9_kqwoe"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_DecompChair01_1003.tres" id="10_vtyii"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_DecompChair01_1004.tres" id="11_m4pal"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_DecompChair01_1005.tres" id="12_28o0c"]
+[ext_resource type="ArrayMesh" path="res://assets/imports/capsule/built/meshes/SM_Device01.res" id="13_tx2xl"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_PropsSet02.tres" id="14_ei6nk"]
+[ext_resource type="ArrayMesh" path="res://assets/imports/capsule/built/meshes/SM_Container02.res" id="15_qjmcb"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Container01_1001.tres" id="16_k8kme"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Container01_1002.tres" id="17_0s0sk"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_ContainerGlass_1001.tres" id="18_uypyn"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_ContainerGlass_1002.tres" id="19_oouio"]
+[ext_resource type="ArrayMesh" path="res://assets/imports/capsule/built/meshes/SM_MetalDoor01.res" id="20_rjixy"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_MetalDoor01.tres" id="21_ubg17"]
+[ext_resource type="ArrayMesh" path="res://assets/imports/capsule/built/meshes/SM_Terminal01.res" id="22_0umta"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Door01.tres" id="23_6sfm5"]
+[ext_resource type="ArrayMesh" path="res://assets/imports/capsule/built/meshes/SM_LabTable01.res" id="24_giepx"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_LabProps01.tres" id="25_bjxig"]
+[ext_resource type="ArrayMesh" path="res://assets/imports/capsule/built/meshes/SM_LabLampA01.res" id="26_28rb1"]
+[ext_resource type="ArrayMesh" path="res://assets/imports/capsule/built/meshes/SM_Lamp01.res" id="27_bnrco"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Props01_1001.tres" id="28_mod3y"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Light01_1001.tres" id="29_1m2i0"]
+[ext_resource type="ArrayMesh" path="res://assets/imports/capsule/built/meshes/SM_GasCylinderA01.res" id="30_vpicj"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Props01_1004.tres" id="31_gr0dr"]
+[ext_resource type="ArrayMesh" path="res://assets/imports/capsule/built/meshes/SM_MetalWall07.res" id="32_iymw2"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_MetalWall07_1001.tres" id="33_5nn6f"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_MetalWall07_1002.tres" id="34_75rnb"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_MetalWall07_1003.tres" id="35_3idn3"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_MetalWall07_1004.tres" id="36_pio1o"]
+[ext_resource type="ArrayMesh" path="res://assets/imports/capsule/built/meshes/SM_MetalFloor22.res" id="37_x6j20"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Wall09_1002.tres" id="38_8ylj4"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Wall09_1003.tres" id="39_s62ov"]
+[ext_resource type="ArrayMesh" path="res://assets/imports/capsule/built/meshes/SM_Mod02Int.res" id="40_5hat6"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Mod02Int_01_1001.tres" id="41_vk55f"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Mod02Int_01_1002.tres" id="42_podq6"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Mod02Int_01_1003.tres" id="43_tucad"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Mod02Int_01_1004.tres" id="44_nh28y"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Mod02Int_01_1005.tres" id="45_durlb"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Mod02Int_01_1006.tres" id="46_lcclm"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Mod02Int_01_1007.tres" id="47_i317u"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Mod02Int_01_1008.tres" id="48_j4wir"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Mod02Int_02_1008.tres" id="49_8nqv6"]
+[ext_resource type="ArrayMesh" path="res://assets/imports/capsule/built/meshes/SM_LampA02.res" id="50_f106u"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Bathroom02.tres" id="51_d56n8"]
+[ext_resource type="ArrayMesh" path="res://assets/imports/capsule/built/meshes/SM_PlugExtensionA01.res" id="52_ffxjr"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Wires01.tres" id="53_jlesl"]
+[ext_resource type="ArrayMesh" path="res://assets/imports/capsule/built/meshes/SM_BedBase01.res" id="54_yrtv8"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_BedBase01.tres" id="55_nx7gg"]
+[ext_resource type="ArrayMesh" path="res://assets/imports/capsule/built/meshes/SM_ScreensA01.res" id="56_o84v1"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Props05.tres" id="57_kmvm4"]
+[ext_resource type="ArrayMesh" path="res://assets/imports/capsule/built/meshes/SM_Ventilation01.res" id="58_4giad"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Ventilation01.tres" id="59_ga6yh"]
+[ext_resource type="ArrayMesh" path="res://assets/imports/capsule/built/meshes/SM_Mod07WallA02.res" id="60_t6ykt"]
+[ext_resource type="ArrayMesh" path="res://assets/imports/capsule/built/meshes/SM_Ladder03.res" id="61_xoyhu"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Ladder01_1002.tres" id="62_qo4ko"]
+[ext_resource type="ArrayMesh" path="res://assets/imports/capsule/built/meshes/SM_OxygenCylinder01.res" id="63_x71c7"]
+[ext_resource type="ArrayMesh" path="res://assets/imports/capsule/built/meshes/SM_GasCylinderA02.res" id="64_kvq8j"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Props01_1002.tres" id="65_330y6"]
+[ext_resource type="ArrayMesh" path="res://assets/imports/capsule/built/meshes/SM_Wall10.res" id="66_g7hvh"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Wall09_1001.tres" id="67_6fk2x"]
+[ext_resource type="ArrayMesh" path="res://assets/imports/capsule/built/meshes/SM_ChemicalContainer02A.res" id="68_qoj12"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_ChemicalContainer02.tres" id="69_46ufl"]
+[ext_resource type="ArrayMesh" path="res://assets/imports/capsule/built/meshes/SM_BedSheets02.res" id="70_hfkoh"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_BedSheets02.tres" id="71_s5a73"]
+[ext_resource type="ArrayMesh" path="res://assets/imports/capsule/built/meshes/SM_Lamp05.res" id="72_mcdvj"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/M_Glass2.tres" id="73_6f80b"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Lamp06.tres" id="74_sobtq"]
+[ext_resource type="ArrayMesh" path="res://assets/imports/capsule/built/meshes/SM_Radiostations_Charger.res" id="75_x38nt"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Radiostation_Charger.tres" id="76_yjx78"]
+[ext_resource type="ArrayMesh" path="res://assets/imports/capsule/built/meshes/SM_Radiostations_R168.res" id="77_fg02u"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Radiostation_R168.tres" id="78_al0fs"]
+[ext_resource type="ArrayMesh" path="res://assets/imports/capsule/built/meshes/SM_Radiostations_R997.res" id="79_mg47d"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Radiostation_R997.tres" id="80_ksmgn"]
+[ext_resource type="ArrayMesh" path="res://assets/imports/capsule/built/meshes/SM_Computer_14a.res" id="81_mdrac"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Computer_14a.tres" id="82_v5ay8"]
+
+[node name="CapsuleInterior" type="Node3D" unique_id=266983676]
+
+[node name="SM_Mod07WallA01" type="MeshInstance3D" parent="." unique_id=120803421]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -1.85, -3.2, -10.2)
+mesh = ExtResource("1_exadw")
+surface_material_override/0 = ExtResource("2_q3mtd")
+surface_material_override/1 = ExtResource("3_kq1vp")
+surface_material_override/2 = ExtResource("4_4v37w")
+
+[node name="SM_Ceiling06" type="MeshInstance3D" parent="." unique_id=1462128929]
+transform = Transform3D(0.99999976, 0, 0, 0, 0, 1, 0, -1.2, 0, -4.45, 2.9, -0.1)
+mesh = ExtResource("5_mdwm5")
+surface_material_override/0 = ExtResource("6_k116b")
+
+[node name="SM_DecompChairA01" type="MeshInstance3D" parent="." unique_id=1313088831]
+transform = Transform3D(-1, 0, 0, 0, 0, 0.99999994, 0, 1.0000001, 0, 0.05, -1.3, -1.9)
+mesh = ExtResource("7_7s0l3")
+surface_material_override/0 = ExtResource("8_rdgrc")
+surface_material_override/1 = ExtResource("9_kqwoe")
+surface_material_override/2 = ExtResource("10_vtyii")
+surface_material_override/3 = ExtResource("11_m4pal")
+surface_material_override/4 = ExtResource("12_28o0c")
+
+[node name="SM_Device01" type="MeshInstance3D" parent="." unique_id=1923676125]
+transform = Transform3D(-1, 0, 0, 0, 0, 1, 0, 1, 0, 2.95, -0.9, -0.6)
+mesh = ExtResource("13_tx2xl")
+surface_material_override/0 = ExtResource("14_ei6nk")
+
+[node name="SM_Container02" type="MeshInstance3D" parent="." unique_id=35304497]
+transform = Transform3D(0, 1, 0, 0, 0, 1, 1, 0, 0, -2.65, -0.9, -0.7)
+mesh = ExtResource("15_qjmcb")
+surface_material_override/0 = ExtResource("16_k8kme")
+surface_material_override/1 = ExtResource("17_0s0sk")
+surface_material_override/2 = ExtResource("18_uypyn")
+surface_material_override/3 = ExtResource("19_oouio")
+
+[node name="SM_MetalDoor01" type="MeshInstance3D" parent="." unique_id=966393376]
+transform = Transform3D(1.01, 0, 0, 0, 0, 1.01, 0, -1, 0, -0.75, -1.45, -12.5)
+mesh = ExtResource("20_rjixy")
+surface_material_override/0 = ExtResource("21_ubg17")
+
+[node name="SM_Terminal01" type="MeshInstance3D" parent="." unique_id=1381984055]
+transform = Transform3D(0, -1, 0, 0, 0, 1, -1, 0, 0, -1.03, 0.2, -12.1)
+mesh = ExtResource("22_0umta")
+surface_material_override/0 = ExtResource("23_6sfm5")
+
+[node name="SM_LabTable01" type="MeshInstance3D" parent="." unique_id=278894149]
+transform = Transform3D(0, 1.3999999, 0, 0, 0, 1, 1.5, 0, 0, 3.35, -0.95, -0.2)
+mesh = ExtResource("24_giepx")
+surface_material_override/0 = ExtResource("25_bjxig")
+
+[node name="SM_LabLampA01" type="MeshInstance3D" parent="." unique_id=865030677]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -0.15, 2.9, -3)
+mesh = ExtResource("26_28rb1")
+surface_material_override/0 = ExtResource("25_bjxig")
+
+[node name="SM_Lamp01" type="MeshInstance3D" parent="." unique_id=148978535]
+transform = Transform3D(1, 0, 0, 0, 0, 0.99999976, 0, -1, 0, -2.25, 3.2, -4.1)
+mesh = ExtResource("27_bnrco")
+surface_material_override/0 = ExtResource("28_mod3y")
+surface_material_override/1 = ExtResource("29_1m2i0")
+
+[node name="SM_GasCylinderA01" type="MeshInstance3D" parent="." unique_id=304510655]
+transform = Transform3D(-0.8191519, 0, -0.57357645, 0.57357633, 0, -0.8191521, 0, -1, 0, -5.05, -2, -2.95)
+mesh = ExtResource("30_vpicj")
+surface_material_override/0 = ExtResource("31_gr0dr")
+
+[node name="SM_MetalWall07" type="MeshInstance3D" parent="." unique_id=1214634249]
+transform = Transform3D(0.99999994, 0, 0, 0, 0, 1, 0, -1, 0, 0.05, -3.3, -12.1)
+mesh = ExtResource("32_iymw2")
+surface_material_override/0 = ExtResource("33_5nn6f")
+surface_material_override/1 = ExtResource("34_75rnb")
+surface_material_override/2 = ExtResource("35_3idn3")
+surface_material_override/3 = ExtResource("36_pio1o")
+
+[node name="SM_MetalFloor23" type="MeshInstance3D" parent="." unique_id=391790855]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -2.45, -1.9, -4.1)
+mesh = ExtResource("37_x6j20")
+surface_material_override/0 = ExtResource("38_8ylj4")
+surface_material_override/1 = ExtResource("39_s62ov")
+
+[node name="SM_MetalFloor24" type="MeshInstance3D" parent="." unique_id=1030194951]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -0.9999999, 0, -2.45, -1.9, -2.1)
+mesh = ExtResource("37_x6j20")
+surface_material_override/0 = ExtResource("38_8ylj4")
+surface_material_override/1 = ExtResource("39_s62ov")
+
+[node name="SM_MetalFloor25" type="MeshInstance3D" parent="." unique_id=1067992675]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1.0000005, 0, -2.45, -1.9, -8.1)
+mesh = ExtResource("37_x6j20")
+surface_material_override/0 = ExtResource("38_8ylj4")
+surface_material_override/1 = ExtResource("39_s62ov")
+
+[node name="SM_MetalFloor26" type="MeshInstance3D" parent="." unique_id=1997285069]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -2.45, -1.9, -6.1)
+mesh = ExtResource("37_x6j20")
+surface_material_override/0 = ExtResource("38_8ylj4")
+surface_material_override/1 = ExtResource("39_s62ov")
+
+[node name="SM_MetalFloor27" type="MeshInstance3D" parent="." unique_id=984075428]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -2.45, -1.9, -10.1)
+mesh = ExtResource("37_x6j20")
+surface_material_override/0 = ExtResource("38_8ylj4")
+surface_material_override/1 = ExtResource("39_s62ov")
+
+[node name="SM_MetalFloor28" type="MeshInstance3D" parent="." unique_id=1077082372]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -2.45, -1.9, -0.1)
+mesh = ExtResource("37_x6j20")
+surface_material_override/0 = ExtResource("38_8ylj4")
+surface_material_override/1 = ExtResource("39_s62ov")
+
+[node name="SM_Mod07WallA2" type="MeshInstance3D" parent="." unique_id=810509947]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -1.85, -3.2, -8.2)
+mesh = ExtResource("1_exadw")
+surface_material_override/0 = ExtResource("2_q3mtd")
+surface_material_override/1 = ExtResource("3_kq1vp")
+surface_material_override/2 = ExtResource("4_4v37w")
+
+[node name="SM_Mod07WallA3" type="MeshInstance3D" parent="." unique_id=1905323711]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -1.85, -3.2, -6.2)
+mesh = ExtResource("1_exadw")
+surface_material_override/0 = ExtResource("2_q3mtd")
+surface_material_override/1 = ExtResource("3_kq1vp")
+surface_material_override/2 = ExtResource("4_4v37w")
+
+[node name="SM_Mod07WallA4" type="MeshInstance3D" parent="." unique_id=1943223905]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -1.85, -3.2, -0.2)
+mesh = ExtResource("1_exadw")
+surface_material_override/0 = ExtResource("2_q3mtd")
+surface_material_override/1 = ExtResource("3_kq1vp")
+surface_material_override/2 = ExtResource("4_4v37w")
+
+[node name="SM_Mod07WallA5" type="MeshInstance3D" parent="." unique_id=1513970527]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -1.85, -3.2, -2.2)
+mesh = ExtResource("1_exadw")
+surface_material_override/0 = ExtResource("2_q3mtd")
+surface_material_override/1 = ExtResource("3_kq1vp")
+surface_material_override/2 = ExtResource("4_4v37w")
+
+[node name="SM_Mod07WallA6" type="MeshInstance3D" parent="." unique_id=945217486]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -0.99999976, 0, -1.85, -3.2, -4.2)
+mesh = ExtResource("1_exadw")
+surface_material_override/0 = ExtResource("2_q3mtd")
+surface_material_override/1 = ExtResource("3_kq1vp")
+surface_material_override/2 = ExtResource("4_4v37w")
+
+[node name="SM_Mod07WallA7" type="MeshInstance3D" parent="." unique_id=187831286]
+transform = Transform3D(-1, 0, 0, 0, 0, 1, 0, 1, 0, 1.9500003, -3.2, -2.2)
+mesh = ExtResource("1_exadw")
+surface_material_override/0 = ExtResource("2_q3mtd")
+surface_material_override/1 = ExtResource("3_kq1vp")
+surface_material_override/2 = ExtResource("4_4v37w")
+
+[node name="SM_Mod07WallA8" type="MeshInstance3D" parent="." unique_id=1452676505]
+transform = Transform3D(-1, 0, 0, 0, 0, 1, 0, 1, 0, 1.9500003, -3.2, -4.2)
+mesh = ExtResource("1_exadw")
+surface_material_override/0 = ExtResource("2_q3mtd")
+surface_material_override/1 = ExtResource("3_kq1vp")
+surface_material_override/2 = ExtResource("4_4v37w")
+
+[node name="SM_Mod07WallA9" type="MeshInstance3D" parent="." unique_id=1775000875]
+transform = Transform3D(-1, 0, 0, 0, 0, 1, 0, 1, 0, 1.95, -3.2, -6.2)
+mesh = ExtResource("1_exadw")
+surface_material_override/0 = ExtResource("2_q3mtd")
+surface_material_override/1 = ExtResource("3_kq1vp")
+surface_material_override/2 = ExtResource("4_4v37w")
+
+[node name="SM_Mod07WallA10" type="MeshInstance3D" parent="." unique_id=105611871]
+transform = Transform3D(-1, 0, 0, 0, 0, 1, 0, 1, 0, 1.95, -3.2, -8.2)
+mesh = ExtResource("1_exadw")
+surface_material_override/0 = ExtResource("2_q3mtd")
+surface_material_override/1 = ExtResource("3_kq1vp")
+surface_material_override/2 = ExtResource("4_4v37w")
+
+[node name="SM_Mod07WallA11" type="MeshInstance3D" parent="." unique_id=2310108]
+transform = Transform3D(-1, 0, 0, 0, 0, 1, 0, 1, 0, 1.95, -3.2, -10.2)
+mesh = ExtResource("1_exadw")
+surface_material_override/0 = ExtResource("2_q3mtd")
+surface_material_override/1 = ExtResource("3_kq1vp")
+surface_material_override/2 = ExtResource("4_4v37w")
+
+[node name="SM_Mod07WallA12" type="MeshInstance3D" parent="." unique_id=872323892]
+transform = Transform3D(-1, 0, 0, 0, 0, 1, 0, 1, 0, 1.95, -3.2, -12.2)
+mesh = ExtResource("1_exadw")
+surface_material_override/0 = ExtResource("2_q3mtd")
+surface_material_override/1 = ExtResource("3_kq1vp")
+surface_material_override/2 = ExtResource("4_4v37w")
+
+[node name="SM_MetalWall8" type="MeshInstance3D" parent="." unique_id=809624775]
+transform = Transform3D(0.99999994, 0, 0, 0, 0, 1, 0, -1, 0, 0.05, -3.3, 0.1)
+mesh = ExtResource("32_iymw2")
+surface_material_override/0 = ExtResource("33_5nn6f")
+surface_material_override/1 = ExtResource("34_75rnb")
+surface_material_override/2 = ExtResource("35_3idn3")
+surface_material_override/3 = ExtResource("36_pio1o")
+
+[node name="SM_Mod02Int" type="MeshInstance3D" parent="." unique_id=386651092]
+transform = Transform3D(0.99999994, 0, 0, 0, 0, 1, 0, -1, 0, 0.05, 0, -11.9)
+mesh = ExtResource("40_5hat6")
+surface_material_override/0 = ExtResource("41_vk55f")
+surface_material_override/1 = ExtResource("42_podq6")
+surface_material_override/2 = ExtResource("43_tucad")
+surface_material_override/3 = ExtResource("44_nh28y")
+surface_material_override/4 = ExtResource("45_durlb")
+surface_material_override/5 = ExtResource("46_lcclm")
+surface_material_override/6 = ExtResource("47_i317u")
+surface_material_override/7 = ExtResource("48_j4wir")
+surface_material_override/8 = ExtResource("49_8nqv6")
+
+[node name="SM_LampA02" type="MeshInstance3D" parent="." unique_id=1175290445]
+transform = Transform3D(0, 1, 0, 0, 0, 1, 1, 0, 0, 0.05, 2.9, -10.1)
+mesh = ExtResource("50_f106u")
+surface_material_override/0 = ExtResource("51_d56n8")
+
+[node name="SM_PlugExtensionA01" type="MeshInstance3D" parent="." unique_id=508880510]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -0.99999994, 0, -1.95, -1.7, -1.3)
+mesh = ExtResource("52_ffxjr")
+surface_material_override/0 = ExtResource("53_jlesl")
+
+[node name="SM_BedBase01" type="MeshInstance3D" parent="." unique_id=619880503]
+transform = Transform3D(2.5, 0, 0, 0, -1.5, 0, 0, 0, -1, 0, 0, 0)
+mesh = ExtResource("54_yrtv8")
+surface_material_override/0 = ExtResource("55_nx7gg")
+
+[node name="SM_LabTable2" type="MeshInstance3D" parent="." unique_id=352184245]
+transform = Transform3D(0, 1.4, 0, 0, 0, 1, 1.5, 0, 0, -1.15, -0.95, -0.2)
+mesh = ExtResource("24_giepx")
+surface_material_override/0 = ExtResource("25_bjxig")
+
+[node name="SM_ScreensA01" type="MeshInstance3D" parent="." unique_id=1370256131]
+transform = Transform3D(0, 0.9999999, 0, 0, 0, 1, 1, 0, 0, 2.35, -0.9, -0.6)
+mesh = ExtResource("56_o84v1")
+surface_material_override/0 = ExtResource("57_kmvm4")
+
+[node name="SM_Ventilation01" type="MeshInstance3D" parent="." unique_id=1288375433]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1.25, 0, 3.65, 2.7, -12.6)
+mesh = ExtResource("58_4giad")
+surface_material_override/0 = ExtResource("59_ga6yh")
+
+[node name="SM_Ventilation2" type="MeshInstance3D" parent="." unique_id=1361233292]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1.25, 0, 3.65, 2.7, -6.2)
+mesh = ExtResource("58_4giad")
+surface_material_override/0 = ExtResource("59_ga6yh")
+
+[node name="SM_Mod07WallA13" type="MeshInstance3D" parent="." unique_id=2121624064]
+transform = Transform3D(0, -1, 0, 0, 0, 1, -1.0000002, 0, 0, 1.05, -2.55, -3.3)
+mesh = ExtResource("60_t6ykt")
+surface_material_override/0 = ExtResource("2_q3mtd")
+surface_material_override/1 = ExtResource("3_kq1vp")
+surface_material_override/2 = ExtResource("4_4v37w")
+
+[node name="SM_Ladder03" type="MeshInstance3D" parent="." unique_id=541652563]
+transform = Transform3D(0, -0.9999999, 0, 0, 0, 0.99999994, -1, 0, 0, 1.85, -1.8, -1.2)
+mesh = ExtResource("61_xoyhu")
+surface_material_override/0 = ExtResource("62_qo4ko")
+
+[node name="SM_Ladder4" type="MeshInstance3D" parent="." unique_id=1297861558]
+transform = Transform3D(0, 1, 0, 0, 0, 0.99999994, 1, 0, 0, -1.75, -1.8, -2.3)
+mesh = ExtResource("61_xoyhu")
+surface_material_override/0 = ExtResource("62_qo4ko")
+
+[node name="SM_OxygenCylinder4" type="MeshInstance3D" parent="." unique_id=776706221]
+transform = Transform3D(0.9848077, 0.17364824, 0, 0, 0, 1, 0.17364812, -0.9848077, 0, -0.43, -1.7, -3)
+mesh = ExtResource("63_x71c7")
+surface_material_override/0 = ExtResource("16_k8kme")
+
+[node name="SM_GasCylinderA02" type="MeshInstance3D" parent="." unique_id=999036439]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -6.55, -1.7, -5)
+mesh = ExtResource("64_kvq8j")
+surface_material_override/0 = ExtResource("65_330y6")
+
+[node name="SM_GasCylinderA2" type="MeshInstance3D" parent="." unique_id=232427114]
+transform = Transform3D(-0.81915236, 0, -0.57357645, -0.5735764, 0, 0.8191521, 0, 1, 0, -5.15, 1.2, -9.35)
+mesh = ExtResource("30_vpicj")
+surface_material_override/0 = ExtResource("31_gr0dr")
+
+[node name="SM_Wall10" type="MeshInstance3D" parent="." unique_id=2095882336]
+transform = Transform3D(1, 0, 0, 0, 0, 1.2500002, 0, -1.4999995, 0, -11.45, -4.3, -8.9)
+mesh = ExtResource("66_g7hvh")
+surface_material_override/0 = ExtResource("67_6fk2x")
+surface_material_override/1 = ExtResource("38_8ylj4")
+
+[node name="SM_Wall11" type="MeshInstance3D" parent="." unique_id=310664355]
+transform = Transform3D(1, 0, 0, 0, 0, 1.2500002, 0, -1.5, 0, -11.45, -4.3, -0.4)
+mesh = ExtResource("66_g7hvh")
+surface_material_override/0 = ExtResource("67_6fk2x")
+surface_material_override/1 = ExtResource("38_8ylj4")
+
+[node name="SM_ChemicalContainer02A" type="MeshInstance3D" parent="." unique_id=1743818772]
+transform = Transform3D(0, -1, 0, 0, 0, 1, -1, 0, 0, 4.95, -1.9, -1.2)
+mesh = ExtResource("68_qoj12")
+surface_material_override/0 = ExtResource("69_46ufl")
+
+[node name="SM_BedBase2" type="MeshInstance3D" parent="." unique_id=1195540271]
+transform = Transform3D(1.5, 0, 0, 0, 0, 0.99999994, 0, -1.5, 0, 4.85, -1.3, -10.5)
+mesh = ExtResource("54_yrtv8")
+surface_material_override/0 = ExtResource("55_nx7gg")
+
+[node name="SM_BedSheets02" type="MeshInstance3D" parent="." unique_id=1018712659]
+transform = Transform3D(1.5, 0, 0, 0, 0, 1, 0, -1.5, 0, 4.95, -1.28, -10.5)
+mesh = ExtResource("70_hfkoh")
+surface_material_override/0 = ExtResource("71_s5a73")
+
+[node name="SM_Lamp6" type="MeshInstance3D" parent="." unique_id=1167429887]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -0.99999976, 0, 5.55, 0.1, -4.2)
+mesh = ExtResource("72_mcdvj")
+surface_material_override/0 = ExtResource("73_6f80b")
+surface_material_override/1 = ExtResource("74_sobtq")
+
+[node name="SM_Lamp7" type="MeshInstance3D" parent="." unique_id=1076035219]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 5.55, 0.1, -6.2)
+mesh = ExtResource("72_mcdvj")
+surface_material_override/0 = ExtResource("73_6f80b")
+surface_material_override/1 = ExtResource("74_sobtq")
+
+[node name="SM_Lamp8" type="MeshInstance3D" parent="." unique_id=203017259]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 5.55, 0.1, -8.2)
+mesh = ExtResource("72_mcdvj")
+surface_material_override/0 = ExtResource("73_6f80b")
+surface_material_override/1 = ExtResource("74_sobtq")
+
+[node name="SM_Lamp9" type="MeshInstance3D" parent="." unique_id=439186760]
+transform = Transform3D(-1, 0, 0, 0, 0, 1, 0, 1, 0, -5.45, 0.1, -4.2)
+mesh = ExtResource("72_mcdvj")
+surface_material_override/0 = ExtResource("73_6f80b")
+surface_material_override/1 = ExtResource("74_sobtq")
+
+[node name="SM_Lamp10" type="MeshInstance3D" parent="." unique_id=589957169]
+transform = Transform3D(-1, 0, 0, 0, 0, 1, 0, 1, 0, -5.45, 0.1, -6.2)
+mesh = ExtResource("72_mcdvj")
+surface_material_override/0 = ExtResource("73_6f80b")
+surface_material_override/1 = ExtResource("74_sobtq")
+
+[node name="SM_Lamp11" type="MeshInstance3D" parent="." unique_id=1690059737]
+transform = Transform3D(-1, 0, 0, 0, 0, 1, 0, 1, 0, -5.45, 0.1, -8.2)
+mesh = ExtResource("72_mcdvj")
+surface_material_override/0 = ExtResource("73_6f80b")
+surface_material_override/1 = ExtResource("74_sobtq")
+
+[node name="SM_GasCylinderA3" type="MeshInstance3D" parent="." unique_id=1914847193]
+transform = Transform3D(-1, 0, 0, 0, 0, 1, 0, 1, 0, 6.65, -1.7, -7.58)
+mesh = ExtResource("64_kvq8j")
+surface_material_override/0 = ExtResource("65_330y6")
+
+[node name="SM_OxygenCylinder5" type="MeshInstance3D" parent="." unique_id=610887740]
+transform = Transform3D(0.34202012, -0.93969274, 0, 0, 0, 1, -0.93969274, -0.34202027, 0, -0.6, -1.7, -3)
+mesh = ExtResource("63_x71c7")
+surface_material_override/0 = ExtResource("16_k8kme")
+
+[node name="SM_OxygenCylinder6" type="MeshInstance3D" parent="." unique_id=388623327]
+transform = Transform3D(0.9848077, 0.17364824, 0, 0, 0, 1, 0.17364812, -0.98480785, 0, -0.68, -1.7, -2.88)
+mesh = ExtResource("63_x71c7")
+surface_material_override/0 = ExtResource("16_k8kme")
+
+[node name="SM_OxygenCylinder7" type="MeshInstance3D" parent="." unique_id=2031937493]
+transform = Transform3D(0.9396927, -0.3420201, 0, 0, 0, 1, -0.34202003, -0.93969285, 0, -0.51, -1.7, -2.88)
+mesh = ExtResource("63_x71c7")
+surface_material_override/0 = ExtResource("16_k8kme")
+
+[node name="SM_OxygenCylinder8" type="MeshInstance3D" parent="." unique_id=1463874666]
+transform = Transform3D(-0.34202027, -0.9396927, 0, 0, 0, 1, -0.9396925, 0.34202003, 0, 0.69, -1.7, -2.88)
+mesh = ExtResource("63_x71c7")
+surface_material_override/0 = ExtResource("16_k8kme")
+
+[node name="SM_OxygenCylinder9" type="MeshInstance3D" parent="." unique_id=1744789693]
+transform = Transform3D(0.7660444, 0.6427876, 0, 0, 0, 1, 0.6427877, -0.7660446, 0, 0.52, -1.7, -2.88)
+mesh = ExtResource("63_x71c7")
+surface_material_override/0 = ExtResource("16_k8kme")
+
+[node name="SM_OxygenCylinder10" type="MeshInstance3D" parent="." unique_id=1682940856]
+transform = Transform3D(-0.86602545, 0.5, 0, 0, 0, 1, 0.5, 0.86602545, 0, 0.6, -1.7, -3)
+mesh = ExtResource("63_x71c7")
+surface_material_override/0 = ExtResource("16_k8kme")
+
+[node name="SM_OxygenCylinder11" type="MeshInstance3D" parent="." unique_id=352045042]
+transform = Transform3D(0.93969274, -0.34202027, 0, 0, 0, 1, -0.34202027, -0.93969274, 0, 0.77, -1.7, -3)
+mesh = ExtResource("63_x71c7")
+surface_material_override/0 = ExtResource("16_k8kme")
+
+[node name="SM_Lamp2" type="MeshInstance3D" parent="." unique_id=1245030074]
+transform = Transform3D(1, 0, 0, 0, 0, 0.99999976, 0, -1, 0, -2.25, 3.2, -2)
+mesh = ExtResource("27_bnrco")
+surface_material_override/0 = ExtResource("28_mod3y")
+surface_material_override/1 = ExtResource("29_1m2i0")
+
+[node name="SM_Lamp3" type="MeshInstance3D" parent="." unique_id=1512634557]
+transform = Transform3D(1, 0, 0, 0, 0, 0.99999976, 0, -1, 0, -2.25, 3.2, -10.4)
+mesh = ExtResource("27_bnrco")
+surface_material_override/0 = ExtResource("28_mod3y")
+surface_material_override/1 = ExtResource("29_1m2i0")
+
+[node name="SM_Lamp4" type="MeshInstance3D" parent="." unique_id=648111160]
+transform = Transform3D(1, 0, 0, 0, 0, 0.99999976, 0, -1, 0, -2.25, 3.2, -8.3)
+mesh = ExtResource("27_bnrco")
+surface_material_override/0 = ExtResource("28_mod3y")
+surface_material_override/1 = ExtResource("29_1m2i0")
+
+[node name="SM_Lamp5" type="MeshInstance3D" parent="." unique_id=1369330568]
+transform = Transform3D(1, 0, 0, 0, 0, 0.99999976, 0, -1, 0, 2.25, 3.2, -10.4)
+mesh = ExtResource("27_bnrco")
+surface_material_override/0 = ExtResource("28_mod3y")
+surface_material_override/1 = ExtResource("29_1m2i0")
+
+[node name="SM_Lamp12" type="MeshInstance3D" parent="." unique_id=2089987940]
+transform = Transform3D(1, 0, 0, 0, 0, 0.99999976, 0, -1, 0, 2.25, 3.2, -8.3)
+mesh = ExtResource("27_bnrco")
+surface_material_override/0 = ExtResource("28_mod3y")
+surface_material_override/1 = ExtResource("29_1m2i0")
+
+[node name="SM_Lamp13" type="MeshInstance3D" parent="." unique_id=129403116]
+transform = Transform3D(1, 0, 0, 0, 0, 0.99999976, 0, -1, 0, 2.25, 3.2, -4.1)
+mesh = ExtResource("27_bnrco")
+surface_material_override/0 = ExtResource("28_mod3y")
+surface_material_override/1 = ExtResource("29_1m2i0")
+
+[node name="SM_Lamp14" type="MeshInstance3D" parent="." unique_id=41787832]
+transform = Transform3D(1, 0, 0, 0, 0, 0.99999976, 0, -1, 0, 2.25, 3.2, -2)
+mesh = ExtResource("27_bnrco")
+surface_material_override/0 = ExtResource("28_mod3y")
+surface_material_override/1 = ExtResource("29_1m2i0")
+
+[node name="SM_Ventilation3" type="MeshInstance3D" parent="." unique_id=168860722]
+transform = Transform3D(-1.0000002, 0, 0, 0, 0, 1, 0, 1.25, 0, -3.55, 2.7, 0.2)
+mesh = ExtResource("58_4giad")
+surface_material_override/0 = ExtResource("59_ga6yh")
+
+[node name="SM_Ventilation4" type="MeshInstance3D" parent="." unique_id=1571391788]
+transform = Transform3D(-1.0000002, 0, 0, 0, 0, 1, 0, 1.25, 0, -3.55, 2.7, -6.2)
+mesh = ExtResource("58_4giad")
+surface_material_override/0 = ExtResource("59_ga6yh")
+
+[node name="SM_ChemicalContainer02A2" type="MeshInstance3D" parent="." unique_id=865726931]
+transform = Transform3D(0, -1, 0, 0, 0, 1, -0.99999976, 0, 0, 4.95, -1.9, -3.2)
+mesh = ExtResource("68_qoj12")
+surface_material_override/0 = ExtResource("69_46ufl")
+
+[node name="SM_Lamp15" type="MeshInstance3D" parent="." unique_id=1924934681]
+transform = Transform3D(0.99999994, 0, 0, 0, -0.7660444, 0.64278746, 0, -0.6427889, -0.7660446, 0.05, 2.5, -12.1)
+mesh = ExtResource("27_bnrco")
+surface_material_override/0 = ExtResource("28_mod3y")
+surface_material_override/1 = ExtResource("29_1m2i0")
+
+[node name="SM_Lamp16" type="MeshInstance3D" parent="." unique_id=974630539]
+transform = Transform3D(0.99999994, 0, 0, 0, 0.76604426, 0.64278746, 0, -0.64278746, 0.7660443, 0.05, 2.5, -0.3)
+mesh = ExtResource("27_bnrco")
+surface_material_override/0 = ExtResource("28_mod3y")
+surface_material_override/1 = ExtResource("29_1m2i0")
+
+[node name="SM_Radiostations_Charger" type="MeshInstance3D" parent="." unique_id=1317657530]
+transform = Transform3D(-1.2990379, 0.75, 0, 0, 0, 1.5, 0.75, 1.299038, 0, -1.45, -1.7, -0.5)
+mesh = ExtResource("75_x38nt")
+surface_material_override/0 = ExtResource("76_yjx78")
+
+[node name="SM_Radiostations_R168" type="MeshInstance3D" parent="." unique_id=1793398706]
+transform = Transform3D(-1.2310098, 0.21706021, 0, 0, 0, 1.25, 0.21706027, 1.2310098, 0, 1.65, -0.9, -0.6)
+mesh = ExtResource("77_fg02u")
+surface_material_override/0 = ExtResource("78_al0fs")
+
+[node name="SM_Radiostations_R997" type="MeshInstance3D" parent="." unique_id=1634501342]
+transform = Transform3D(-1, 0, 0, 0, 0, 1, 0, 1, 0, -2.05, -0.9, -0.6)
+mesh = ExtResource("79_mg47d")
+surface_material_override/0 = ExtResource("80_ksmgn")
+
+[node name="SM_Computer_14a" type="MeshInstance3D" parent="." unique_id=145858530]
+transform = Transform3D(-1, 0, 0, 0, 0, 1, 0, 1, 0, -1.45, -0.9, -0.6)
+mesh = ExtResource("81_mdrac")
+surface_material_override/0 = ExtResource("82_v5ay8")
+
+[node name="SM_PlugExtensionA2" type="MeshInstance3D" parent="." unique_id=1719053416]
+transform = Transform3D(0.5, 0.86602545, 0, 0, 0, 1, 0.8660254, -0.5, 0, 2.15, -1.7, -0.8)
+mesh = ExtResource("52_ffxjr")
+surface_material_override/0 = ExtResource("53_jlesl")
+
+[node name="SM_Radiostations_Charger2" type="MeshInstance3D" parent="." unique_id=1437747337]
+transform = Transform3D(-1.477212, -0.26047242, 0, 0, 0, 1.5, -0.26047242, 1.477212, 0, 1.65, -1.7, -0.3)
+mesh = ExtResource("75_x38nt")
+surface_material_override/0 = ExtResource("76_yjx78")

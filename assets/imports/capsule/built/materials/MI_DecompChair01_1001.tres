@@ -1,0 +1,13 @@
+[gd_resource type="ORMMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_DecompChair01_BC_1001.png" id="1_3wc3q"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_DecompChair01_N_1001.png" id="2_dqpm3"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_DecompChair01_ORM_1001.png" id="3_n5yqg"]
+
+[resource]
+resource_name = "MI_DecompChair01_1001"
+albedo_texture = ExtResource("1_3wc3q")
+orm_texture = ExtResource("3_n5yqg")
+normal_enabled = true
+normal_texture = ExtResource("2_dqpm3")
+texture_filter = 5

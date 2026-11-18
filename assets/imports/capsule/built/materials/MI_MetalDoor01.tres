@@ -1,0 +1,13 @@
+[gd_resource type="ORMMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_MetalDoor01_BC.png" id="1_rneyf"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_MetalDoor01_N.png" id="2_c7723"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_MetalDoor01_ORM.png" id="3_edsmf"]
+
+[resource]
+resource_name = "MI_MetalDoor01"
+albedo_texture = ExtResource("1_rneyf")
+orm_texture = ExtResource("3_edsmf")
+normal_enabled = true
+normal_texture = ExtResource("2_c7723")
+texture_filter = 5

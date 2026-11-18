@@ -1,0 +1,3976 @@
+{
+ "map": "/Game/ProfundidadeZero/Capsule",
+ "placements": [
+  {
+   "actor": "SM_Mod07WallA01",
+   "mesh": "SM_Mod07WallA01",
+   "loc": [
+    60.0,
+    -610.0,
+    -130.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Mod07Wall01"
+   ]
+  },
+  {
+   "actor": "SM_Ceiling06",
+   "mesh": "SM_Ceiling06",
+   "loc": [
+    -200.0,
+    400.0,
+    480.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.0,
+    1.2,
+    1.0
+   ],
+   "materials": [
+    "MI_Ceiling06"
+   ]
+  },
+  {
+   "actor": "SM_DecompChairA01",
+   "mesh": "SM_DecompChairA01",
+   "loc": [
+    250.0,
+    220.0,
+    60.0
+   ],
+   "quat": [
+    -2.237312831651947e-16,
+    1.3030112296551615e-16,
+    -1.0,
+    7.3887043024834e-15
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_DecompChair01"
+   ]
+  },
+  {
+   "actor": "SM_Device01",
+   "mesh": "SM_Device01",
+   "loc": [
+    540.0,
+    350.0,
+    100.00000000000006
+   ],
+   "quat": [
+    -2.2204460492503114e-16,
+    1.1102230246251367e-16,
+    -0.9999999999999999,
+    7.388704302483399e-15
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_PropsSet02"
+   ]
+  },
+  {
+   "actor": "SM_Container02",
+   "mesh": "SM_Container02",
+   "loc": [
+    -20.0,
+    340.0,
+    100.0
+   ],
+   "quat": [
+    9.094414602383968e-17,
+    -9.332946926643964e-17,
+    0.7071067811865442,
+    0.7071067811865507
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Container01",
+    "MI_ContainerGlass"
+   ]
+  },
+  {
+   "actor": "SM_MetalDoor01",
+   "mesh": "SM_MetalDoor01",
+   "loc": [
+    170.0,
+    -840.0,
+    45.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.01,
+    1.0,
+    1.01
+   ],
+   "materials": [
+    "MI_MetalDoor01"
+   ]
+  },
+  {
+   "actor": "SM_Terminal01",
+   "mesh": "SM_Terminal01",
+   "loc": [
+    142.0,
+    -800.0,
+    210.0
+   ],
+   "quat": [
+    -1.7183409220062739e-16,
+    -1.2439523089652472e-17,
+    -0.7071067811865434,
+    0.7071067811865518
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Door01"
+   ]
+  },
+  {
+   "actor": "SM_LabTable01",
+   "mesh": "SM_LabTable01",
+   "loc": [
+    580.0,
+    390.0,
+    95.0
+   ],
+   "quat": [
+    7.850462293418806e-17,
+    -7.850462293418864e-17,
+    0.7071067811865449,
+    0.7071067811865501
+   ],
+   "scale": [
+    1.5,
+    1.4,
+    1.0
+   ],
+   "materials": [
+    "MI_LabProps01"
+   ]
+  },
+  {
+   "actor": "SM_LabLampA01",
+   "mesh": "SM_LabLampA01",
+   "loc": [
+    230.0,
+    110.0,
+    480.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_LabProps01"
+   ]
+  },
+  {
+   "actor": "SM_Lamp01",
+   "mesh": "SM_Lamp01",
+   "loc": [
+    20.0,
+    0.0,
+    510.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Props01",
+    "MI_Light01"
+   ]
+  },
+  {
+   "actor": "SM_GasCylinderA01",
+   "mesh": "SM_GasCylinderA01",
+   "loc": [
+    -260.0,
+    115.0,
+    -10.0
+   ],
+   "quat": [
+    -6.551925145178353e-15,
+    0.9537169507482284,
+    -3.0719826710278335e-15,
+    -0.3007057995042683
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Props01"
+   ]
+  },
+  {
+   "actor": "SM_MetalWall07",
+   "mesh": "SM_MetalWall07",
+   "loc": [
+    250.0,
+    -800.0,
+    -140.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_MetalWall07"
+   ]
+  },
+  {
+   "actor": "SM_MetalFloor23",
+   "mesh": "SM_MetalFloor22",
+   "loc": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Wall09"
+   ]
+  },
+  {
+   "actor": "SM_MetalFloor24",
+   "mesh": "SM_MetalFloor22",
+   "loc": [
+    0.0,
+    200.0,
+    0.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Wall09"
+   ]
+  },
+  {
+   "actor": "SM_MetalFloor25",
+   "mesh": "SM_MetalFloor22",
+   "loc": [
+    0.0,
+    -400.0,
+    0.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Wall09"
+   ]
+  },
+  {
+   "actor": "SM_MetalFloor26",
+   "mesh": "SM_MetalFloor22",
+   "loc": [
+    0.0,
+    -200.0,
+    0.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Wall09"
+   ]
+  },
+  {
+   "actor": "SM_MetalFloor27",
+   "mesh": "SM_MetalFloor22",
+   "loc": [
+    0.0,
+    -600.0,
+    0.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Wall09"
+   ]
+  },
+  {
+   "actor": "SM_MetalFloor28",
+   "mesh": "SM_MetalFloor22",
+   "loc": [
+    0.0,
+    400.0,
+    0.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Wall09"
+   ]
+  },
+  {
+   "actor": "SM_Mod07WallA2",
+   "mesh": "SM_Mod07WallA01",
+   "loc": [
+    60.0,
+    -410.0,
+    -130.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Mod07Wall01"
+   ]
+  },
+  {
+   "actor": "SM_Mod07WallA3",
+   "mesh": "SM_Mod07WallA01",
+   "loc": [
+    60.0,
+    -210.0,
+    -130.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Mod07Wall01"
+   ]
+  },
+  {
+   "actor": "SM_Mod07WallA4",
+   "mesh": "SM_Mod07WallA01",
+   "loc": [
+    60.0,
+    390.0,
+    -130.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Mod07Wall01"
+   ]
+  },
+  {
+   "actor": "SM_Mod07WallA5",
+   "mesh": "SM_Mod07WallA01",
+   "loc": [
+    60.0,
+    190.0,
+    -130.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Mod07Wall01"
+   ]
+  },
+  {
+   "actor": "SM_Mod07WallA6",
+   "mesh": "SM_Mod07WallA01",
+   "loc": [
+    60.0,
+    -10.0,
+    -130.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Mod07Wall01"
+   ]
+  },
+  {
+   "actor": "SM_Mod07WallA7",
+   "mesh": "SM_Mod07WallA01",
+   "loc": [
+    440.0000243359307,
+    189.99999999999727,
+    -130.0
+   ],
+   "quat": [
+    2.220446049250296e-16,
+    -1.1102230246251557e-16,
+    0.9999999999999999,
+    6.500525882783275e-15
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Mod07Wall01"
+   ]
+  },
+  {
+   "actor": "SM_Mod07WallA8",
+   "mesh": "SM_Mod07WallA01",
+   "loc": [
+    440.00001946874465,
+    -10.000000000002728,
+    -130.0
+   ],
+   "quat": [
+    2.220446049250296e-16,
+    -1.1102230246251557e-16,
+    0.9999999999999999,
+    6.500525882783275e-15
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Mod07Wall01"
+   ]
+  },
+  {
+   "actor": "SM_Mod07WallA9",
+   "mesh": "SM_Mod07WallA01",
+   "loc": [
+    440.00001460155863,
+    -210.00000000000148,
+    -130.0
+   ],
+   "quat": [
+    2.220446049250296e-16,
+    -1.1102230246251557e-16,
+    0.9999999999999999,
+    6.500525882783275e-15
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Mod07Wall01"
+   ]
+  },
+  {
+   "actor": "SM_Mod07WallA10",
+   "mesh": "SM_Mod07WallA01",
+   "loc": [
+    440.0000097343725,
+    -410.0000000000016,
+    -130.0
+   ],
+   "quat": [
+    2.220446049250296e-16,
+    -1.1102230246251557e-16,
+    0.9999999999999999,
+    6.500525882783275e-15
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Mod07Wall01"
+   ]
+  },
+  {
+   "actor": "SM_Mod07WallA11",
+   "mesh": "SM_Mod07WallA01",
+   "loc": [
+    440.00000486718614,
+    -610.0000000000006,
+    -130.0
+   ],
+   "quat": [
+    2.220446049250296e-16,
+    -1.1102230246251557e-16,
+    0.9999999999999999,
+    6.500525882783275e-15
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Mod07Wall01"
+   ]
+  },
+  {
+   "actor": "SM_Mod07WallA12",
+   "mesh": "SM_Mod07WallA01",
+   "loc": [
+    440.0,
+    -810.0,
+    -130.0
+   ],
+   "quat": [
+    2.220446049250296e-16,
+    -1.1102230246251557e-16,
+    0.9999999999999999,
+    6.500525882783275e-15
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Mod07Wall01"
+   ]
+  },
+  {
+   "actor": "SM_MetalWall8",
+   "mesh": "SM_MetalWall07",
+   "loc": [
+    250.0,
+    420.0,
+    -140.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_MetalWall07"
+   ]
+  },
+  {
+   "actor": "SM_Mod02Int",
+   "mesh": "SM_Mod02Int",
+   "loc": [
+    250.0,
+    -780.0,
+    190.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Mod02Int_01",
+    "MI_Mod02Int_02"
+   ]
+  },
+  {
+   "actor": "SM_LampA02",
+   "mesh": "SM_LampA02",
+   "loc": [
+    250.0,
+    -600.0,
+    480.0
+   ],
+   "quat": [
+    2.7621346737718646e-16,
+    -5.2017488091871445e-16,
+    0.7071067811865367,
+    0.7071067811865585
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Bathroom02"
+   ]
+  },
+  {
+   "actor": "SM_PlugExtensionA01",
+   "mesh": "SM_PlugExtensionA01",
+   "loc": [
+    50.0,
+    280.0,
+    20.0
+   ],
+   "quat": [
+    -1.1771776655834561e-16,
+    -1.4899416626308947e-16,
+    -6.448681311873737e-15,
+    1.0
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Wires01"
+   ]
+  },
+  {
+   "actor": "SM_BedBase01",
+   "mesh": "SM_BedBase01",
+   "loc": [
+    245.0,
+    410.0,
+    190.0
+   ],
+   "quat": [
+    0.7071067811865472,
+    0.0,
+    0.0,
+    0.7071067811865479
+   ],
+   "scale": [
+    2.5,
+    1.5,
+    1.0
+   ],
+   "materials": [
+    "MI_BedBase01"
+   ]
+  },
+  {
+   "actor": "SM_LabTable2",
+   "mesh": "SM_LabTable01",
+   "loc": [
+    130.0,
+    390.0,
+    95.0
+   ],
+   "quat": [
+    0.0,
+    -0.0,
+    0.7071067811865476,
+    0.7071067811865477
+   ],
+   "scale": [
+    1.5,
+    1.4,
+    1.0
+   ],
+   "materials": [
+    "MI_LabProps01"
+   ]
+  },
+  {
+   "actor": "SM_ScreensA01",
+   "mesh": "SM_ScreensA01",
+   "loc": [
+    480.0,
+    350.0,
+    100.0
+   ],
+   "quat": [
+    7.850462293418806e-17,
+    -7.850462293418864e-17,
+    0.7071067811865449,
+    0.7071067811865501
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Props05"
+   ]
+  },
+  {
+   "actor": "SM_Ventilation01",
+   "mesh": "SM_Ventilation01",
+   "loc": [
+    610.0,
+    -850.0,
+    460.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.0,
+    1.25,
+    1.0
+   ],
+   "materials": [
+    "MI_Ventilation01"
+   ]
+  },
+  {
+   "actor": "SM_Ventilation2",
+   "mesh": "SM_Ventilation01",
+   "loc": [
+    610.0,
+    -210.0,
+    460.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.0,
+    1.25,
+    1.0
+   ],
+   "materials": [
+    "MI_Ventilation01"
+   ]
+  },
+  {
+   "actor": "SM_Devices2",
+   "mesh": "SM_Devices01",
+   "loc": [
+    350.0,
+    380.0,
+    30.0
+   ],
+   "quat": [
+    0.0,
+    -0.0,
+    0.7071067811865476,
+    0.7071067811865477
+   ],
+   "scale": [
+    1.0,
+    1.875,
+    1.875
+   ],
+   "materials": [
+    "MI_Devices01"
+   ]
+  },
+  {
+   "actor": "SM_Mod07WallA13",
+   "mesh": "SM_Mod07WallA02",
+   "loc": [
+    350.0,
+    80.0,
+    -65.0
+   ],
+   "quat": [
+    -1.5700924586837665e-16,
+    -5.053640174072107e-31,
+    -0.7071067811865435,
+    0.7071067811865512
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Mod07Wall01"
+   ]
+  },
+  {
+   "actor": "SM_Ladder03",
+   "mesh": "SM_Ladder03",
+   "loc": [
+    430.0,
+    290.0,
+    10.0
+   ],
+   "quat": [
+    -1.5700924586837665e-16,
+    -5.053640174072107e-31,
+    -0.7071067811865435,
+    0.7071067811865512
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Ladder01"
+   ]
+  },
+  {
+   "actor": "SM_Ladder4",
+   "mesh": "SM_Ladder03",
+   "loc": [
+    70.0,
+    180.0,
+    10.0
+   ],
+   "quat": [
+    1.0338366911349177e-16,
+    -1.0815431559869062e-16,
+    0.7071067811865467,
+    0.7071067811865482
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Ladder01"
+   ]
+  },
+  {
+   "actor": "SM_OxygenCylinder4",
+   "mesh": "SM_OxygenCylinder01",
+   "loc": [
+    202.0,
+    110.0,
+    20.0
+   ],
+   "quat": [
+    -3.7096817553684944e-17,
+    -1.1659711746817975e-17,
+    0.08715574274765767,
+    0.9961946980917452
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Container01"
+   ]
+  },
+  {
+   "actor": "SM_GasCylinderA02",
+   "mesh": "SM_GasCylinderA02",
+   "loc": [
+    -410.0,
+    -90.0,
+    20.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Props01"
+   ]
+  },
+  {
+   "actor": "SM_GasCylinderA2",
+   "mesh": "SM_GasCylinderA01",
+   "loc": [
+    -270.0,
+    -525.0,
+    310.0
+   ],
+   "quat": [
+    -0.30070579950426696,
+    3.379729491820256e-15,
+    0.9537169507482289,
+    5.313951142916776e-15
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Props01"
+   ]
+  },
+  {
+   "actor": "SM_Wall10",
+   "mesh": "SM_Wall10",
+   "loc": [
+    -900.0,
+    -480.0,
+    -240.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.0,
+    1.5,
+    1.25
+   ],
+   "materials": [
+    "MI_Wall09"
+   ]
+  },
+  {
+   "actor": "SM_Wall11",
+   "mesh": "SM_Wall10",
+   "loc": [
+    -900.0,
+    370.0,
+    -240.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.0,
+    1.5,
+    1.25
+   ],
+   "materials": [
+    "MI_Wall09"
+   ]
+  },
+  {
+   "actor": "SM_ChemicalContainer02A",
+   "mesh": "SM_ChemicalContainer02A",
+   "loc": [
+    740.0,
+    290.0,
+    5.684341886080802e-14
+   ],
+   "quat": [
+    -1.5700924586837665e-16,
+    -5.053640174072107e-31,
+    -0.7071067811865435,
+    0.7071067811865512
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_ChemicalContainer02"
+   ]
+  },
+  {
+   "actor": "SM_BedBase2",
+   "mesh": "SM_BedBase01",
+   "loc": [
+    730.0,
+    -640.0,
+    60.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.5,
+    1.5,
+    1.0
+   ],
+   "materials": [
+    "MI_BedBase01"
+   ]
+  },
+  {
+   "actor": "SM_BedSheets02",
+   "mesh": "SM_BedSheets02",
+   "loc": [
+    740.0,
+    -640.0,
+    62.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.5,
+    1.5,
+    1.0
+   ],
+   "materials": [
+    "MI_BedSheets02"
+   ]
+  },
+  {
+   "actor": "SM_Lamp6",
+   "mesh": "SM_Lamp05",
+   "loc": [
+    800.0,
+    -10.0,
+    200.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Lamp06",
+    "M_Glass2"
+   ]
+  },
+  {
+   "actor": "SM_Lamp7",
+   "mesh": "SM_Lamp05",
+   "loc": [
+    800.0,
+    -210.0,
+    200.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Lamp06",
+    "M_Glass2"
+   ]
+  },
+  {
+   "actor": "SM_Lamp8",
+   "mesh": "SM_Lamp05",
+   "loc": [
+    800.0,
+    -410.0,
+    200.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Lamp06",
+    "M_Glass2"
+   ]
+  },
+  {
+   "actor": "SM_Lamp9",
+   "mesh": "SM_Lamp05",
+   "loc": [
+    -300.00000973437227,
+    -10.000000000001364,
+    200.0
+   ],
+   "quat": [
+    -2.237312831651947e-16,
+    1.3030112296551615e-16,
+    -1.0,
+    7.3887043024834e-15
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Lamp06",
+    "M_Glass2"
+   ]
+  },
+  {
+   "actor": "SM_Lamp10",
+   "mesh": "SM_Lamp05",
+   "loc": [
+    -300.00000486718614,
+    -210.00000000000068,
+    200.0
+   ],
+   "quat": [
+    -2.237312831651947e-16,
+    1.3030112296551615e-16,
+    -1.0,
+    7.3887043024834e-15
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Lamp06",
+    "M_Glass2"
+   ]
+  },
+  {
+   "actor": "SM_Lamp11",
+   "mesh": "SM_Lamp05",
+   "loc": [
+    -300.0,
+    -410.0,
+    200.0
+   ],
+   "quat": [
+    -2.237312831651947e-16,
+    1.3030112296551615e-16,
+    -1.0,
+    7.3887043024834e-15
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Lamp06",
+    "M_Glass2"
+   ]
+  },
+  {
+   "actor": "SM_GasCylinderA3",
+   "mesh": "SM_GasCylinderA02",
+   "loc": [
+    910.0,
+    -348.0,
+    20.0
+   ],
+   "quat": [
+    2.220446049250297e-16,
+    -1.1102230246251552e-16,
+    0.9999999999999999,
+    5.390302858158118e-15
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Props01"
+   ]
+  },
+  {
+   "actor": "SM_OxygenCylinder5",
+   "mesh": "SM_OxygenCylinder01",
+   "loc": [
+    185.0,
+    110.0,
+    20.0
+   ],
+   "quat": [
+    -1.4218439953612565e-16,
+    -1.243952308965209e-17,
+    -0.5735764363510417,
+    0.8191520442889945
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Container01"
+   ]
+  },
+  {
+   "actor": "SM_OxygenCylinder6",
+   "mesh": "SM_OxygenCylinder01",
+   "loc": [
+    177.0,
+    122.0,
+    20.0
+   ],
+   "quat": [
+    1.470036947977954e-19,
+    -1.6802599202379693e-18,
+    0.08715574274765803,
+    0.9961946980917453
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Container01"
+   ]
+  },
+  {
+   "actor": "SM_OxygenCylinder7",
+   "mesh": "SM_OxygenCylinder01",
+   "loc": [
+    194.0,
+    122.0,
+    20.0
+   ],
+   "quat": [
+    -3.855764100600509e-17,
+    -1.8488927466117464e-32,
+    -0.1736481776669298,
+    0.9848077530122078
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Container01"
+   ]
+  },
+  {
+   "actor": "SM_OxygenCylinder8",
+   "mesh": "SM_OxygenCylinder01",
+   "loc": [
+    314.0,
+    122.0,
+    20.0
+   ],
+   "quat": [
+    -1.58464283061579e-16,
+    -2.1779766320341838e-17,
+    -0.8191520442889887,
+    0.5735764363510504
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Container01"
+   ]
+  },
+  {
+   "actor": "SM_OxygenCylinder9",
+   "mesh": "SM_OxygenCylinder01",
+   "loc": [
+    297.0,
+    122.0,
+    20.0
+   ],
+   "quat": [
+    -3.4950428301045167e-17,
+    -5.671957999749257e-17,
+    0.3420201433256668,
+    0.9396926207859088
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Container01"
+   ]
+  },
+  {
+   "actor": "SM_OxygenCylinder10",
+   "mesh": "SM_OxygenCylinder01",
+   "loc": [
+    305.0,
+    110.0,
+    20.0
+   ],
+   "quat": [
+    2.3110501874840855e-16,
+    -2.1661846025393035e-16,
+    0.9659258262890709,
+    0.2588190451025122
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Container01"
+   ]
+  },
+  {
+   "actor": "SM_OxygenCylinder11",
+   "mesh": "SM_OxygenCylinder01",
+   "loc": [
+    322.0,
+    110.0,
+    20.0
+   ],
+   "quat": [
+    -5.754357290629271e-17,
+    3.3477320479142143e-18,
+    -0.1736481776669298,
+    0.9848077530122078
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Container01"
+   ]
+  },
+  {
+   "actor": "SM_Lamp2",
+   "mesh": "SM_Lamp01",
+   "loc": [
+    20.0,
+    210.0,
+    510.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Props01",
+    "MI_Light01"
+   ]
+  },
+  {
+   "actor": "SM_Lamp3",
+   "mesh": "SM_Lamp01",
+   "loc": [
+    20.0,
+    -630.0,
+    510.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Props01",
+    "MI_Light01"
+   ]
+  },
+  {
+   "actor": "SM_Lamp4",
+   "mesh": "SM_Lamp01",
+   "loc": [
+    20.0,
+    -420.0,
+    510.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Props01",
+    "MI_Light01"
+   ]
+  },
+  {
+   "actor": "SM_Lamp5",
+   "mesh": "SM_Lamp01",
+   "loc": [
+    470.0,
+    -630.0,
+    510.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Props01",
+    "MI_Light01"
+   ]
+  },
+  {
+   "actor": "SM_Lamp12",
+   "mesh": "SM_Lamp01",
+   "loc": [
+    470.0,
+    -420.0,
+    510.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Props01",
+    "MI_Light01"
+   ]
+  },
+  {
+   "actor": "SM_Lamp13",
+   "mesh": "SM_Lamp01",
+   "loc": [
+    470.0,
+    0.0,
+    510.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Props01",
+    "MI_Light01"
+   ]
+  },
+  {
+   "actor": "SM_Lamp14",
+   "mesh": "SM_Lamp01",
+   "loc": [
+    470.0,
+    210.0,
+    510.0
+   ],
+   "quat": [
+    0.0,
+    0.0,
+    0.0,
+    1.0
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Props01",
+    "MI_Light01"
+   ]
+  },
+  {
+   "actor": "SM_Ventilation3",
+   "mesh": "SM_Ventilation01",
+   "loc": [
+    -109.99998442500427,
+    429.9999999999977,
+    460.0
+   ],
+   "quat": [
+    2.3314472138052277e-16,
+    -1.268749116530341e-16,
+    1.0,
+    7.3887043024834e-15
+   ],
+   "scale": [
+    1.0,
+    1.25,
+    1.0
+   ],
+   "materials": [
+    "MI_Ventilation01"
+   ]
+  },
+  {
+   "actor": "SM_Ventilation4",
+   "mesh": "SM_Ventilation01",
+   "loc": [
+    -110.0,
+    -210.0,
+    460.0
+   ],
+   "quat": [
+    2.3314472138052277e-16,
+    -1.268749116530341e-16,
+    1.0,
+    7.3887043024834e-15
+   ],
+   "scale": [
+    1.0,
+    1.25,
+    1.0
+   ],
+   "materials": [
+    "MI_Ventilation01"
+   ]
+  },
+  {
+   "actor": "SM_ChemicalContainer02A2",
+   "mesh": "SM_ChemicalContainer02A",
+   "loc": [
+    740.0,
+    90.0,
+    0.0
+   ],
+   "quat": [
+    -1.5700924586837665e-16,
+    -5.053640174072107e-31,
+    -0.7071067811865435,
+    0.7071067811865512
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_ChemicalContainer02"
+   ]
+  },
+  {
+   "actor": "SM_Lamp15",
+   "mesh": "SM_Lamp01",
+   "loc": [
+    250.0,
+    -800.0,
+    440.0
+   ],
+   "quat": [
+    0.4226182617406976,
+    0.0,
+    0.0,
+    0.9063077870366507
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Props01",
+    "MI_Light01"
+   ]
+  },
+  {
+   "actor": "SM_Lamp16",
+   "mesh": "SM_Lamp01",
+   "loc": [
+    250.0,
+    380.0,
+    440.0
+   ],
+   "quat": [
+    -0.422618261740699,
+    -0.0,
+    0.0,
+    0.90630778703665
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Props01",
+    "MI_Light01"
+   ]
+  },
+  {
+   "actor": "SM_Radiostations_Charger",
+   "mesh": "SM_Radiostations_Charger",
+   "loc": [
+    100.0,
+    360.0,
+    20.000000000000014
+   ],
+   "quat": [
+    2.3413430154449197e-16,
+    -4.602427441704393e-16,
+    0.9659258262890655,
+    0.2588190451025305
+   ],
+   "scale": [
+    1.5,
+    1.5,
+    1.5
+   ],
+   "materials": [
+    "MI_Radiostation_Charger"
+   ]
+  },
+  {
+   "actor": "SM_Radiostations_R168",
+   "mesh": "SM_Radiostations_R168",
+   "loc": [
+    410.0,
+    350.0,
+    100.0
+   ],
+   "quat": [
+    2.1824446661446627e-16,
+    -2.0677412663066123e-16,
+    0.9961946980917449,
+    0.08715574274766455
+   ],
+   "scale": [
+    1.25,
+    1.25,
+    1.25
+   ],
+   "materials": [
+    "MI_Radiostation_R168"
+   ]
+  },
+  {
+   "actor": "SM_Radiostations_R997",
+   "mesh": "SM_Radiostations_R997",
+   "loc": [
+    40.0,
+    350.0,
+    100.0
+   ],
+   "quat": [
+    2.237312831651929e-16,
+    -1.3030112296551807e-16,
+    1.0,
+    6.5005258827832755e-15
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Radiostation_R997"
+   ]
+  },
+  {
+   "actor": "SM_Computer_14a",
+   "mesh": "SM_Computer_14a",
+   "loc": [
+    100.0,
+    350.0,
+    100.00000000000003
+   ],
+   "quat": [
+    -2.2204460492503114e-16,
+    1.1102230246251367e-16,
+    -0.9999999999999999,
+    7.388704302483399e-15
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Computer_14a"
+   ]
+  },
+  {
+   "actor": "SM_PlugExtensionA2",
+   "mesh": "SM_PlugExtensionA01",
+   "loc": [
+    460.0,
+    330.0,
+    20.0
+   ],
+   "quat": [
+    2.7755575615628692e-17,
+    -4.807406715958892e-17,
+    0.4999999999999983,
+    0.8660254037844394
+   ],
+   "scale": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "materials": [
+    "MI_Wires01"
+   ]
+  },
+  {
+   "actor": "SM_Radiostations_Charger2",
+   "mesh": "SM_Radiostations_Charger",
+   "loc": [
+    410.0,
+    380.0,
+    19.999999999999943
+   ],
+   "quat": [
+    -2.7186751543761592e-16,
+    3.1230002108913624e-16,
+    -0.9961946980917453,
+    0.08715574274765811
+   ],
+   "scale": [
+    1.5,
+    1.5,
+    1.5
+   ],
+   "materials": [
+    "MI_Radiostation_Charger"
+   ]
+  }
+ ],
+ "meshes": {
+  "SM_Mod07WallA01": {
+   "name": "SM_Mod07WallA01",
+   "slots": [
+    "MI_Mod07Wall01"
+   ]
+  },
+  "SM_Ceiling06": {
+   "name": "SM_Ceiling06",
+   "slots": [
+    "MI_Ceiling06"
+   ]
+  },
+  "SM_DecompChairA01": {
+   "name": "SM_DecompChairA01",
+   "slots": [
+    "MI_DecompChair01"
+   ]
+  },
+  "SM_Device01": {
+   "name": "SM_Device01",
+   "slots": [
+    "MI_PropsSet02"
+   ]
+  },
+  "SM_Container02": {
+   "name": "SM_Container02",
+   "slots": [
+    "MI_Container01",
+    "MI_ContainerGlass"
+   ]
+  },
+  "SM_MetalDoor01": {
+   "name": "SM_MetalDoor01",
+   "slots": [
+    "MI_MetalDoor01"
+   ]
+  },
+  "SM_Terminal01": {
+   "name": "SM_Terminal01",
+   "slots": [
+    "MI_Door01"
+   ]
+  },
+  "SM_LabTable01": {
+   "name": "SM_LabTable01",
+   "slots": [
+    "MI_LabProps01"
+   ]
+  },
+  "SM_LabLampA01": {
+   "name": "SM_LabLampA01",
+   "slots": [
+    "MI_LabProps01"
+   ]
+  },
+  "SM_Lamp01": {
+   "name": "SM_Lamp01",
+   "slots": [
+    "MI_Props01",
+    "MI_Light01"
+   ]
+  },
+  "SM_GasCylinderA01": {
+   "name": "SM_GasCylinderA01",
+   "slots": [
+    "MI_Props01"
+   ]
+  },
+  "SM_MetalWall07": {
+   "name": "SM_MetalWall07",
+   "slots": [
+    "MI_MetalWall07"
+   ]
+  },
+  "SM_MetalFloor22": {
+   "name": "SM_MetalFloor22",
+   "slots": [
+    "MI_Wall09"
+   ]
+  },
+  "SM_Mod02Int": {
+   "name": "SM_Mod02Int",
+   "slots": [
+    "MI_Mod02Int_01",
+    "MI_Mod02Int_02"
+   ]
+  },
+  "SM_LampA02": {
+   "name": "SM_LampA02",
+   "slots": [
+    "MI_Bathroom02"
+   ]
+  },
+  "SM_PlugExtensionA01": {
+   "name": "SM_PlugExtensionA01",
+   "slots": [
+    "MI_Wires01"
+   ]
+  },
+  "SM_BedBase01": {
+   "name": "SM_BedBase01",
+   "slots": [
+    "MI_BedBase01"
+   ]
+  },
+  "SM_ScreensA01": {
+   "name": "SM_ScreensA01",
+   "slots": [
+    "MI_Props05"
+   ]
+  },
+  "SM_Ventilation01": {
+   "name": "SM_Ventilation01",
+   "slots": [
+    "MI_Ventilation01"
+   ]
+  },
+  "SM_Devices01": {
+   "name": "SM_Devices01",
+   "slots": [
+    "MI_Devices01"
+   ]
+  },
+  "SM_Mod07WallA02": {
+   "name": "SM_Mod07WallA02",
+   "slots": [
+    "MI_Mod07Wall01"
+   ]
+  },
+  "SM_Ladder03": {
+   "name": "SM_Ladder03",
+   "slots": [
+    "MI_Ladder01"
+   ]
+  },
+  "SM_OxygenCylinder01": {
+   "name": "SM_OxygenCylinder01",
+   "slots": [
+    "MI_Container01"
+   ]
+  },
+  "SM_GasCylinderA02": {
+   "name": "SM_GasCylinderA02",
+   "slots": [
+    "MI_Props01"
+   ]
+  },
+  "SM_Wall10": {
+   "name": "SM_Wall10",
+   "slots": [
+    "MI_Wall09"
+   ]
+  },
+  "SM_ChemicalContainer02A": {
+   "name": "SM_ChemicalContainer02A",
+   "slots": [
+    "MI_ChemicalContainer02"
+   ]
+  },
+  "SM_BedSheets02": {
+   "name": "SM_BedSheets02",
+   "slots": [
+    "MI_BedSheets02"
+   ]
+  },
+  "SM_Lamp05": {
+   "name": "SM_Lamp05",
+   "slots": [
+    "MI_Lamp06",
+    "M_Glass2"
+   ]
+  },
+  "SM_Radiostations_Charger": {
+   "name": "SM_Radiostations_Charger",
+   "slots": [
+    "MI_Radiostation_Charger"
+   ]
+  },
+  "SM_Radiostations_R168": {
+   "name": "SM_Radiostations_R168",
+   "slots": [
+    "MI_Radiostation_R168"
+   ]
+  },
+  "SM_Radiostations_R997": {
+   "name": "SM_Radiostations_R997",
+   "slots": [
+    "MI_Radiostation_R997"
+   ]
+  },
+  "SM_Computer_14a": {
+   "name": "SM_Computer_14a",
+   "slots": [
+    "MI_Computer_14a"
+   ]
+  }
+ },
+ "materials": {
+  "MI_Mod07Wall01": {
+   "name": "MI_Mod07Wall01",
+   "base": "M_Base_VT_01",
+   "blend": "BLEND_OPAQUE",
+   "two_sided": false,
+   "scalars": {},
+   "vectors": {},
+   "textures": {
+    "BC": "T_Mod07Wall01_BC",
+    "ORM": "T_Mod07Wall01_ORM",
+    "N": "T_Mod07Wall01_N"
+   }
+  },
+  "MI_Ceiling06": {
+   "name": "MI_Ceiling06",
+   "base": "M_BaseEmissive",
+   "blend": "BLEND_OPAQUE",
+   "two_sided": false,
+   "scalars": {
+    "Emiss_Multy": 1.0
+   },
+   "vectors": {
+    "Emissiv_Color": [
+     1.0,
+     0.028356000781059265,
+     0.0,
+     1.0
+    ]
+   },
+   "textures": {
+    "BC": "T_Ceiling06_BC",
+    "ORM": "T_Ceiling06_ORM",
+    "N": "T_Ceiling06_N",
+    "Emissive": "T_Ceiling06_E"
+   }
+  },
+  "MI_DecompChair01": {
+   "name": "MI_DecompChair01",
+   "base": "M_BaseEmissive",
+   "blend": "BLEND_OPAQUE",
+   "two_sided": false,
+   "scalars": {
+    "Emiss_Multy": 1.0
+   },
+   "vectors": {
+    "Emissiv_Color": [
+     1.0,
+     0.8843269944190979,
+     0.42472100257873535,
+     1.0
+    ]
+   },
+   "textures": {
+    "BC": "T_DecompChair01_BC",
+    "ORM": "T_DecompChair01_ORM",
+    "N": "T_DecompChair01_N",
+    "Emissive": "T_DecompChair01_E"
+   }
+  },
+  "MI_PropsSet02": {
+   "name": "MI_PropsSet02",
+   "base": "M_BaseE",
+   "blend": "BLEND_OPAQUE",
+   "two_sided": false,
+   "scalars": {
+    "E_Multi": 0.22857099771499634
+   },
+   "vectors": {},
+   "textures": {
+    "BC": "T_PropsSet02_BC",
+    "ORM": "T_PropsSet02_ORM",
+    "Normal": "T_PropsSet02_N",
+    "Emissive": "T_PropsSet02_E"
+   }
+  },
+  "MI_Container01": {
+   "name": "MI_Container01",
+   "base": "M_BaseEmissive",
+   "blend": "BLEND_OPAQUE",
+   "two_sided": false,
+   "scalars": {
+    "Emiss_Multy": 0.20000000298023224
+   },
+   "vectors": {
+    "Emissiv_Color": [
+     1.0,
+     0.8686130046844482,
+     0.6436949968338013,
+     1.0
+    ]
+   },
+   "textures": {
+    "BC": "T_Container_BC",
+    "ORM": "T_Container_ORM",
+    "N": "T_Container_N",
+    "Emissive": "T_Container_E"
+   }
+  },
+  "MI_ContainerGlass": {
+   "name": "MI_ContainerGlass",
+   "base": "M_Glass",
+   "blend": "BLEND_TRANSLUCENT",
+   "two_sided": false,
+   "scalars": {
+    "Specular": 10.0,
+    "Opacity": 0.3499999940395355,
+    "FresnelFalloff": 10.0,
+    "Refraction": 1.399999976158142
+   },
+   "vectors": {
+    "ColorGlass": [
+     0.0,
+     0.0012019999558106065,
+     0.0033030000049620867,
+     1.0
+    ]
+   },
+   "textures": {
+    "N": "T_Container_N",
+    "BC": "T_Container_BC",
+    "ORM": "T_Container_ORM"
+   }
+  },
+  "MI_MetalDoor01": {
+   "name": "MI_MetalDoor01",
+   "base": "M_Base_VT_01",
+   "blend": "BLEND_OPAQUE",
+   "two_sided": false,
+   "scalars": {},
+   "vectors": {},
+   "textures": {
+    "BC": "T_MetalDoor01_BC",
+    "ORM": "T_MetalDoor01_ORM",
+    "N": "T_MetalDoor01_N"
+   }
+  },
+  "MI_Door01": {
+   "name": "MI_Door01",
+   "base": "M_BaseE",
+   "blend": "BLEND_OPAQUE",
+   "two_sided": false,
+   "scalars": {
+    "E_Multi": 1.0
+   },
+   "vectors": {},
+   "textures": {
+    "BC": "T_Door01_BC",
+    "ORM": "T_Door01_ORM",
+    "Normal": "T_Door01_N",
+    "Emissive": "T_Door01_E"
+   }
+  },
+  "MI_LabProps01": {
+   "name": "MI_LabProps01",
+   "base": "M_BaseEmissive",
+   "blend": "BLEND_OPAQUE",
+   "two_sided": false,
+   "scalars": {
+    "Emiss_Multy": 3.0
+   },
+   "vectors": {
+    "Emissiv_Color": [
+     0.014151999726891518,
+     0.3663420081138611,
+     1.0,
+     1.0
+    ]
+   },
+   "textures": {
+    "BC": "T_LabProps01_BC",
+    "ORM": "T_LabProps01_ORM",
+    "N": "T_LabProps01_N",
+    "Emissive": "T_LabProps01_E"
+   }
+  },
+  "MI_Props01": {
+   "name": "MI_Props01",
+   "base": "M_Base_VT_01",
+   "blend": "BLEND_OPAQUE",
+   "two_sided": false,
+   "scalars": {},
+   "vectors": {},
+   "textures": {
+    "BC": "T_Props01_BC",
+    "ORM": "T_Props01_ORM",
+    "N": "T_Props01_N"
+   }
+  },
+  "MI_Light01": {
+   "name": "MI_Light01",
+   "base": "M_BaseLight",
+   "blend": "BLEND_OPAQUE",
+   "two_sided": false,
+   "scalars": {
+    "Em_multy": 10.0
+   },
+   "vectors": {
+    "EM_Color": [
+     0.21018600463867188,
+     0.45691001415252686,
+     1.0,
+     1.0
+    ]
+   },
+   "textures": {
+    "BC": "T_MOD02_BC"
+   }
+  },
+  "MI_MetalWall07": {
+   "name": "MI_MetalWall07",
+   "base": "M_Base_VT_01",
+   "blend": "BLEND_OPAQUE",
+   "two_sided": false,
+   "scalars": {},
+   "vectors": {},
+   "textures": {
+    "BC": "T_MetalWall07_BC",
+    "ORM": "T_MetalWall07_ORM",
+    "N": "T_MetalWall07_N"
+   }
+  },
+  "MI_Wall09": {
+   "name": "MI_Wall09",
+   "base": "M_Base_VT_01",
+   "blend": "BLEND_OPAQUE",
+   "two_sided": false,
+   "scalars": {},
+   "vectors": {},
+   "textures": {
+    "BC": "T_Wall09_BC",
+    "ORM": "T_Wall09_ORM",
+    "N": "T_Wall09_N"
+   }
+  },
+  "MI_Mod02Int_01": {
+   "name": "MI_Mod02Int_01",
+   "base": "M_BaseEmissive",
+   "blend": "BLEND_OPAQUE",
+   "two_sided": false,
+   "scalars": {
+    "Emiss_Multy": 0.5
+   },
+   "vectors": {
+    "Emissiv_Color": [
+     1.0,
+     0.682142972946167,
+     0.4455629885196686,
+     1.0
+    ]
+   },
+   "textures": {
+    "BC": "T_Mod02_Int_BC",
+    "ORM": "T_Mod02_Int_ORM",
+    "N": "T_Mod02_Int_N",
+    "Emissive": "T_Mod02_Int_E"
+   }
+  },
+  "MI_Mod02Int_02": {
+   "name": "MI_Mod02Int_02",
+   "base": "M_Glass",
+   "blend": "BLEND_TRANSLUCENT",
+   "two_sided": false,
+   "scalars": {
+    "Specular": 10.0,
+    "Opacity": 0.3499999940395355,
+    "FresnelFalloff": 10.0,
+    "Refraction": 1.399999976158142
+   },
+   "vectors": {
+    "ColorGlass": [
+     0.0,
+     0.0012019999558106065,
+     0.0033030000049620867,
+     1.0
+    ]
+   },
+   "textures": {
+    "N": "T_Mod02_Int_N",
+    "BC": "T_Mod02_Int_BC",
+    "ORM": "T_Mod02_Int_ORM"
+   }
+  },
+  "MI_Bathroom02": {
+   "name": "MI_Bathroom02",
+   "base": "M_BaseE",
+   "blend": "BLEND_OPAQUE",
+   "two_sided": false,
+   "scalars": {
+    "E_Multi": 1.0
+   },
+   "vectors": {},
+   "textures": {
+    "BC": "T_Bathroom01_BC",
+    "ORM": "T_Bathroom01_ORM",
+    "Normal": "T_Bathroom01_N",
+    "Emissive": "T_Bathroom01_E"
+   }
+  },
+  "MI_Wires01": {
+   "name": "MI_Wires01",
+   "base": "M_BaseE",
+   "blend": "BLEND_OPAQUE",
+   "two_sided": false,
+   "scalars": {
+    "E_Multi": 2.0
+   },
+   "vectors": {},
+   "textures": {
+    "BC": "T_Wires01_BC",
+    "ORM": "T_Wires01_ORM",
+    "Normal": "T_Wires01_N",
+    "Emissive": "T_Wires01_E"
+   }
+  },
+  "MI_BedBase01": {
+   "name": "MI_BedBase01",
+   "base": "M_Base_VT_01",
+   "blend": "BLEND_OPAQUE",
+   "two_sided": false,
+   "scalars": {},
+   "vectors": {},
+   "textures": {
+    "BC": "T_BedBase01_BC",
+    "ORM": "T_BedBase01_ORM",
+    "N": "T_BedBase01_N"
+   }
+  },
+  "MI_Props05": {
+   "name": "MI_Props05",
+   "base": "M_BaseE",
+   "blend": "BLEND_OPAQUE",
+   "two_sided": false,
+   "scalars": {
+    "E_Multi": 0.30000001192092896
+   },
+   "vectors": {},
+   "textures": {
+    "BC": "T_Props05_BC",
+    "ORM": "T_Props05_ORM",
+    "Normal": "T_Props05_N",
+    "Emissive": "T_Props05_E"
+   }
+  },
+  "MI_Ventilation01": {
+   "name": "MI_Ventilation01",
+   "base": "M_Base_VT_01",
+   "blend": "BLEND_OPAQUE",
+   "two_sided": false,
+   "scalars": {},
+   "vectors": {},
+   "textures": {
+    "BC": "T_Ventilation01_BC",
+    "ORM": "T_Ventilation01_ORM",
+    "N": "T_Ventilation01_N"
+   }
+  },
+  "MI_Devices01": {
+   "name": "MI_Devices01",
+   "base": "M_BaseEmissive",
+   "blend": "BLEND_OPAQUE",
+   "two_sided": false,
+   "scalars": {
+    "Emiss_Multy": 0.20000000298023224
+   },
+   "vectors": {
+    "Emissiv_Color": [
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ]
+   },
+   "textures": {
+    "BC": "T_Devices01_BC",
+    "ORM": "T_Devices01_ORM",
+    "N": "T_Devices01_N",
+    "Emissive": "T_Devices01_E"
+   }
+  },
+  "MI_Ladder01": {
+   "name": "MI_Ladder01",
+   "base": "M_Base_VT_01",
+   "blend": "BLEND_OPAQUE",
+   "two_sided": false,
+   "scalars": {},
+   "vectors": {},
+   "textures": {
+    "BC": "T_Ladder01_BC",
+    "ORM": "T_Ladder01_ORM",
+    "N": "T_Ladder01_N"
+   }
+  },
+  "MI_ChemicalContainer02": {
+   "name": "MI_ChemicalContainer02",
+   "base": "M_base",
+   "blend": "BLEND_MASKED",
+   "two_sided": false,
+   "scalars": {
+    "spec": 0.0,
+    "Metallic": 0.0,
+    "Roughness": 0.0,
+    "fresnel exponent": 7.0,
+    "fresnel multiply": 1.0,
+    "desaturation": 0.0,
+    "Hue": 0.0,
+    "Contrast": 0.0,
+    "metall desaturation": 0.0,
+    "metall Hue": 0.0,
+    "metall Contrast": 0.0,
+    "metall Roughness": 0.0,
+    "Opacity str": 1.0,
+    "Dirt str": 1.0,
+    "Diff/Mett color Mask str": 3.0,
+    "Emmisive Str": 1.0,
+    "Dirt Roughness": 0.8999999761581421,
+    "Dirt Normal tilling": 4.0,
+    "vertex color sharp mask (Diffuse)": 10.0,
+    "vertex color mask Tiling": 1.0,
+    "desaturation 2": 0.0,
+    "Hue 2": 0.0,
+    "Contrast 2": 0.0,
+    "metall desaturation 2": 0.0,
+    "metall Hue 2": 0.0,
+    "metall Contrast 2": 0.0,
+    "Diff/Mett color Mask str 2": 3.0,
+    "spec 2": 0.0,
+    "Metallic 2": 0.0,
+    "Roughness 2": 0.0,
+    "metall Roughness 2": 0.0,
+    "vertex color sharp mask (Normal)": 10.0,
+    "vertex color sharp mask (Rough/Spec)": 10.0,
+    "Vertex color Mask Str": 1.0,
+    "Base U Tiling": 1.0,
+    "Layer 2 U Tiling": 1.0,
+    "Layer 2 V Tiling": 1.0,
+    "Base V Tiling": 1.0,
+    "Blinking speed": 1.0,
+    "vertex color B roughness": 1.0,
+    "vertex color G roughness": 1.0,
+    "vertex color R roughness": 1.0,
+    "vertex color B Tiling": 1.0,
+    "Vertex color B Str": 1.0,
+    "vertex color B sharp": 1.0,
+    "vertex color G sharp": 1.0,
+    "Vertex color G Str": 1.0,
+    "vertex color G Tiling": 1.0,
+    "vertex color R sharp": 1.0,
+    "Vertex color R Str": 1.0,
+    "vertex color R Tiling": 1.0,
+    "Additional Diffuse Color Mask str": 5.0
+   },
+   "vectors": {
+    "diffuse color": [
+     1.0,
+     1.0,
+     1.0,
+     0.0
+    ],
+    "fresnel color": [
+     0.06100000813603401,
+     0.14699991047382355,
+     0.2150000035762787,
+     0.0
+    ],
+    "metall color": [
+     1.0,
+     1.0,
+     1.0,
+     0.0
+    ],
+    "dirt color": [
+     0.11500000208616257,
+     0.10361500084400177,
+     0.0960249975323677,
+     0.0
+    ],
+    "diffuse color2": [
+     1.0,
+     1.0,
+     1.0,
+     0.0
+    ],
+    "metall color 2": [
+     1.0,
+     1.0,
+     1.0,
+     0.0
+    ],
+    "additional diffuse color": [
+     1.0,
+     1.0,
+     1.0,
+     0.0
+    ],
+    "additional diffuse color 2": [
+     1.0,
+     0.03779900074005127,
+     0.0,
+     0.0
+    ],
+    "Emmisive color": [
+     1.0,
+     1.0,
+     1.0,
+     0.0
+    ],
+    "B color": [
+     0.1550000011920929,
+     0.08503399789333344,
+     0.025731999427080154,
+     0.0
+    ],
+    "G color": [
+     0.1550000011920929,
+     0.08503399789333344,
+     0.025731999427080154,
+     0.0
+    ],
+    "R color": [
+     0.1550000011920929,
+     0.08503399789333344,
+     0.025731999427080154,
+     0.0
+    ],
+    "additional diffuse color2": [
+     1.0,
+     1.0,
+     1.0,
+     0.0
+    ]
+   },
+   "textures": {
+    "Diffuse": "T_ChemicalContainer02_D",
+    "SRMH": "T_ChemicalContainer02_SRM",
+    "Normal": "T_ChemicalContainer02_N",
+    "emmisive": "T_Server_E"
+   }
+  },
+  "MI_BedSheets02": {
+   "name": "MI_BedSheets02",
+   "base": "M_Base_VT_01",
+   "blend": "BLEND_OPAQUE",
+   "two_sided": false,
+   "scalars": {},
+   "vectors": {},
+   "textures": {
+    "BC": "T_BedSheets02_BC",
+    "ORM": "T_BedSheets02_ORM",
+    "N": "T_BedSheets02_N"
+   }
+  },
+  "MI_Lamp06": {
+   "name": "MI_Lamp06",
+   "base": "M_BaseEm",
+   "blend": "BLEND_OPAQUE",
+   "two_sided": false,
+   "scalars": {
+    "EmMult": 1.2000000476837158
+   },
+   "vectors": {
+    "Color": [
+     0.8177080154418945,
+     0.4410560131072998,
+     0.1548510044813156,
+     1.0
+    ]
+   },
+   "textures": {
+    "BaseColor": "T_Lamp_BC",
+    "ORM": "T_Lamp_ORM",
+    "Normal": "T_Lamp_N",
+    "EmColor": "T_Lamp_E"
+   }
+  },
+  "M_Glass2": {
+   "name": "M_Glass2",
+   "base": "M_Glass2",
+   "blend": "BLEND_TRANSLUCENT",
+   "two_sided": false,
+   "scalars": {},
+   "vectors": {},
+   "textures": {}
+  },
+  "MI_Radiostation_Charger": {
+   "name": "MI_Radiostation_Charger",
+   "base": "M_Master_Standard",
+   "blend": "BLEND_OPAQUE",
+   "two_sided": false,
+   "scalars": {
+    "Black Value": 1.0,
+    "Middle Value": 0.0,
+    "White Value": 0.5,
+    "Middle Point": 0.7285709977149963,
+    "Diffuse Intensity": 0.0,
+    "Detail Scale": 0.0,
+    "Detail Normal Intensity": 0.0,
+    "Roughness Detail Scale": 5.0,
+    "Detail Roughness Intensity": 1.0,
+    "Roughness Intensity": 1.0,
+    "AO Blend Intensity": 0.5,
+    "G - Mask Strength": 0.75,
+    "Moss Mask - BlendNormal": 50.0,
+    "Moss Mask - WorldBlendMax": 19.0,
+    "Moss Mask - Opacity": 1.0,
+    "Moss - Fuzz - CoreDarkness": 0.800000011920929,
+    "Moss - Fuzz - Power": 0.5,
+    "Moss - Fuzz - EdgeBrightness": 1.0,
+    "Moss - Tiling": 20.0,
+    "Moss Mask - Detail Mask Tiling": 4.0,
+    "Moss Mask - Detail Mask Strength": -0.5536119937896729,
+    "Moss - Flatten Normal": 0.0,
+    "Moss Mask - Flatten Normal Input": 0.0,
+    "Dirt - FuzzCoreDarkness": 0.800000011920929,
+    "Dirt - FuzzPower": 0.5,
+    "Dirt - FuzzEdgeBrightness": 1.0,
+    "Dirt - Tiling": 10.0,
+    "Dirt Mask - Detail Mask Tiling": 8.0,
+    "Dirt Mask - Detail Mask Strength": 1.0,
+    "Dirt - Flatten Normal": 0.0,
+    "Dirt Mask - Flatten Normal Input": 0.0,
+    "Dirt Mask - Blend Normal": 1.0,
+    "Dirt Mask - WorldBlendMax": 2.0,
+    "Dirt Mask - Opacity": 1.0,
+    "R - Mask Strength": 1.0,
+    "A - Mask Strength": 1.0,
+    "B - Mask Strength": 0.75,
+    "EmissiveTintStrength": 1.0,
+    "BaseColourEmissiveOverlayIntesnity": 1.0,
+    "EmissiveIntensity": 1.0,
+    "MetallicIntensity": 1.0,
+    "Specular": 0.5
+   },
+   "vectors": {
+    "R - Color": [
+     0.5,
+     0.5,
+     0.5,
+     0.0
+    ],
+    "G - Color": [
+     0.5,
+     0.5,
+     0.5,
+     0.0
+    ],
+    "B - Color": [
+     0.5,
+     0.5,
+     0.5,
+     0.0
+    ],
+    "A - Color": [
+     0.5,
+     0.5,
+     0.5,
+     0.0
+    ],
+    "AlbedoBaseTint": [
+     0.5,
+     0.5,
+     0.5,
+     0.0
+    ],
+    "Dirt - AlbedoTint": [
+     1.0,
+     1.0,
+     1.0,
+     0.0
+    ],
+    "Moss - AlbedoTint": [
+     1.0,
+     1.0,
+     1.0,
+     0.0
+    ],
+    "EmissiveTint": [
+     1.0,
+     1.0,
+     1.0,
+     0.0
+    ]
+   },
+   "textures": {
+    "AORM": "T_Radiostations_R168_AORM",
+    "Albedo": "T_Radiostations_R168_BC",
+    "Normals": "T_Radiostations_R168_N",
+    "Emissive": "T_Albedo"
+   }
+  },
+  "MI_Radiostation_R168": {
+   "name": "MI_Radiostation_R168",
+   "base": "M_Master_Standard",
+   "blend": "BLEND_OPAQUE",
+   "two_sided": false,
+   "scalars": {
+    "Black Value": 1.0,
+    "Middle Value": 0.0,
+    "White Value": 0.5,
+    "Middle Point": 0.7285709977149963,
+    "Diffuse Intensity": 0.0,
+    "Detail Scale": 0.0,
+    "Detail Normal Intensity": 0.0,
+    "Roughness Detail Scale": 5.0,
+    "Detail Roughness Intensity": 1.0,
+    "Roughness Intensity": 1.0,
+    "AO Blend Intensity": 0.5,
+    "G - Mask Strength": 0.75,
+    "Moss Mask - BlendNormal": 50.0,
+    "Moss Mask - WorldBlendMax": 19.0,
+    "Moss Mask - Opacity": 1.0,
+    "Moss - Fuzz - CoreDarkness": 0.800000011920929,
+    "Moss - Fuzz - Power": 0.5,
+    "Moss - Fuzz - EdgeBrightness": 1.0,
+    "Moss - Tiling": 20.0,
+    "Moss Mask - Detail Mask Tiling": 4.0,
+    "Moss Mask - Detail Mask Strength": -0.5536119937896729,
+    "Moss - Flatten Normal": 0.0,
+    "Moss Mask - Flatten Normal Input": 0.0,
+    "Dirt - FuzzCoreDarkness": 0.800000011920929,
+    "Dirt - FuzzPower": 0.5,
+    "Dirt - FuzzEdgeBrightness": 1.0,
+    "Dirt - Tiling": 10.0,
+    "Dirt Mask - Detail Mask Tiling": 8.0,
+    "Dirt Mask - Detail Mask Strength": 1.0,
+    "Dirt - Flatten Normal": 0.0,
+    "Dirt Mask - Flatten Normal Input": 0.0,
+    "Dirt Mask - Blend Normal": 1.0,
+    "Dirt Mask - WorldBlendMax": 2.0,
+    "Dirt Mask - Opacity": 1.0,
+    "R - Mask Strength": 1.0,
+    "A - Mask Strength": 1.0,
+    "B - Mask Strength": 0.75,
+    "EmissiveTintStrength": 1.0,
+    "BaseColourEmissiveOverlayIntesnity": 1.0,
+    "EmissiveIntensity": 1.0,
+    "MetallicIntensity": 1.0,
+    "Specular": 0.5
+   },
+   "vectors": {
+    "R - Color": [
+     0.5,
+     0.5,
+     0.5,
+     0.0
+    ],
+    "G - Color": [
+     0.5,
+     0.5,
+     0.5,
+     0.0
+    ],
+    "B - Color": [
+     0.5,
+     0.5,
+     0.5,
+     0.0
+    ],
+    "A - Color": [
+     0.5,
+     0.5,
+     0.5,
+     0.0
+    ],
+    "AlbedoBaseTint": [
+     0.5,
+     0.5,
+     0.5,
+     0.0
+    ],
+    "Dirt - AlbedoTint": [
+     1.0,
+     1.0,
+     1.0,
+     0.0
+    ],
+    "Moss - AlbedoTint": [
+     1.0,
+     1.0,
+     1.0,
+     0.0
+    ],
+    "EmissiveTint": [
+     1.0,
+     1.0,
+     1.0,
+     0.0
+    ]
+   },
+   "textures": {
+    "AORM": "T_Radiostations_R168_AORM",
+    "Albedo": "T_Radiostations_R168_BC",
+    "Normals": "T_Radiostations_R168_N",
+    "Emissive": "T_Albedo"
+   }
+  },
+  "MI_Radiostation_R997": {
+   "name": "MI_Radiostation_R997",
+   "base": "M_Master_Standard",
+   "blend": "BLEND_OPAQUE",
+   "two_sided": false,
+   "scalars": {
+    "Black Value": 1.0,
+    "Middle Value": 0.0,
+    "White Value": 0.5,
+    "Middle Point": 0.7285709977149963,
+    "Diffuse Intensity": 0.0,
+    "Detail Scale": 0.0,
+    "Detail Normal Intensity": 0.0,
+    "Roughness Detail Scale": 5.0,
+    "Detail Roughness Intensity": 1.0,
+    "Roughness Intensity": 1.0,
+    "AO Blend Intensity": 0.5,
+    "G - Mask Strength": 0.75,
+    "Moss Mask - BlendNormal": 50.0,
+    "Moss Mask - WorldBlendMax": 19.0,
+    "Moss Mask - Opacity": 1.0,
+    "Moss - Fuzz - CoreDarkness": 0.800000011920929,
+    "Moss - Fuzz - Power": 0.5,
+    "Moss - Fuzz - EdgeBrightness": 1.0,
+    "Moss - Tiling": 20.0,
+    "Moss Mask - Detail Mask Tiling": 4.0,
+    "Moss Mask - Detail Mask Strength": -0.5536119937896729,
+    "Moss - Flatten Normal": 0.0,
+    "Moss Mask - Flatten Normal Input": 0.0,
+    "Dirt - FuzzCoreDarkness": 0.800000011920929,
+    "Dirt - FuzzPower": 0.5,
+    "Dirt - FuzzEdgeBrightness": 1.0,
+    "Dirt - Tiling": 10.0,
+    "Dirt Mask - Detail Mask Tiling": 8.0,
+    "Dirt Mask - Detail Mask Strength": 1.0,
+    "Dirt - Flatten Normal": 0.0,
+    "Dirt Mask - Flatten Normal Input": 0.0,
+    "Dirt Mask - Blend Normal": 1.0,
+    "Dirt Mask - WorldBlendMax": 2.0,
+    "Dirt Mask - Opacity": 1.0,
+    "R - Mask Strength": 1.0,
+    "A - Mask Strength": 1.0,
+    "B - Mask Strength": 0.75,
+    "EmissiveTintStrength": 1.0,
+    "BaseColourEmissiveOverlayIntesnity": 1.0,
+    "EmissiveIntensity": 1.0,
+    "MetallicIntensity": 1.0,
+    "Specular": 0.5
+   },
+   "vectors": {
+    "R - Color": [
+     0.5,
+     0.5,
+     0.5,
+     0.0
+    ],
+    "G - Color": [
+     0.5,
+     0.5,
+     0.5,
+     0.0
+    ],
+    "B - Color": [
+     0.5,
+     0.5,
+     0.5,
+     0.0
+    ],
+    "A - Color": [
+     0.5,
+     0.5,
+     0.5,
+     0.0
+    ],
+    "AlbedoBaseTint": [
+     0.5,
+     0.5,
+     0.5,
+     0.0
+    ],
+    "Dirt - AlbedoTint": [
+     1.0,
+     1.0,
+     1.0,
+     0.0
+    ],
+    "Moss - AlbedoTint": [
+     1.0,
+     1.0,
+     1.0,
+     0.0
+    ],
+    "EmissiveTint": [
+     1.0,
+     1.0,
+     1.0,
+     0.0
+    ]
+   },
+   "textures": {
+    "AORM": "T_Radiostations_R997_AORM",
+    "Albedo": "T_Radiostations_R997_BC",
+    "Normals": "T_Radiostations_R997_N",
+    "Emissive": "T_Radiostations_R997_Emissive"
+   }
+  },
+  "MI_Computer_14a": {
+   "name": "MI_Computer_14a",
+   "base": "MM_MasterMaterial_01a",
+   "blend": "BLEND_OPAQUE",
+   "two_sided": false,
+   "scalars": {
+    "Roughness": 0.10000000149011612,
+    "Roughness Multi": 1.0,
+    "Roughness Power": 1.0,
+    "Texture Coord": 1.0,
+    "Emissive Height ": 0.0,
+    "Height Ratio Offset": 0.05000000074505806,
+    "Cloth Power": 6.0,
+    "Cloth Edge Brightness": 0.800000011920929,
+    "Cloth Core Darkness": 0.800000011920929,
+    "Normal Intensity": 1.0,
+    "Texture Coord Detail": 3.0,
+    "Detail Normal Intensity": 0.5,
+    "Texture Coord Dust": 2.0,
+    "Dust Contrast": 1.0,
+    "Dust Amount": 1.0,
+    "Dust AO Influence": 0.0,
+    "Dust Mask Influence": 0.0,
+    "Emissive Power": 1.0,
+    "Opacity": 1.0,
+    "SS Power": 1.0,
+    "Static Brightness": 1.0,
+    "Brightness": 1.0,
+    "Distortion Tiling": 5.0,
+    "Speed": 1.0,
+    "Wave Speed": -0.009999999776482582,
+    "Amplitude": 1.0,
+    "Texture Coord Static": 1.0,
+    "Fresnel Multi (Lamp)": 1.0,
+    "Fresnel Power (Lamp)": 1.0,
+    "Fresnel Exp (Lamp)": 0.5,
+    "Tint Mask Contrast": 1.0,
+    "Tint Mask Multi": 1.0,
+    "Emissive Blinking": 1.0,
+    "Dither Multi": 1.0,
+    "Metalness Value": 1.0,
+    "Reflection Blur": 1.0,
+    "Fake Reflection Brightness": 0.20000000298023224,
+    "Fake Reflection Desaturation": 0.5,
+    "Opacity Add from Reflection": 1.0,
+    "Alpha Contrast": 0.0,
+    "Alpha Add": 0.0,
+    "Alpha Multi": 1.0,
+    "Max Expensive Steps Debug Color": 32.0,
+    "Min Steps POM": 16.0,
+    "Max Steps POM": 32.0,
+    "POM Midpoint": 0.5,
+    "Texture Coord X": 1.0,
+    "Texture Coord Y": 1.0
+   },
+   "vectors": {
+    "Emissive Color Multi": [
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "Albedo Color Tint (Base)": [
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "Base Color Tint (Mask)": [
+     1.0,
+     1.0,
+     1.0,
+     1.0
+    ],
+    "Base Color Tint (Green)": [
+     0.0,
+     1.0,
+     0.08787400275468826,
+     1.0
+    ],
+    "Base Color Tint (Red)": [
+     1.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "Base Color Tint (Blue)": [
+     0.0,
+     0.2958739995956421,
+     1.0,
+     1.0
+    ],
+    "Dust Tint": [
+     0.6979169845581055,
+     0.6085389852523804,
+     0.5852320194244385,
+     1.0
+    ],
+    "SS Color Multi": [
+     0.0,
+     0.0,
+     0.0,
+     1.0
+    ],
+    "Number Color": [
+     0.551584005355835,
+     1.0,
+     0.0832739993929863,
+     1.0
+    ],
+    "Fake Reflection TInt": [
+     1.0,
+     1.0,
+     1.0,
+     0.0
+    ],
+    "Base Color Tint (Alpha)": [
+     0.0,
+     1.0,
+     0.08787400275468826,
+     1.0
+    ],
+    "Heightmap Channel POM": [
+     1.0,
+     0.0,
+     0.0,
+     0.0
+    ]
+   },
+   "textures": {
+    "RMA": "TX_Computer_14a_RMA",
+    "Normal": "TX_Computer_14a_NRM",
+    "Albedo": "TX_Computer_14a_ALB",
+    "Emissive": "TX_Computer_14a_EMM"
+   }
+  }
+ },
+ "textures": {
+  "T_Mod07Wall01_BC": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Mod07Wall01_ORM": {
+   "srgb": false,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Mod07Wall01_N": {
+   "srgb": false,
+   "compression": "TC_NORMALMAP",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Ceiling06_BC": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Ceiling06_ORM": {
+   "srgb": false,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Ceiling06_N": {
+   "srgb": false,
+   "compression": "TC_NORMALMAP",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Ceiling06_E": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_DecompChair01_BC": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_DecompChair01_ORM": {
+   "srgb": false,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_DecompChair01_N": {
+   "srgb": false,
+   "compression": "TC_NORMALMAP",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_DecompChair01_E": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_PropsSet02_BC": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_PropsSet02_ORM": {
+   "srgb": false,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_PropsSet02_N": {
+   "srgb": false,
+   "compression": "TC_NORMALMAP",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_PropsSet02_E": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Container_BC": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Container_ORM": {
+   "srgb": false,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Container_N": {
+   "srgb": false,
+   "compression": "TC_NORMALMAP",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Container_E": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_MetalDoor01_BC": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_MetalDoor01_ORM": {
+   "srgb": false,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_MetalDoor01_N": {
+   "srgb": false,
+   "compression": "TC_NORMALMAP",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Door01_BC": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Door01_ORM": {
+   "srgb": false,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Door01_N": {
+   "srgb": false,
+   "compression": "TC_NORMALMAP",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Door01_E": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_LabProps01_BC": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_LabProps01_ORM": {
+   "srgb": false,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_LabProps01_N": {
+   "srgb": false,
+   "compression": "TC_NORMALMAP",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_LabProps01_E": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Props01_BC": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Props01_ORM": {
+   "srgb": false,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Props01_N": {
+   "srgb": false,
+   "compression": "TC_NORMALMAP",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_MOD02_BC": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_MetalWall07_BC": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_MetalWall07_ORM": {
+   "srgb": false,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_MetalWall07_N": {
+   "srgb": false,
+   "compression": "TC_NORMALMAP",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Wall09_BC": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Wall09_ORM": {
+   "srgb": false,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Wall09_N": {
+   "srgb": false,
+   "compression": "TC_NORMALMAP",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Mod02_Int_BC": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Mod02_Int_ORM": {
+   "srgb": false,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Mod02_Int_N": {
+   "srgb": false,
+   "compression": "TC_NORMALMAP",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Mod02_Int_E": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Bathroom01_BC": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Bathroom01_ORM": {
+   "srgb": false,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Bathroom01_N": {
+   "srgb": false,
+   "compression": "TC_NORMALMAP",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Bathroom01_E": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Wires01_BC": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Wires01_ORM": {
+   "srgb": false,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Wires01_N": {
+   "srgb": false,
+   "compression": "TC_NORMALMAP",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Wires01_E": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_BedBase01_BC": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_BedBase01_ORM": {
+   "srgb": false,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_BedBase01_N": {
+   "srgb": false,
+   "compression": "TC_NORMALMAP",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Props05_BC": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Props05_ORM": {
+   "srgb": false,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Props05_N": {
+   "srgb": false,
+   "compression": "TC_NORMALMAP",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Props05_E": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Ventilation01_BC": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Ventilation01_ORM": {
+   "srgb": false,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Ventilation01_N": {
+   "srgb": false,
+   "compression": "TC_NORMALMAP",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Devices01_BC": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Devices01_ORM": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Devices01_N": {
+   "srgb": false,
+   "compression": "TC_NORMALMAP",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Devices01_E": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Ladder01_BC": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Ladder01_ORM": {
+   "srgb": false,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Ladder01_N": {
+   "srgb": false,
+   "compression": "TC_NORMALMAP",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_ChemicalContainer02_D": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    2048,
+    2048
+   ],
+   "exported": true
+  },
+  "T_ChemicalContainer02_SRM": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    2048,
+    2048
+   ],
+   "exported": true
+  },
+  "T_ChemicalContainer02_N": {
+   "srgb": false,
+   "compression": "TC_NORMALMAP",
+   "size": [
+    2048,
+    2048
+   ],
+   "exported": true
+  },
+  "T_Server_E": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    2048,
+    2048
+   ],
+   "exported": true
+  },
+  "T_BedSheets02_BC": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_BedSheets02_ORM": {
+   "srgb": false,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_BedSheets02_N": {
+   "srgb": false,
+   "compression": "TC_NORMALMAP",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Lamp_BC": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Lamp_ORM": {
+   "srgb": false,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Lamp_N": {
+   "srgb": false,
+   "compression": "TC_NORMALMAP",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Lamp_E": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Radiostations_R168_AORM": {
+   "srgb": false,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Radiostations_R168_BC": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Radiostations_R168_N": {
+   "srgb": false,
+   "compression": "TC_NORMALMAP",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Albedo": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    256,
+    256
+   ],
+   "exported": true
+  },
+  "T_Radiostations_R997_AORM": {
+   "srgb": false,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Radiostations_R997_BC": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Radiostations_R997_N": {
+   "srgb": false,
+   "compression": "TC_NORMALMAP",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "T_Radiostations_R997_Emissive": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "TX_Computer_14a_RMA": {
+   "srgb": false,
+   "compression": "TC_MASKS",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "TX_Computer_14a_NRM": {
+   "srgb": false,
+   "compression": "TC_NORMALMAP",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "TX_Computer_14a_ALB": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  },
+  "TX_Computer_14a_EMM": {
+   "srgb": true,
+   "compression": "TC_DEFAULT",
+   "size": [
+    4096,
+    4096
+   ],
+   "exported": true
+  }
+ }
+}

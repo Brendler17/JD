@@ -1,0 +1,13 @@
+[gd_resource type="ORMMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Ventilation01_BC.png" id="1_2011t"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Ventilation01_N.png" id="2_w2glv"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Ventilation01_ORM.png" id="3_ykjjo"]
+
+[resource]
+resource_name = "MI_Ventilation01"
+albedo_texture = ExtResource("1_2011t")
+orm_texture = ExtResource("3_ykjjo")
+normal_enabled = true
+normal_texture = ExtResource("2_w2glv")
+texture_filter = 5

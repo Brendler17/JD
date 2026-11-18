@@ -1,0 +1,13 @@
+[gd_resource type="ORMMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_BedSheets02_BC.png" id="1_vmt5t"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_BedSheets02_N.png" id="2_cto3n"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_BedSheets02_ORM.png" id="3_1oxo6"]
+
+[resource]
+resource_name = "MI_BedSheets02"
+albedo_texture = ExtResource("1_vmt5t")
+orm_texture = ExtResource("3_1oxo6")
+normal_enabled = true
+normal_texture = ExtResource("2_cto3n")
+texture_filter = 5

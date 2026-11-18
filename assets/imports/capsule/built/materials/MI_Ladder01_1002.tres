@@ -1,0 +1,13 @@
+[gd_resource type="ORMMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Ladder01_BC_1002.png" id="1_o4j2s"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Ladder01_N_1002.png" id="2_kl684"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Ladder01_ORM_1002.png" id="3_v6083"]
+
+[resource]
+resource_name = "MI_Ladder01_1002"
+albedo_texture = ExtResource("1_o4j2s")
+orm_texture = ExtResource("3_v6083")
+normal_enabled = true
+normal_texture = ExtResource("2_kl684")
+texture_filter = 5

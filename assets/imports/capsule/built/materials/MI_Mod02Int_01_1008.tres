@@ -1,0 +1,19 @@
+[gd_resource type="ORMMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Mod02_Int_BC_1008.png" id="1_k5qyl"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Mod02_Int_E_1008.png" id="2_8qvcd"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Mod02_Int_N_1008.png" id="3_omw3t"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Mod02_Int_ORM_1008.png" id="4_q01mo"]
+
+[resource]
+resource_name = "MI_Mod02Int_01_1008"
+albedo_texture = ExtResource("1_k5qyl")
+orm_texture = ExtResource("4_q01mo")
+emission_enabled = true
+emission = Color(1, 0.682143, 0.445563, 1)
+emission_energy_multiplier = 0.5
+emission_operator = 1
+emission_texture = ExtResource("2_8qvcd")
+normal_enabled = true
+normal_texture = ExtResource("3_omw3t")
+texture_filter = 5

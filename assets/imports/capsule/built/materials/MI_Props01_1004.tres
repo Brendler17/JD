@@ -1,0 +1,13 @@
+[gd_resource type="ORMMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Props01_BC_1004.png" id="1_kbsb3"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Props01_N_1004.png" id="2_rannf"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_Props01_ORM_1004.png" id="3_yc8mm"]
+
+[resource]
+resource_name = "MI_Props01_1004"
+albedo_texture = ExtResource("1_kbsb3")
+orm_texture = ExtResource("3_yc8mm")
+normal_enabled = true
+normal_texture = ExtResource("2_rannf")
+texture_filter = 5

@@ -1,0 +1,19 @@
+[gd_resource type="ORMMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_PropsSet02_BC.png" id="1_38yyo"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_PropsSet02_E.png" id="2_gkahn"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_PropsSet02_N.png" id="3_22cyd"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_PropsSet02_ORM.png" id="4_8a08s"]
+
+[resource]
+resource_name = "MI_PropsSet02"
+albedo_texture = ExtResource("1_38yyo")
+orm_texture = ExtResource("4_8a08s")
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 0.228571
+emission_operator = 1
+emission_texture = ExtResource("2_gkahn")
+normal_enabled = true
+normal_texture = ExtResource("3_22cyd")
+texture_filter = 5

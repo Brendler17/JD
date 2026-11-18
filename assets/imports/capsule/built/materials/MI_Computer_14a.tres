@@ -1,0 +1,24 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/TX_Computer_14a_ALB.png" id="1_85egj"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/TX_Computer_14a_RMA.png" id="2_dhl2w"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/TX_Computer_14a_EMM.png" id="3_h1gc5"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/TX_Computer_14a_NRM.png" id="4_y86g6"]
+
+[resource]
+resource_name = "MI_Computer_14a"
+albedo_texture = ExtResource("1_85egj")
+metallic = 1.0
+metallic_texture = ExtResource("2_dhl2w")
+metallic_texture_channel = 1
+roughness_texture = ExtResource("2_dhl2w")
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+emission_operator = 1
+emission_texture = ExtResource("3_h1gc5")
+normal_enabled = true
+normal_texture = ExtResource("4_y86g6")
+ao_enabled = true
+ao_texture = ExtResource("2_dhl2w")
+ao_texture_channel = 2
+texture_filter = 5

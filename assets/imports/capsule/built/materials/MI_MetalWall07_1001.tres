@@ -1,0 +1,13 @@
+[gd_resource type="ORMMaterial3D" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_MetalWall07_BC_1001.png" id="1_b0tim"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_MetalWall07_N_1001.png" id="2_4phys"]
+[ext_resource type="Texture2D" path="res://assets/imports/capsule/textures/T_MetalWall07_ORM_1001.png" id="3_dixsk"]
+
+[resource]
+resource_name = "MI_MetalWall07_1001"
+albedo_texture = ExtResource("1_b0tim")
+orm_texture = ExtResource("3_dixsk")
+normal_enabled = true
+normal_texture = ExtResource("2_4phys")
+texture_filter = 5
