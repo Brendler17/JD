@@ -5,8 +5,10 @@ class_name MazeGenerator
 ##
 ## Garantias:
 ## - Existe pelo menos um caminho entre 'S' e 'E' (o backtracker conecta todas as células livres).
-## - O menor caminho de 'S' até 'E', em passos de uma célula, é de pelo menos 1/4 do total
-##   de células livres do mapa. Se uma tentativa não permitir isso, outra é gerada.
+## - O menor caminho de 'S' até 'E', em passos de uma célula, fica dentro de `path_range`
+##   (ex.: 28–32), para o tamanho do percurso não depender da sorte. Sem faixa
+##   (Vector2i.ZERO), vale o critério antigo: pelo menos 1/4 das células livres.
+##   Se uma tentativa não tiver nenhuma casa na faixa, outra é gerada.
 ## - A borda do mapa é sempre parede.
 
 const DIRECTIONS: Array[Vector2i] = [Vector2i.UP, Vector2i.RIGHT, Vector2i.DOWN, Vector2i.LEFT]
@@ -18,7 +20,9 @@ const MIN_PATH_RATIO := 0.25
 ## `size` é arredondado para ímpar (células "sala" ficam nas coordenadas ímpares).
 ## `loop_chance` é a probabilidade de abrir cada parede interna extra, criando
 ## caminhos alternativos (0 = labirinto perfeito, só um caminho entre dois pontos).
-static func generate(size: Vector2i, rng_seed: int, loop_chance := 0.0) -> MazeGrid:
+## `path_range` = (mínimo, máximo) do menor caminho até a saída, em passos.
+static func generate(size: Vector2i, rng_seed: int, loop_chance := 0.0,
+		path_range := Vector2i.ZERO) -> MazeGrid:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = rng_seed
 	var width := maxi(size.x, 5) | 1
@@ -30,9 +34,13 @@ static func generate(size: Vector2i, rng_seed: int, loop_chance := 0.0) -> MazeG
 		var start: Vector2i = floor_cells[rng.randi_range(0, floor_cells.size() - 1)]
 		var distances := _distances_from(start, open, width, height)
 		var min_distance := ceili(floor_cells.size() * MIN_PATH_RATIO)
+		var max_distance := 1 << 30
+		if path_range != Vector2i.ZERO:
+			min_distance = path_range.x
+			max_distance = path_range.y
 		var candidates: Array[Vector2i] = []
 		for cell: Vector2i in distances:
-			if distances[cell] >= min_distance:
+			if distances[cell] >= min_distance and distances[cell] <= max_distance:
 				candidates.append(cell)
 		if candidates.is_empty():
 			continue

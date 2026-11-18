@@ -9,6 +9,10 @@ extends Node3D
 @export var maze_size := Vector2i(15, 15)
 ## Probabilidade de abrir paredes extras, criando caminhos alternativos.
 @export_range(0.0, 1.0) var loop_chance := 0.08
+## Menor caminho do início até a saída, em passos (mínimo, máximo). Tira a sorte do
+## tamanho do percurso: sem ela, o caminho ia de 25 a 74 passos (cauda longa que
+## matava por O₂). 28–32 fica em volta da mediana antiga (30). (0, 0) = critério antigo.
+@export var exit_path_range := Vector2i(28, 32)
 ## 0 = semente aleatória a cada partida; outro valor reproduz sempre o mesmo labirinto.
 @export var fixed_seed := 0
 ## Se definido, usa este labirinto escrito à mão em vez de gerar um.
@@ -28,6 +32,6 @@ func _enter_tree() -> void:
 	else:
 		var rng_seed := fixed_seed if fixed_seed != 0 else randi()
 		seed_used = rng_seed
-		maze = MazeGenerator.generate(maze_size, rng_seed, loop_chance)
+		maze = MazeGenerator.generate(maze_size, rng_seed, loop_chance, exit_path_range)
 	for path in maze_consumers:
 		get_node(path).maze = maze
