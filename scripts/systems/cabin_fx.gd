@@ -8,6 +8,8 @@ extends RefCounted
 var lights: Array[Light3D] = []
 var base_energy := {}
 var screens: Array[PanelScreen] = []
+## Superfícies emissivas (faixas do teto) que acompanham as luzes.
+var glows: Array[CabinGlow] = []
 ## Rótulos 3D das teclas e do knob (sem sombreamento: brilhariam no escuro).
 var labels: Array[Label3D] = []
 
@@ -18,6 +20,8 @@ static func collect(cabin_lights: Node3D, alarm_light: Light3D, command_panel: N
 		if node is Light3D and node != alarm_light:
 			fx.lights.append(node)
 			fx.base_energy[node] = (node as Light3D).light_energy
+		elif node is CabinGlow:
+			fx.glows.append(node)
 	for node in command_panel.find_children("*", "", true, false):
 		if node is PanelScreen:
 			fx.screens.append(node)
@@ -33,6 +37,8 @@ func flicker(failing: float, light_range: Vector2, screen_range: Vector2, off_po
 	for light in lights:
 		light.light_energy = 0.0 if randf() < failing \
 				else base_energy[light] * randf_range(light_range.x, light_range.y) * scale
+	for glow in glows:
+		glow.level = 0.0 if randf() < failing else randf_range(light_range.x, light_range.y) * scale
 	for screen in screens:
 		screen.power = off_power if randf() < failing else randf_range(screen_range.x, screen_range.y) * scale
 	for label in labels:
@@ -43,10 +49,17 @@ func flicker(failing: float, light_range: Vector2, screen_range: Vector2, off_po
 func set_level(light_scale: float, screen_power: float) -> void:
 	for light in lights:
 		light.light_energy = base_energy[light] * light_scale
+	set_glow(light_scale)
 	for screen in screens:
 		screen.power = screen_power
 	for label in labels:
 		label.visible = screen_power > 0.05
+
+
+## Emissão das faixas em `level` × a original (para quem anima as luzes à mão).
+func set_glow(level: float) -> void:
+	for glow in glows:
+		glow.level = level
 
 
 func restore() -> void:

@@ -172,6 +172,7 @@ func _process_oxygen(delta: float) -> void:
 	var light_level := clampf(1.0 - (_time - O2_BROWNOUT_TIME) / (O2_LIGHTS_OUT - O2_BROWNOUT_TIME), 0.0, 1.0) * 0.6
 	for light in _fx.lights:
 		light.light_energy = _fx.base_energy[light] * light_level * (0.85 if randf() < 0.04 else 1.0)
+	_fx.set_glow(light_level)
 	for i in _fx.screens.size():
 		var left := _screen_deaths[i] - _time
 		var screen := _fx.screens[i]
