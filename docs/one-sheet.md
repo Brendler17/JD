@@ -4,7 +4,7 @@
 
 | | |
 |---|---|
-| **Plataformas** | PC (Windows / Linux) — engine Godot 4. Build para web (itch.io) como meta secundária. |
+| **Plataformas** | PC (Windows / Linux) — engine Godot 4. |
 | **Faixa etária** | 14+ (equivalente T / Teen) — tensão psicológica e perigo implícito, sem violência gráfica explícita. |
 | **Classificação pretendida** | T (Teen) — conteúdo de suspense/horror atmosférico. |
 
@@ -26,8 +26,8 @@ Não existe movimento livre nem strafe: a cápsula anda só na direção em que 
 
 ## Modos de gameplay
 
-- **Modo Campanha (MVP):** um labirinto único, do ponto A ao ponto B.
-- **Modo Roguelike (pós-MVP):** múltiplos mapas com dificuldade crescente; o progresso de uma tentativa que termina em morte retorna como bônus permanente (melhorias/moedas) na tentativa seguinte.
+- **Modo Campanha (implementado):** um labirinto procedural por partida, do ponto A ao ponto B, com percurso de tamanho controlado (28–32 passos). Cada nova tentativa gera um labirinto novo.
+- **Roadmap pós-entrega:** Modo Roguelike (mapas em sequência; cada nova tentativa vira a "Cápsula Onze", "Doze"...), powerups e modos de dificuldade.
 
 ## Diferenciais de venda
 
@@ -36,7 +36,7 @@ Não existe movimento livre nem strafe: a cápsula anda só na direção em que 
 - **Sonar como faca de dois gumes** — obter informação tem preço: cada uso pode atrair um inimigo invisível e intransponível.
 - **Escopo gráfico enxuto, execução afiada** — toda a produção acontece dentro da cápsula, liberando o tempo do time para polir áudio e sistemas em vez de arte 3D cara.
 - **Progressão por risco calculado** — oxigênio, sonar e dano acumulado criam decisões constantes de risco x recompensa.
-- **Replayability roguelike** — labirintos regenerados e progressão meta (upgrades) recompensam tentativas repetidas.
+- **Labirinto novo a cada tentativa** — geração procedural com percurso de tamanho fixo: o mapa muda, a dificuldade não depende de sorte.
 
 ## Produtos concorrentes
 

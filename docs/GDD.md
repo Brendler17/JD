@@ -6,7 +6,7 @@
 
 - **Nome do jogo:** Profundidade Zero
 - **Gênero:** Horror psicológico / navegação às cegas / gerenciamento de recursos
-- **Plataforma:** PC (Windows/Linux), engine Godot 4. Build web (itch.io) como meta secundária.
+- **Plataforma:** PC (Windows/Linux), engine Godot 4.
 - **Público-alvo / Classificação:** 14+ (T/Teen) — suspense e perigo implícito, sem violência gráfica explícita.
 - **Pitch:** o jogador guia uma cápsula submersa, sem visão do ambiente, por um labirinto, usando um painel de botões e um sonar de uso limitado, administrando oxigênio, informação e risco até alcançar a saída.
 
@@ -55,9 +55,9 @@
 - Nada de exposição longa. Cada revelação cabe numa frase ou num objeto.
 - O jogador é anônimo: só "Cápsula Dez".
 
-**Em aberto (decidir depois):** o que é a criatura e o que houve com a Tétis (de propósito, pode nunca ser respondido); se, no modo roguelike, cada nova tentativa vira a "Cápsula Onze", "Doze"... (a fala de derrota já deixa essa porta aberta).
+**Em aberto (de propósito):** o que é a criatura e o que houve com a Tétis. Pode nunca ser respondido: o mistério faz parte do horror. A ideia de cada nova tentativa virar a "Cápsula Onze", "Doze"... está no roadmap (§9).
 
-*(A detalhar: moodboard e referências de tom.)*
+**Referências de tom:** *Iron Lung* (horror dentro de um veículo isolado, câmera presa na cabine), *Duskers* (exploração às cegas por sensores e recursos escassos), *Phasmophobia* (pistas sonoras como mecânica) e *Dead Space* (névoa e luz de alarme na cabine). Visual: a demo em Unreal da equipe (§2.2).
 
 ## 3. Core Loop
 
@@ -94,13 +94,13 @@ Regras:
 - **Risco:** cada pulso atrai o inimigo para o ponto de onde saiu (§4.5).
 - **Raio de detecção (implementado):** o pulso revela a criatura como **ponto vermelho passageiro** se ela estiver a até **4,5 células** em linha reta (atravessando paredes) ou no feixe reto de uma das 4 direções. Um anel se expande no CRT até o limite do raio, para o jogador entender o alcance. O sonar vira a ferramenta para planejar a fuga, e o dilema fica claro: ver onde ela está custa chamá-la.
 
-*(A detalhar: feedback sonoro do ping/eco.)*
+- **Feedback sonoro (implementado):** ping ao emitir, eco ao voltar e rosnado quando o eco passa pela criatura (§6.4).
 
 ### 4.3 Oxigênio
 
 - Recurso central e condição de derrota.
-- Consumido ao usar o botão Andar e por colisões.
-- Esgotar oxigênio ou colidir repetidamente leva à morte.
+- Consumido por toda ação do painel (andar, ré, girar, sonar) e, com custo maior, por colisões.
+- Esgotar o oxigênio é derrota.
 
 | Parâmetro | Valor (MVP, ponto de partida) |
 |---|---|
@@ -111,7 +111,7 @@ Regras:
 | Custo por colisão | 8 |
 | Regeneração | Nenhuma |
 
-- Valores atuais de playtest (revisados em 2026-10-27, junto com o labirinto procedural, quando girar e sonar passaram a custar). Não são finais.
+- Valores validados em playtest com telemetria (§4.6.1): com o percurso controlado (§4.4), o O₂ de 240 deu 57% de vitória, dentro do alvo de 40–60%.
 - Uma colisão custa o mesmo que 8 passos: bater na parede deve doer o suficiente para fazer o jogador hesitar antes de andar às cegas.
 - **Leitura:** mostrador analógico de O₂ no painel (escala invertida: cheio à esquerda, ponteiro sobe para a faixa vermelha à direita nos últimos 25%) e valor numérico grande, com barra, no monitor lateral esquerdo ("Suporte de vida", §7.1).
 - **Chegar à saída com o último ponto de oxigênio conta como vitória.**
@@ -121,7 +121,7 @@ Regras:
 
 - Representado como uma matriz (grade) com no mínimo um caminho válido entre entrada e saída.
 - Modo Campanha (MVP): labirinto único, ponto A → ponto B.
-- Modo Roguelike (pós-MVP): múltiplos mapas gerados, dificuldade crescente.
+- Modo Roguelike: no roadmap pós-entrega (§9).
 - Células: parede, livre, início (1) e saída (1). Tudo além dos limites do mapa é parede.
 - **Colisão:** tentar andar para uma parede **não move** a cápsula — o comando é "desperdiçado" e conta como colisão (que custará oxigênio, conforme §4.3). O jogador sente a parede, mas não atravessa nem é empurrado.
 - **Geração procedural (implementada):** cada partida, e cada "Tentar novamente", gera um labirinto novo de 15 × 15 células (4 m cada), com alguns caminhos alternativos. O menor caminho até a saída fica sempre entre **28 e 32 passos** (antes: ≥ 1/4 das células livres, sem teto, o que dava de 25 a 74 passos). O labirinto continua aleatório em formato, becos e posição do início; só o tamanho do percurso deixou de ser sorte. Ainda é possível fixar uma semente ou um mapa escrito à mão para testes e balanceamento.
@@ -131,7 +131,7 @@ Regras:
 - Invisível e intransponível.
 - Reage ao uso do sonar (se aproxima quando o jogador "faz barulho").
 
-- **Indícios de proximidade:** sirene + luz vermelha piscando (ver §6.3), metal rangendo/sendo espremido (§6.4) e — proposta — interferência crescente no rádio (§6.2).
+- **Indícios de proximidade:** sirene + luz vermelha piscando (ver §6.3), metal rangendo/sendo espremido (§6.4) e interferência crescente no rádio e no mostrador INTERF. (§6.2).
 
 - **Comportamento (implementado, valores para playtest; rebalanceado em 2026-11-12, ver §4.6):** age em turnos — andar, ré, colidir e sonar dão um turno à criatura (girar não, desde 2026-11-16). Nos primeiros 15 turnos ela dorme (período de calma, §4.6.1). Normalmente vaga devagar (1 célula a cada 2 turnos). **Cada pulso de sonar a faz caçar o ponto de onde o pulso saiu**, 1 célula por turno; se não achar a cápsula lá, ela mergulha e reaparece longe. A 2 células ou menos, ela sente a cápsula e passa a **rondá-la devagar** (1 célula a cada 2 turnos); encostada, joga o dado a cada turno (ataca ou hesita).
 - **Condição de derrota:** o casco aguenta **2 golpes**; o **3º** rompe o casco — tela "CONTATO". Cada golpe que o casco aguenta a faz mergulhar e reaparecer longe.
@@ -163,12 +163,8 @@ Regras:
 3. *Pânico:* com ela a 3 casas, o jogador usa o sonar para vê-la. Ela vem direto e ataca sem dado; o casco cai de 2 para 1.
 
 **Decisões tomadas (2026-11-12):**
-- Chance de hesitar: ~~60%~~ **70%** desde a rodada 2 (§4.6.1), e a primeira encostada sempre hesita.
-- ~~Casco mostrado como linha no monitor superior.~~ **Substituído em 2026-11-16:** no playtest, O₂ e casco ficavam pequenos demais no monitor superior. Os dois foram para o **monitor lateral esquerdo** (antes apagado), com número grande e 3 blocos desenhados (cheio = intacto, contorno riscado = perdido; vermelho com 1 ponto). Ver §7.1.
-
-**Ainda em aberto:**
-- ~~Opção E~~ → incorporada na rodada 2, abaixo.
-- Falas do rádio para golpe não letal, casco crítico, sonar perto dela, O₂ e interferência: **gravadas e implementadas em 2026-11-16** (falas 14–19 em [`roteiro-radio.md`](roteiro-radio.md)), aguardando gravação.
+- Chance de hesitar: 60% nesta rodada; **70%** desde a rodada 2 (§4.6.1), e a primeira encostada sempre hesita.
+- Casco mostrado primeiro como linha no monitor superior. **Substituído em 2026-11-16:** no playtest, O₂ e casco ficavam pequenos demais no monitor superior. Os dois foram para o **monitor lateral esquerdo** (antes apagado), com número grande e 3 blocos desenhados (cheio = intacto, contorno riscado = perdido; vermelho com 1 ponto). Ver §7.1.
 
 **Apresentação do golpe não letal (implementada):** tranco de câmera e impacto (`cabin_impact` 0,7), rugido da criatura um pouco mais baixo que o do golpe final, luzes e telas falhando por ~1 s, linha "!! GOLPE NO CASCO — INTEGRIDADE 2/3" no registro do monitor. Detalhes técnicos no TDD §9.
 
@@ -193,17 +189,19 @@ Regras:
 - **R3:** carga com o pulso a ≤ 3 células em linha reta (mesma métrica do raio de 4,5).
 - **R4:** a primeira encostada vale para a partida inteira. Depois dela, a cada turno encostada, 30% de ataque.
 - **Diálogos:** nenhuma fala precisou mudar. A fala 19 (opcional) passa a tocar sempre no primeiro encontro de perto, porque a primeira encostada agora sempre hesita.
-- **Próximo passo:** playtest. Se ficar fácil demais, desfazer pela metade, nesta ordem: R5 (O₂ 220), R3 (carga a 3,5), R4 (ataque 35%), R1 (calma de 10 turnos). R2 fica, porque corrige uma injustiça e não é só um número.
+- **Resultado (2026-11-17/18):** com R1–R5, 10 partidas deram 70% de vitória, mas as duas mortes por O₂ vieram de mapas longos (40 e 42 passos), ou seja, de sorte. Em vez de desfazer o R5 (O₂ 220), o percurso foi fixado em 28–32 passos (§4.4). Com isso, 7 partidas deram 57%, dentro do alvo, e o O₂ ficou em 240. R1–R5 seguem valendo.
 
-**Outras alavancas (cardápio, se o pacote não bastar ou para afinar):**
+**Alternativas avaliadas e não adotadas** (ficam registradas como opções de ajuste fino; nenhuma faz parte do jogo):
 - **Vagar sem rumo de verdade:** ao vagar, ela evita se aproximar da cápsula. Só o sonar (ou o azar) a traz. Isso deixa toda perseguição com uma **causa** que o jogador entende.
 - `STALK_LOSE_RANGE` 4 → 3: ela perde o rastro mais cedo.
 - Labirinto 15×15 → 13×13, ou `loop_chance` 0,08 → 0,15: rota mais curta e mais saídas de fuga.
-- Casco 3 → 4, ou reparo de casco como powerup (§4.7).
+- Casco 3 → 4, ou reparo de casco como powerup (roadmap, §4.7).
 - **Informação em vez de números:** raspar de casco quando ela está encostada, para o jogador saber que é hora de fugir (GDD §6.4).
 - Modo "treino" na primeira partida (sem criatura, só rádio e instrumentos), se o tutorial pelo rádio não bastar.
 
-### 4.7 Powerups no labirinto (em avaliação, 2026-11-16)
+### 4.7 Powerups no labirinto (roadmap pós-entrega, §9)
+
+> **Não implementado.** Proposta avaliada em 2026-11-16 e mantida para depois da entrega. O desenho abaixo é o ponto de partida.
 
 **Ideia do usuário:** itens espalhados pelo labirinto, vistos no sonar só **no feixe** (as 4 linhas retas do pulso, até a primeira parede), como era a criatura antes do raio. Candidatos: sonar grátis, sonar melhorado, escudo, oxigênio, dica de caminho livre e ping de saída.
 
@@ -235,10 +233,8 @@ Regras:
 
 ## 5. Progressão
 
-- **MVP:** Modo Campanha — um labirinto, do início ao fim.
-- **Pós-MVP:** Modo Roguelike — múltiplos mapas, progresso de tentativas anteriores retorna como bônus permanente (upgrades/moedas) nas tentativas seguintes.
-
-*(A detalhar: quais upgrades existem, curva de dificuldade entre mapas.)*
+- **Implementado:** Modo Campanha. Cada partida é um labirinto do início à saída, e cada "Tentar novamente" gera um labirinto novo com percurso do mesmo tamanho (28–32 passos), então a dificuldade é estável entre tentativas.
+- **Roadmap pós-entrega:** Modo Roguelike e modos de dificuldade (§9).
 
 ## 6. Áudio & Atmosfera
 
@@ -249,26 +245,25 @@ A atmosfera é construída quase inteiramente por áudio, já que o jogador não
 - **Toda a informação inicial chega por áudio**, pela voz de alguém do lado de fora (um comandante/operador) falando por **rádio**. Nada de telas de tutorial ou textos explicativos.
 - **Tom:** realista — como uma transmissão de verdade para o fundo do mar: voz comprimida/abafada, chiado, **interferências** e cortes ocasionais.
 - **Conteúdo da introdução:** situar o jogador (quem é, o que faz ali, qual a missão) e ensinar o básico: como se mover pelo painel, como funciona o oxigênio, o custo das colisões e o sonar.
-- **Proposta (a validar) — tutorial contextual:** manter a introdução curta (só contexto + "ande até a saída") e entregar o resto em falas disparadas na **primeira vez** que algo acontece: primeira colisão ("Cuidado, cada impacto compromete o casco e o ar."), primeiro uso do sonar, oxigênio baixo pela primeira vez. Jogadores esquecem informação dada toda de uma vez, e uma fala que chega no momento do evento ensina melhor e mantém o rádio vivo durante a partida.
+- **Implementado — tutorial contextual:** manter a introdução curta (só contexto + "ande até a saída") e entregar o resto em falas disparadas na **primeira vez** que algo acontece: primeira colisão ("Cuidado, cada impacto compromete o casco e o ar."), primeiro uso do sonar, oxigênio baixo pela primeira vez. Jogadores esquecem informação dada toda de uma vez, e uma fala que chega no momento do evento ensina melhor e mantém o rádio vivo durante a partida.
 - **Roteiro definido:** 13 falas (introdução, cobrança para sentar, primeiro uso do painel, primeira colisão, primeiro sonar, primeiro alarme, primeiro encontro com a criatura, O₂ baixo, aviso sobre a Estação Tétis, perto da saída, vitória e duas derrotas) em [`roteiro-radio.md`](roteiro-radio.md), escritas segundo a lore (§2.3): o comandante esconde a verdade e se revela em deslizes. Identificação no rádio: "Superfície" (comandante) e "Cápsula Dez" (jogador). Várias frases repetem o teaser (protocolo decorado). Vozes geradas pela equipe com a mesma voz do teaser, gravadas limpas; o efeito de rádio é aplicado pelo jogo.
 - **Implementado — rádio no jogo:** as 13 falas (19 desde 2026-11-16, com as falas de instrumentos e de casco) tocam nos gatilhos do roteiro, no máximo uma vez por partida, uma por vez. O comandante se **interrompe** no meio de uma fala comum quando a criatura aparece pela primeira vez ("Espera... o que foi isso?"). Dicas que esperariam demais na fila são descartadas e voltam a valer se o evento se repetir, para nenhuma dica chegar fora de hora. A voz passa por filtro de rádio, com estática e chiado de abrir e fechar a transmissão.
-- **Implementado — legendas:** na base da tela, com o texto revelado no ritmo da fala (acessibilidade e apresentação em sala com som ruim). Ficaram fora do monitor superior porque, sentado no posto, ele quase não aparece no campo de visão; o monitor só registra "TRANSMISSÃO RECEBIDA". *Opcional (não feito):* botão de "repetir última transmissão" no painel.
+- **Implementado — legendas:** na base da tela, com o texto revelado no ritmo da fala (acessibilidade e apresentação em sala com som ruim). Ficaram fora do monitor superior porque, sentado no posto, ele quase não aparece no campo de visão; o monitor só registra "TRANSMISSÃO RECEBIDA".
 - **Implementado — o desfecho é do rádio:** no fim da partida, a tela de vitória/derrota só aparece depois da última fala do comandante (um clique antecipa). A fala final é o fecho da história e não compete com a tela.
 
 ### 6.2 Rádio e o inimigo
 
 - Ideia levantada: disparar a voz do comandante quando o inimigo se revela.
-- **Implementado** (validar em playtest): usar a voz **uma única vez**, no **primeiro encontro** (fala roteirizada e assustada, com estática subindo por baixo — "Espera... o que foi isso no seu sonar? ... Não... De novo não."). Nos encontros seguintes, **sem fala**: só a **interferência do rádio aumentando** conforme o inimigo se aproxima. Motivo: no horror, explicar demais mata a tensão, e uma fala repetida vira rotina em poucos encontros. Já o rádio que "morre" perto da criatura vira um **sensor de proximidade diegético**, coerente com um jogo cego guiado por som.
+- **Implementado:** usar a voz **uma única vez**, no **primeiro encontro** (fala roteirizada e assustada, com estática subindo por baixo — "Espera... o que foi isso no seu sonar? ... Não... De novo não."). Nos encontros seguintes, **sem fala**: só a **interferência do rádio aumentando** conforme o inimigo se aproxima. Motivo: no horror, explicar demais mata a tensão, e uma fala repetida vira rotina em poucos encontros. Já o rádio que "morre" perto da criatura vira um **sensor de proximidade diegético**, coerente com um jogo cego guiado por som.
 
 ### 6.3 Alarme: sirene + luz vermelha
 
 - **Quando:** o jogador está em perigo — **inimigo próximo** ou **oxigênio baixo** (mesmo limiar do indicador, 25%).
 - **Som:** sirene apitando.
-- **Visual:** luz vermelha piscando dentro da cabine, bem *oldschool* (giroflex/lâmpada de alerta). No protótipo atual, pode ser um piscar vermelho sobre a tela até o cockpit existir.
-- **Proposta (a validar) — distinguir as causas:** mesma luz vermelha, mas **sons diferentes** — oxigênio baixo = bipe de alarme ritmado; inimigo = sirene + metal rangendo. Se as duas causas soarem igual, o jogador não sabe se deve economizar ar ou fugir.
+- **Visual:** luz vermelha piscando dentro da cabine, bem *oldschool* (giroflex/lâmpada de alerta), que também tinge as luminárias, as faixas do teto e a névoa.
 - **Implementado — silenciar alarme:** knob vermelho sob o monitor superior. Corta o **som** dos alarmes ativos (sirene e bipe), mas a luz vermelha continua piscando. Só funciona com algum alarme tocando. Um perigo **novo**, ou o fim de todos os alarmes, rearma o som sozinho, para o jogador não silenciar uma vez e esquecer. O monitor registra "ALARME SILENCIADO" e "ALARME REARMADO".
 - **Implementado — sons distintos:** inimigo = sirene; O₂ baixo = bipe duplo (gerado proceduralmente, distinto da sirene).
-- **Proposta (a validar) — não mascarar o áudio do jogo:** como o jogo depende de ouvir o ambiente, a sirene não deve tocar contínua em volume alto. Opções: tocar em pulsos com pausas, abaixar a música/ambiente só nos picos, ou ter um **botão "silenciar alarme" no painel** — a luz continua piscando, mas o jogador escolhe recuperar a audição (decisão de risco extra, e um ótimo momento de tensão).
+- **Não mascarar o áudio do jogo:** como o jogo depende de ouvir o ambiente, o jogador pode silenciar a sirene (knob MUTE acima), mantendo a luz. É uma decisão de risco: recuperar a audição sem perder o aviso visual.
 
 ### 6.4 Camadas sonoras previstas
 
@@ -311,7 +306,7 @@ Tudo vive no painel físico em frente à cadeira, operado com a mira quando o jo
 - Layout do teclado em cruz: a disposição espacial espelha a ação (frente em cima, ré embaixo, giros nas laterais), reduzindo erro de clique sob tensão. Acionado apenas por mouse.
 - No fim da partida, o teclado é desabilitado e aparece a tela de fim (vitória/derrota) com "Tentar novamente" e "Menu principal" (ainda 2D).
 
-*(A detalhar: usar os outros 3 knobs (ex.: volume do rádio, brilho do sonar). Legendas do rádio: implementadas na base da tela, ver §6.1.)*
+- Os 3 knobs ao lado do MUTE são **decorativos** e ficaram sem rótulo, para não sugerirem função. Legendas do rádio: na base da tela (§6.1).
 
 ### 7.1.1 Cenas de fim de partida (implementado em 2026-11-16)
 
@@ -333,23 +328,35 @@ Os menus ficam **fora** da ficção (2D sobre a tela), com o mesmo visual dos mo
 - **Créditos:** Gustavo Brendler e Rafael Nunes Siqueira; Godot; voz do comandante gerada por IA no sintetizador próprio da equipe (feito com o Google AI Studio); ambiente e efeitos do Pixabay; sons CC0 do Freesound (motor e rangido); clique, bipe e estática sintetizados pela equipe. Registro completo em `assets/audio/CREDITS.md`.
 - *Decisão:* o Esc, que antes só liberava o cursor, agora abre a pausa. Com uma anotação aberta, o Esc continua fechando a anotação.
 
-## 8. Escopo & Fora do Escopo (MVP)
+## 8. Escopo da entrega
 
-**Dentro do MVP:**
-- Movimentação pelo painel diegético (Frente/Ré/Girar/Sonar).
-- Consumo de oxigênio por ação e colisão.
-- Inimigo atraído pelo sonar.
-- Modo Campanha, ponto A → ponto B.
+**Implementado (MVP):**
+- Movimentação pelo painel diegético (Frente/Ré/Girar/Sonar), com manobras de duração real.
+- Consumo de oxigênio por ação e colisão; casco com 3 pontos de integridade.
+- Criatura em turnos, atraída pelo sonar (caça, ronda, carga, mergulho), nunca vista.
+- Modo Campanha: um labirinto procedural por partida, percurso de 28–32 passos.
+- Rádio do comandante (19 falas com legendas), alarme com mudo, cenas de fim (vitória, falta de O₂, contato).
+- Menu principal, pausa, opções e créditos.
 
-**Já implementado além do escopo original do MVP:**
+**Implementado além do escopo original do MVP:**
 - Andar dentro da cabine (WASD) e textos examináveis de lore.
 - Geração procedural de labirintos.
+- Telemetria de playtest (CSV por partida) usada no balanceamento.
 
-**Fora do MVP (pós-MVP / roguelike / stretch goals):**
-- Progressão meta (upgrades/moedas entre tentativas).
-- Múltiplos inimigos ou variações de inimigo.
+**Fora da entrega:** tudo o que está no roadmap (§9). Build web foi descartado: a entrega é só desktop (Windows/Linux).
 
-## 9. Registro de Decisões
+## 9. Roadmap pós-entrega
+
+> Nada nesta seção está implementado. São direções já pensadas com o design atual, registradas para continuar o projeto depois da entrega.
+
+| Item | Ideia | Por que encaixa |
+|---|---|---|
+| **Modo Roguelike** | Mapas em sequência com dificuldade crescente. Cada nova tentativa depois de uma derrota vira a "Cápsula Onze", "Doze"... | A fala de derrota já termina em "Preparem a Onze": a progressão nasce da lore |
+| **Progressão meta** | Bônus permanentes (upgrades) entre tentativas do roguelike | Recompensa tentativas repetidas sem mudar o núcleo |
+| **Powerups** | Destroços das cápsulas anteriores no labirinto (cilindro de O₂, placa de casco, boia-isca), vistos só no feixe do sonar (§4.7) | Dá ao sonar um segundo motivo e transforma becos em escolha de risco |
+| **Modos de dificuldade** | Dois perfis (fácil/difícil) como `Resource`, com os números que já existem (O₂, faixa de percurso, turnos de calma, chance de ataque, raio de carga, custo do sonar). No difícil, uma regra nova: a criatura **não mergulha** ao chegar a um ponto de sonar vazio e fica rondando a área | Fácil para quem joga pela primeira vez; o difícil quebra a estratégia da isca, que jogadores experientes descobrem |
+
+## 10. Registro de Decisões
 
 > Cada nova decisão de design tomada em conversas com a IA ou discussões de equipe deve ser registrada aqui, com data.
 
@@ -382,3 +389,4 @@ Os menus ficam **fora** da ficção (2D sobre a tela), com o mesmo visual dos mo
 - **2026-11-17 — Caminho até a saída numa faixa fixa (28–32 passos):** as 10 primeiras partidas de telemetria mostraram que as duas mortes por O₂ vieram de mapas longos (caminho ótimo de 40 e 42), enquanto todas as outras partidas tiveram 25–29. Simulando 3.000 labirintos do gerador, o caminho ia de 25 a 74 (mediana 30, 15% com 40 ou mais). Agora a saída é sorteada só entre as casas a 28–32 passos do início, em volta da mediana antiga. Motivo: a dificuldade deve vir da exploração, do sonar e da criatura, não da sorte do mapa; o O₂ continua fixo (240), para o jogador criar intuição de quanto ar um percurso custa. Modos fácil/difícil ficam para depois, sobre essa base. Ajustável em `LevelSetup.exit_path_range` (27–31 mais fácil, 29–33 mais difícil).
 - **2026-11-17 — Fala da criatura mais curta, "colisão" e rótulo MUTE:** a fala do primeiro encontro termina em "Não... De novo não." (o pedido de "repita... sinal... perdendo" saiu) e a interferência suja a voz sem engolir o final. Na fala do primeiro golpe, "não foi parede" virou "não foi colisão", usando o termo que o jogo já mostra (custo "COLISÃO"). A etiqueta "SILENCIAR ALARME" ficava ilegível do assento: o knob agora tem o rótulo "MUTE" no padrão da placa, e os rótulos dos knobs sem função (PULSE, CAMERA, L/R VT) foram apagados. Motivo: pedido do usuário.
 - **2026-11-18 — O₂ mantido em 240 após a faixa de 28–32 passos:** 7 partidas com a faixa: 4 vitórias e 3 derrotas por O₂ (57%, dentro do alvo de 40–60%). As derrotas não vieram mais do tamanho do mapa: o jogador terminou a 24–61 passos da saída (rota errada) e usou 26–29 sonares, contra 12–18 nas vitórias. A proposta de reduzir o O₂ para 220 (§4.6.1, R5) foi descartada por ora, porque empurraria a taxa para baixo do alvo. Reavaliar com partidas de outro jogador.
+- **2026-11-18 — Pendências fechadas para a entrega dos documentos:** como só o que está no GDD poderá ser implementado depois, cada pendência ganhou um destino. **Roadmap pós-entrega (§9):** Modo Roguelike (com a "Cápsula Onze"), progressão meta, powerups (§4.7) e modos de dificuldade (novo: perfis em `Resource` e, no difícil, criatura que não mergulha no ponto vazio). **Variações de inimigo** (antes "fora do MVP") foram removidas. **Removidos:** build web (a entrega é desktop), botão "repetir última transmissão" e uso dos 3 knobs livres (agora decorativos, sem rótulo). **Descartado:** escalada de tensão ao longo da partida. Marcações "a validar"/"a detalhar" já resolvidas foram atualizadas. Motivo: decisão do usuário antes da entrega.
