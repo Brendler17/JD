@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bqqfv4d7oitwm"]
 
 [ext_resource type="Script" uid="uid://ddbd537ab2n6t" path="res://scripts/systems/level_setup.gd" id="1_setup"]
-[ext_resource type="PackedScene" uid="uid://b08cxcpbdr1nj" path="res://assets/imports/capsula_completa/SM_MERGED_StaticMeshActor_1.gltf" id="2_interior"]
+[ext_resource type="PackedScene" path="res://scenes/cockpit/capsule_interior.tscn" id="2_interior"]
 [ext_resource type="Script" uid="uid://dinbeg2yk1xv" path="res://scripts/entities/interactable.gd" id="3_interactable"]
 [ext_resource type="PackedScene" path="res://scenes/entities/player.tscn" id="4_player"]
 [ext_resource type="PackedScene" path="res://scenes/entities/capsule.tscn" id="5_capsule"]
@@ -21,6 +21,24 @@
 [ext_resource type="Script" path="res://scripts/systems/run_telemetry.gd" id="19_telemetry"]
 [ext_resource type="PackedScene" path="res://scenes/ui/pause_menu.tscn" id="20_pause"]
 [ext_resource type="Script" path="res://scripts/systems/ending_sequence.gd" id="21_ending"]
+[ext_resource type="PackedScene" uid="uid://bupwmdnuwx3r6" path="res://assets/imports/sm_devices01/SM_Devices01.fbx" id="22_devices01"]
+[ext_resource type="Script" path="res://scripts/systems/cabin_glow.gd" id="23_glow"]
+[ext_resource type="PackedScene" path="res://scenes/cockpit/cabin_fog.tscn" id="25_fog"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Ceiling06.tres" id="30_glow"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Light01_1001.tres" id="31_glow"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Lamp06.tres" id="32_glow"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Bathroom02.tres" id="33_glow"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_LabProps01.tres" id="34_glow"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Mod02Int_01_1008.tres" id="35_glow"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Computer_14a.tres" id="36_glow"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Props05.tres" id="37_glow"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Wires01.tres" id="38_glow"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Door01.tres" id="39_glow"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_PropsSet02.tres" id="40_glow"]
+[ext_resource type="Material" path="res://assets/imports/capsule/built/materials/MI_Container01_1001.tres" id="41_glow"]
+[ext_resource type="Material" path="res://assets/imports/sm_devices01/materials/M_Devices01_1002.tres" id="42_glow"]
+[ext_resource type="Material" path="res://assets/imports/sm_devices01/materials/M_Devices01_1004.tres" id="43_glow"]
+[ext_resource type="Material" path="res://assets/imports/sm_devices01/materials/M_Devices01_1005.tres" id="44_glow"]
 
 [sub_resource type="Environment" id="Env_cabin"]
 background_mode = 1
@@ -37,6 +55,12 @@ glow_hdr_threshold = 0.85
 adjustment_enabled = true
 adjustment_contrast = 1.12
 adjustment_saturation = 1.08
+fog_enabled = true
+fog_light_color = Color(0.3, 0.33, 0.36, 1)
+fog_light_energy = 0.45
+fog_sun_scatter = 0.0
+fog_density = 0.045
+fog_sky_affect = 0.0
 
 [sub_resource type="BoxShape3D" id="Shape_floor"]
 size = Vector3(8, 0.5, 14)
@@ -89,6 +113,11 @@ environment = SubResource("Env_cabin")
 
 [node name="CapsuleInterior" parent="." unique_id=814285902 instance=ExtResource("2_interior")]
 
+[node name="PanelMesh" parent="." instance=ExtResource("22_devices01")]
+transform = Transform3D(0, 0, -1.875, 0, 1.875, 0, 1, 0, 0, 1.05, -1.6, -0.3)
+
+[node name="CabinFog" parent="." instance=ExtResource("25_fog")]
+
 [node name="CabinLights" type="Node3D" parent="." unique_id=1810467741]
 
 [node name="CeilingLightFront" type="OmniLight3D" parent="CabinLights" unique_id=114677628]
@@ -125,6 +154,41 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, -1.2)
 light_color = Color(0.5, 1, 0.9, 1)
 light_energy = 0.2
 omni_range = 2.0
+
+[node name="StripLightFront" type="OmniLight3D" parent="CabinLights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.0, -3.5)
+light_color = Color(1, 0.86, 0.55, 1)
+light_energy = 0.4
+omni_range = 7.5
+omni_attenuation = 0.6
+
+[node name="StripLightMid" type="OmniLight3D" parent="CabinLights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.0, -6.75)
+light_color = Color(1, 0.86, 0.55, 1)
+light_energy = 0.4
+omni_range = 7.5
+omni_attenuation = 0.6
+
+[node name="StripLightBack" type="OmniLight3D" parent="CabinLights"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.0, -10.0)
+light_color = Color(1, 0.86, 0.55, 1)
+light_energy = 0.4
+omni_range = 7.5
+omni_attenuation = 0.6
+
+[node name="LampGlow" type="Node" parent="CabinLights" node_paths=PackedStringArray("roots", "alarm_light", "tinted_lights", "world_environment")]
+script = ExtResource("23_glow")
+roots = [NodePath("../../CapsuleInterior")]
+materials = Array[BaseMaterial3D]([ExtResource("30_glow"), ExtResource("31_glow"), ExtResource("32_glow"), ExtResource("33_glow"), ExtResource("34_glow"), ExtResource("35_glow")])
+follow_alarm = true
+alarm_light = NodePath("../AlarmLight")
+tinted_lights = [NodePath("../StripLightFront"), NodePath("../StripLightMid"), NodePath("../StripLightBack")]
+world_environment = NodePath("../../WorldEnvironment")
+
+[node name="DeviceGlow" type="Node" parent="CabinLights" node_paths=PackedStringArray("roots")]
+script = ExtResource("23_glow")
+roots = [NodePath("../../CapsuleInterior"), NodePath("../../PanelMesh")]
+materials = Array[BaseMaterial3D]([ExtResource("36_glow"), ExtResource("37_glow"), ExtResource("38_glow"), ExtResource("39_glow"), ExtResource("40_glow"), ExtResource("41_glow"), ExtResource("42_glow"), ExtResource("43_glow"), ExtResource("44_glow")])
 
 [node name="AlarmLight" type="OmniLight3D" parent="CabinLights" unique_id=782170824]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.4, -6)
@@ -275,7 +339,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.4, -1, -10.5)
 shape = SubResource("Shape_bunk")
 
 [node name="SeatView" type="Marker3D" parent="." unique_id=1932815406]
-transform = Transform3D(-1, 0, 0, 0, 0.9973, 0.0739, 0, 0.0739, -0.9973, 0, -0.05, -2.15)
+transform = Transform3D(-1, 0, 0, 0, 0.9973, 0.0739, 0, 0.0739, -0.9973, 0, 0.05, -1.95)
 
 [node name="CommandPanel" parent="." unique_id=661396166 instance=ExtResource("10_command_panel")]
 
