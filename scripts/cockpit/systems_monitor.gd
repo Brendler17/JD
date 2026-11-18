@@ -6,6 +6,10 @@ extends PanelContainer
 ## Barra e blocos são desenhados com _draw (sem glifos): não dependem de fonte
 ## de fallback e continuam legíveis mesmo com a tela tremendo nas falhas.
 ## "Dumb UI": só exibe o que o EventBus informa; valores iniciais vêm do GameState.
+## Emite `content_changed` a cada mudança: a PanelScreen (modo `mipmapped`) tira uma
+## cópia nova da tela, que fica nítida mesmo vista de lado.
+
+signal content_changed
 
 ## Abaixo desta fração do máximo, O₂ muda para a cor de alerta.
 const LOW_OXYGEN_RATIO := 0.25
@@ -46,6 +50,7 @@ func _on_oxygen_changed(current: float, maximum: float) -> void:
 	_oxygen_value.text = "%d / %d" % [ceili(current), int(maximum)]
 	_oxygen_value.add_theme_color_override(&"font_color", ALERT_COLOR if _oxygen_low else NORMAL_COLOR)
 	_oxygen_bar.queue_redraw()
+	content_changed.emit()
 
 
 func _on_hull_changed(current: int, maximum: int) -> void:
@@ -54,6 +59,7 @@ func _on_hull_changed(current: int, maximum: int) -> void:
 	_hull_value.text = "%d / %d" % [current, maximum]
 	_hull_value.add_theme_color_override(&"font_color", ALERT_COLOR if current <= 1 else NORMAL_COLOR)
 	_hull_blocks.queue_redraw()
+	content_changed.emit()
 
 
 ## Barra horizontal com marcas a cada 10%; vazia fica só o contorno escuro.

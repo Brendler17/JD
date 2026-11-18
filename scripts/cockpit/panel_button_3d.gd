@@ -11,6 +11,9 @@ extends Node3D
 ## afundada até o fim e as outras escurecem e ignoram cliques.
 ## Geometria no espaço local: a face fica em z = 0 e a tecla cresce para +Z
 ## (em direção ao jogador); pressionar empurra a tecla para -Z.
+## Com `panel_part_radius` > 0, a tecla não é gerada: a peça modelada do painel
+## (SM_Devices01) que fica dentro desse raio vira a tampa móvel, tingida com
+## `cap_color` (ex.: o knob "BCN" original pintado de vermelho para o alarme).
 
 enum Action { MOVE_FORWARD, MOVE_BACKWARD, ROTATE_LEFT, ROTATE_RIGHT, SONAR, TOGGLE_ALARM_MUTE }
 
@@ -40,13 +43,16 @@ const PROMPTS := {
 @export var label_font_size := 54
 ## Quanto a tecla afunda ao ser pressionada (m).
 @export var travel := 0.014
+## > 0: usa como tampa a peça da malha do painel dentro deste raio (m) em volta do
+## eixo do nó, em vez de gerar uma tecla. `cap_size` continua definindo a área clicável.
+@export var panel_part_radius := 0.0
 
 var disabled := false
 ## Travada por uma manobra em andamento (só teclas de manobra).
 var busy := false
 
 var _cap: Node3D
-var _material: StandardMaterial3D
+var _material: BaseMaterial3D
 var _click: AudioStreamPlayer3D
 var _hovered := false
 var _pressed := false
@@ -89,28 +95,28 @@ func _build() -> void:
 	_cap = Node3D.new()
 	add_child(_cap)
 
-	_material = StandardMaterial3D.new()
-	_material.albedo_color = cap_color
-	_material.roughness = 0.55
-	_material.metallic = 0.2
-	_material.emission_enabled = true
-	_material.emission = Color.BLACK
-
 	var mesh_instance := MeshInstance3D.new()
-	if round:
-		var cylinder := CylinderMesh.new()
-		cylinder.top_radius = cap_size.x * 0.5
-		cylinder.bottom_radius = cap_size.x * 0.5
-		cylinder.height = cap_size.z
-		cylinder.radial_segments = 24
-		mesh_instance.mesh = cylinder
-		mesh_instance.rotation_degrees.x = 90.0
-	else:
-		var box := BoxMesh.new()
-		box.size = cap_size
-		mesh_instance.mesh = box
-	mesh_instance.position.z = cap_size.z * 0.5
-	mesh_instance.material_override = _material
+	if not (panel_part_radius > 0.0 and _build_from_panel(mesh_instance)):
+		_material = StandardMaterial3D.new()
+		_material.albedo_color = cap_color
+		_material.roughness = 0.55
+		_material.metallic = 0.2
+		_material.emission_enabled = true
+		_material.emission = Color.BLACK
+		if round:
+			var cylinder := CylinderMesh.new()
+			cylinder.top_radius = cap_size.x * 0.5
+			cylinder.bottom_radius = cap_size.x * 0.5
+			cylinder.height = cap_size.z
+			cylinder.radial_segments = 24
+			mesh_instance.mesh = cylinder
+			mesh_instance.rotation_degrees.x = 90.0
+		else:
+			var box := BoxMesh.new()
+			box.size = cap_size
+			mesh_instance.mesh = box
+		mesh_instance.position.z = cap_size.z * 0.5
+		mesh_instance.material_override = _material
 	_cap.add_child(mesh_instance)
 
 	if label_text != "":
@@ -144,6 +150,34 @@ func _build() -> void:
 	_click.unit_size = 2.0
 	_click.position.z = cap_size.z
 	add_child(_click)
+
+
+## Usa a peça modelada do painel como tampa, tingida com `cap_color`. Devolve false
+## (e a tecla é gerada normalmente) se a malha do painel ou a peça não existirem.
+func _build_from_panel(mesh_instance: MeshInstance3D) -> bool:
+	var panel := PanelMeshParts.find_panel_mesh(get_tree())
+	if panel == null:
+		return false
+	var part := PanelMeshParts.extract_disc(panel, global_position, global_basis.z,
+			panel_part_radius, 0.0005, global_transform)
+	if part.get_surface_count() == 0:
+		push_warning("PanelButton3D: nenhuma peça do painel dentro de %.3f m de %s." % [panel_part_radius, global_position])
+		return false
+	mesh_instance.mesh = part
+	# Cópia do material original, "pintada": a cor vira `cap_color` lisa, mas o relevo
+	# (normal) e o desgaste (ORM) da peça continuam. A emissão vira uma cor plana (sem
+	# a textura emissiva) para o brilho de hover/aceso.
+	_material = (part.surface_get_material(0) as BaseMaterial3D).duplicate()
+	_material.albedo_texture = null
+	_material.albedo_color = cap_color
+	_material.metallic = 0.25
+	_material.emission_enabled = true
+	_material.emission_texture = null
+	_material.emission = Color.BLACK
+	_material.emission_energy_multiplier = 1.0
+	mesh_instance.material_override = _material
+	mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	return true
 
 
 func forward_mouse(event: InputEventMouse, _world_position: Vector3) -> void:

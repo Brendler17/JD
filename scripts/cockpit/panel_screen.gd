@@ -24,6 +24,12 @@ const PANEL_LAYER := 1 << 3
 @export var transparent := false
 ## Multiplica o brilho da tela (valores > 1 "estouram" levemente, efeito de tela acesa).
 @export_range(0.0, 4.0) var brightness := 1.0
+## Recebe a luz da cabine em vez de emitir a própria (ex.: impressão sobre um mostrador).
+@export var shaded := false
+## Exibe uma cópia com mipmaps (filtro anisotrópico) em vez da textura ao vivo: o texto
+## fica nítido quando a tela é vista de lado. Só para conteúdo que muda por evento:
+## o conteúdo emite `content_changed` e a tela tira uma nova cópia no quadro seguinte.
+@export var mipmapped := false
 
 var viewport: SubViewport
 ## Raiz instanciada de `content` (para quem precisa injetar dados, ex.: o labirinto).
@@ -37,6 +43,9 @@ var power := 1.0:
 
 var _last_pixel := Vector2(-1.0, -1.0)
 var _material: StandardMaterial3D
+var _snapshot: ImageTexture
+var _snapshot_pending := false
+var _snapshot_dirty := false
 
 
 func _ready() -> void:
@@ -54,11 +63,18 @@ func _ready() -> void:
 	var quad := QuadMesh.new()
 	quad.size = size
 	var material := StandardMaterial3D.new()
-	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	if not shaded:
+		material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	material.albedo_texture = viewport.get_texture()
 	_material = material
 	_apply_color()
 	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR
+	if mipmapped:
+		material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+		viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
+		if content_node and content_node.has_signal(&"content_changed"):
+			content_node.connect(&"content_changed", request_snapshot)
+		request_snapshot()
 	if transparent:
 		material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	var mesh := MeshInstance3D.new()
@@ -80,6 +96,31 @@ func _ready() -> void:
 		shape.shape = box
 		area.add_child(shape)
 		add_child(area)
+
+
+## Modo `mipmapped`: renderiza o viewport uma vez e troca a textura do quad por uma
+## cópia com mipmaps. Pedidos durante uma cópia em andamento geram mais uma depois.
+func request_snapshot() -> void:
+	if not mipmapped:
+		return
+	if _snapshot_pending:
+		_snapshot_dirty = true
+		return
+	_snapshot_pending = true
+	viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
+	await RenderingServer.frame_post_draw
+	var image := viewport.get_texture().get_image()
+	if image and not image.is_empty():
+		image.generate_mipmaps()
+		if _snapshot and Vector2i(_snapshot.get_size()) == image.get_size():
+			_snapshot.update(image)
+		else:
+			_snapshot = ImageTexture.create_from_image(image)
+			_material.albedo_texture = _snapshot
+	_snapshot_pending = false
+	if _snapshot_dirty:
+		_snapshot_dirty = false
+		request_snapshot()
 
 
 func _apply_color() -> void:

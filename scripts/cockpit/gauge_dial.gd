@@ -1,87 +1,42 @@
 extends Control
-## Mostrador analógico redondo, desenhado em _draw() para cobrir os relógios
-## brancos do painel amarelo. Um ponteiro varre um arco de 270º.
-## Padrão dos dois mostradores: **perigo sempre à direita** (faixa vermelha no fim
-## do arco), para o jogador ler os dois do mesmo jeito: ponteiro no vermelho = risco.
-##   OXYGEN       → nível de O₂ (oxygen_changed), com a escala invertida: tanque
-##                  cheio à esquerda, ponteiro sobe para o vermelho (últimos 25%)
-##                  conforme o ar acaba.
-##   INTERFERENCE → proximidade do inimigo (enemy_proximity_changed); o ponteiro
-##                  treme mais quanto mais perto, como um sensor sob interferência.
-## "Dumb UI": só reflete sinais do EventBus.
+## Impressão sobre o mostrador original de um relógio do painel: só a faixa
+## vermelha de perigo e a legenda. O fundo, a escala e o ponteiro são os da malha
+## (o ponteiro gira via GaugeNeedle), então o relógio mantém o visual realista.
+## Exibida por uma PanelScreen transparente e sombreada, do tamanho do mostrador
+## (o desenho ocupa o círculo inscrito no viewport).
+## A faixa fica em 0,75–1,0 do arco nos dois relógios (perigo sempre à direita),
+## com o mesmo arco do GaugeNeedle: 270º em sentido horário, início embaixo à esquerda.
+## Desenho estático: não reage a sinais.
 
-enum Kind { OXYGEN, INTERFERENCE }
-
-const LOW_OXYGEN_RATIO := 0.25
-## A partir desta distância (em passos) a interferência é zero.
-const INTERFERENCE_RANGE := 8.0
+const DANGER_FROM := 0.75
 const ARC_START := deg_to_rad(135.0)
 const ARC_SPAN := deg_to_rad(270.0)
-const FACE_COLOR := Color(0.9, 0.9, 0.86)
-const INK_COLOR := Color(0.12, 0.12, 0.13)
-const DANGER_COLOR := Color(0.78, 0.12, 0.08)
-const NEEDLE_COLOR := Color(0.75, 0.1, 0.06)
+## Vermelho de tinta, levemente translúcido para a textura do mostrador aparecer.
+const DANGER_COLOR := Color(0.62, 0.07, 0.05, 0.8)
+const INK_COLOR := Color(0.12, 0.11, 0.1, 0.85)
 
-@export var kind := Kind.OXYGEN
 @export var caption := "O₂"
 
-## Valor alvo (0..1) e valor exibido, suavizado para o ponteiro "andar".
-var _target := 1.0
-var _shown := 1.0
-var _time := 0.0
 
-
-func _ready() -> void:
-	if kind == Kind.OXYGEN:
-		EventBus.oxygen_changed.connect(_on_oxygen_changed)
-		_on_oxygen_changed(GameState.oxygen, GameState.MAX_OXYGEN)
-		_shown = _target
-	else:
-		_target = 0.0
-		_shown = 0.0
-		EventBus.enemy_proximity_changed.connect(_on_enemy_proximity_changed)
-
-
-func _process(delta: float) -> void:
-	_time += delta
-	_shown = lerpf(_shown, _target, 1.0 - exp(-delta * 5.0))
-	queue_redraw()
-
-
-func _on_oxygen_changed(current: float, maximum: float) -> void:
-	_target = clampf(current / maximum, 0.0, 1.0) if maximum > 0.0 else 0.0
-
-
-func _on_enemy_proximity_changed(steps: int) -> void:
-	_target = 0.0 if steps < 0 else clampf(1.0 - float(steps - 1) / INTERFERENCE_RANGE, 0.0, 1.0)
+func _notification(what: int) -> void:
+	# Desenho estático: refaz quando o viewport define o tamanho do Control.
+	if what == NOTIFICATION_RESIZED:
+		queue_redraw()
 
 
 func _draw() -> void:
 	var center := size * 0.5
-	var radius := minf(size.x, size.y) * 0.5 - 2.0
-	draw_circle(center, radius, FACE_COLOR)
-	draw_arc(center, radius - 1.0, 0.0, TAU, 64, INK_COLOR, 3.0)
-
-	# Faixa de perigo no fim do arco nos dois mostradores (O₂ ≤ 25% ↔ posição ≥ 0,75).
-	draw_arc(center, radius * 0.78, _angle(1.0 - LOW_OXYGEN_RATIO), _angle(1.0), 24, DANGER_COLOR, radius * 0.1)
-
-	for i in 11:
-		var t := i / 10.0
+	var radius := minf(size.x, size.y) * 0.5
+	# Anel interno, logo abaixo dos números da escala original.
+	draw_arc(center, radius * 0.6, _angle(DANGER_FROM), _angle(1.0), 32, DANGER_COLOR, radius * 0.07, true)
+	for t in [DANGER_FROM, 1.0]:
 		var dir := Vector2.from_angle(_angle(t))
-		var inner := radius * (0.66 if i % 5 == 0 else 0.72)
-		draw_line(center + dir * inner, center + dir * radius * 0.84, INK_COLOR, 3.0 if i % 5 == 0 else 1.5)
+		draw_line(center + dir * radius * 0.54, center + dir * radius * 0.66, DANGER_COLOR, radius * 0.02, true)
 
 	var font := get_theme_default_font()
-	var font_size := int(radius * 0.22)
-	draw_string(font, center + Vector2(-radius, radius * 0.45), caption, HORIZONTAL_ALIGNMENT_CENTER, radius * 2.0, font_size, INK_COLOR)
-
-	# O₂ invertido: cheio (1) fica à esquerda (posição 0).
-	var value := 1.0 - _shown if kind == Kind.OXYGEN else _shown
-	if kind == Kind.INTERFERENCE and _shown > 0.02:
-		value += sin(_time * 37.0) * 0.04 * _shown + sin(_time * 13.0) * 0.02 * _shown
-	var needle_dir := Vector2.from_angle(_angle(clampf(value, 0.0, 1.02)))
-	draw_line(center - needle_dir * radius * 0.12, center + needle_dir * radius * 0.8, NEEDLE_COLOR, 4.0)
-	draw_circle(center, radius * 0.08, INK_COLOR)
+	var font_size := int(radius * 0.16)
+	draw_string(font, center + Vector2(-radius, radius * 0.42), caption, HORIZONTAL_ALIGNMENT_CENTER,
+			radius * 2.0, font_size, INK_COLOR)
 
 
 func _angle(t: float) -> float:
