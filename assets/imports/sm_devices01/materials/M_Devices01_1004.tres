@@ -1,6 +1,6 @@
 [gd_resource type="ORMMaterial3D" format=3 uid="uid://w2vyq631v2go"]
 
-[ext_resource type="Texture2D" uid="uid://cqgpat5ujbkm8" path="res://assets/imports/sm_devices01/textures/T_Devices01_BC_1004.png" id="1_rq22k"]
+[ext_resource type="Texture2D" uid="uid://b5moh4ubebau4" path="res://assets/imports/sm_devices01/textures/T_Devices01_BC_1004_rotulos.png" id="1_rq22k"]
 [ext_resource type="Texture2D" uid="uid://bybfg7vc6tqim" path="res://assets/imports/sm_devices01/textures/T_Devices01_E_1004.png" id="2_anuir"]
 [ext_resource type="Texture2D" uid="uid://wrnr7ip5scvj" path="res://assets/imports/sm_devices01/textures/T_Devices01_N_1004.png" id="3_v54sy"]
 [ext_resource type="Texture2D" uid="uid://hxy85ht5jdoq" path="res://assets/imports/sm_devices01/textures/T_Devices01_ORM_1004.png" id="4_ucluj"]

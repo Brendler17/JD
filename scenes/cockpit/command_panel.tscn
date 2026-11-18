@@ -16,14 +16,6 @@ albedo_color = Color(0.09, 0.1, 0.1, 1)
 metallic = 0.4
 roughness = 0.6
 
-[sub_resource type="StandardMaterial3D" id="Mat_tape"]
-albedo_color = Color(0.03, 0.03, 0.035, 1)
-roughness = 0.35
-
-[sub_resource type="BoxMesh" id="Mesh_tape"]
-material = SubResource("Mat_tape")
-size = Vector3(0.082, 0.036, 0.0012)
-
 [sub_resource type="BoxMesh" id="Mesh_plate"]
 material = SubResource("Mat_plate")
 size = Vector3(0.46, 0.46, 0.012)
@@ -141,20 +133,3 @@ round = true
 cap_color = Color(0.55, 0.05, 0.03, 1)
 travel = 0.008
 panel_part_radius = 0.0235
-
-[node name="AlarmMuteTape" type="MeshInstance3D" parent="."]
-transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, -1, 0.881, 0.6065, -0.5672)
-cast_shadow = 0
-mesh = SubResource("Mesh_tape")
-
-[node name="Label" type="Label3D" parent="AlarmMuteTape"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0005, 0.0007)
-pixel_size = 0.00022
-shaded = true
-double_sided = false
-modulate = Color(0.92, 0.92, 0.88, 1)
-text = "SILENCIAR
-ALARME"
-font_size = 56
-outline_size = 0
-line_spacing = -6.0
