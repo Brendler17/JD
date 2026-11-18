@@ -1,0 +1,93 @@
+{
+  "mesh": "/Game/DeepWaterStation/Meshes/SM_Devices01",
+  "nanite_enabled": true,
+  "lod0_vertices": 2195,
+  "lod0_triangles": 1392,
+  "num_lods": 1,
+  "bounds_extent_cm": [
+    36.007139682769775,
+    63.37345561385155,
+    116.1884241104126
+  ],
+  "materials": [
+    {
+      "slot": "03 - Default44",
+      "material": "/Game/DeepWaterStation/Materials/MI_Devices01.MI_Devices01",
+      "parent": "/Game/DeepWaterStation/Materials/M_BaseEmissive.M_BaseEmissive",
+      "scalars": {
+        "Emiss_Multy": 0.20000000298023224,
+        "RefractionDepthBias": 0.0
+      },
+      "vectors": {},
+      "textures": {
+        "BC": "T_Devices01_BC",
+        "Emissive": "T_Devices01_E",
+        "N": "T_Devices01_N",
+        "ORM": "T_Devices01_ORM"
+      },
+      "all_scalar_params": {
+        "Emiss_Multy": 0.20000000298023224
+      },
+      "all_vector_params": {
+        "Emissiv_Color": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "all_texture_params": {
+        "BC": "T_Devices01_BC",
+        "ORM": "T_Devices01_ORM",
+        "N": "T_Devices01_N",
+        "Emissive": "T_Devices01_E"
+      }
+    }
+  ],
+  "textures": [
+    {
+      "name": "T_Devices01_BC",
+      "path": "/Game/DeepWaterStation/Textures/T_Devices01_BC.T_Devices01_BC",
+      "size": [
+        4096,
+        4096
+      ],
+      "srgb": true,
+      "compression": "<TextureCompressionSettings.TC_DEFAULT: 0>",
+      "exported": true
+    },
+    {
+      "name": "T_Devices01_E",
+      "path": "/Game/DeepWaterStation/Textures/T_Devices01_E.T_Devices01_E",
+      "size": [
+        4096,
+        4096
+      ],
+      "srgb": true,
+      "compression": "<TextureCompressionSettings.TC_DEFAULT: 0>",
+      "exported": true
+    },
+    {
+      "name": "T_Devices01_N",
+      "path": "/Game/DeepWaterStation/Textures/T_Devices01_N.T_Devices01_N",
+      "size": [
+        4096,
+        4096
+      ],
+      "srgb": false,
+      "compression": "<TextureCompressionSettings.TC_NORMALMAP: 1>",
+      "exported": true
+    },
+    {
+      "name": "T_Devices01_ORM",
+      "path": "/Game/DeepWaterStation/Textures/T_Devices01_ORM.T_Devices01_ORM",
+      "size": [
+        4096,
+        4096
+      ],
+      "srgb": true,
+      "compression": "<TextureCompressionSettings.TC_DEFAULT: 0>",
+      "exported": true
+    }
+  ]
+}

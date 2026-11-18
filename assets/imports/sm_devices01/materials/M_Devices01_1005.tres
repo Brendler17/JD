@@ -1,0 +1,19 @@
+[gd_resource type="ORMMaterial3D" format=3 uid="uid://ch2nfiu7dp3ay"]
+
+[ext_resource type="Texture2D" uid="uid://sndrl8svfvei" path="res://assets/imports/sm_devices01/textures/T_Devices01_BC_1005.png" id="1_1npt5"]
+[ext_resource type="Texture2D" uid="uid://vthkt70lx0i4" path="res://assets/imports/sm_devices01/textures/T_Devices01_E_1005.png" id="2_aogn3"]
+[ext_resource type="Texture2D" uid="uid://rvwcj8pai8lh" path="res://assets/imports/sm_devices01/textures/T_Devices01_N_1005.png" id="3_orgyx"]
+[ext_resource type="Texture2D" uid="uid://c1jfnhlhfg3lg" path="res://assets/imports/sm_devices01/textures/T_Devices01_ORM_1005.png" id="4_sqfwt"]
+
+[resource]
+resource_name = "M_Devices01_1005"
+albedo_texture = ExtResource("1_1npt5")
+orm_texture = ExtResource("4_sqfwt")
+emission_enabled = true
+emission = Color(1, 1, 1, 1)
+emission_energy_multiplier = 0.2
+emission_operator = 1
+emission_texture = ExtResource("2_aogn3")
+normal_enabled = true
+normal_texture = ExtResource("3_orgyx")
+texture_filter = 5

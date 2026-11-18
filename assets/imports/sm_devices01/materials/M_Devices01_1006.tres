@@ -1,0 +1,13 @@
+[gd_resource type="ORMMaterial3D" format=3 uid="uid://b2fn833b0b73x"]
+
+[ext_resource type="Texture2D" uid="uid://bx82nki6s48fe" path="res://assets/imports/sm_devices01/textures/T_Devices01_BC_1006.png" id="1_xb527"]
+[ext_resource type="Texture2D" uid="uid://c83nkoqxsaadd" path="res://assets/imports/sm_devices01/textures/T_Devices01_N_1006.png" id="2_sani4"]
+[ext_resource type="Texture2D" uid="uid://d0px0v7el665o" path="res://assets/imports/sm_devices01/textures/T_Devices01_ORM_1006.png" id="3_c2411"]
+
+[resource]
+resource_name = "M_Devices01_1006"
+albedo_texture = ExtResource("1_xb527")
+orm_texture = ExtResource("3_c2411")
+normal_enabled = true
+normal_texture = ExtResource("2_sani4")
+texture_filter = 5
